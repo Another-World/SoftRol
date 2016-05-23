@@ -1,6 +1,9 @@
 package clases;
 //esta es la clase con los datos de las sanciones.
 import java.time.*;
+
+import bbdd.BBDDSancion;
+import bbdd.BaseDatosC;
 public class Sancion {
 
 	private int n_sancion;
@@ -21,6 +24,23 @@ public class Sancion {
 		this.dni_emple = dni_emple;
 	}
 
+	public Sancion(String dni_socio) {
+		this.dni_socio = dni_socio;
+	}
+
+	
+	public static int numeroSanciones(String dni){
+		Sancion san;
+		BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");
+		san = new Sancion(dni);
+		mibase.abrir();
+		String sanciones = BBDDSancion.buscarSancion(san, mibase.getConexion());
+		mibase.cerrar();
+		int numero= Integer.parseInt(sanciones);
+		return  numero;
+	}
+	
+	
 	public int getN_sancion() {
 		return n_sancion;
 	}

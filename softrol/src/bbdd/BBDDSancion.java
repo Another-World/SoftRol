@@ -44,7 +44,7 @@ public class BBDDSancion {
 	}
 	
 	public static String buscarSancion(Sancion san, Connection c){
-		String cadena="SELECT * FROM sanciones WHERE dni_socio='" + san.getDni_socio() +"'";
+		String cadena="SELECT count(*) FROM sanciones WHERE dni_socio='" + san.getDni_socio() +"'";
 		/*
 		 * buscamos la informacion de la sancion mediante el dni del socio.
 		 */

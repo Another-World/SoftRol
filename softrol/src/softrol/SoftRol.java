@@ -134,7 +134,8 @@ public class SoftRol {
 
 						if (dniSocio.equals(dniValidado)) {
 
-							do {
+							int numeroSancion=Sancion.numeroSanciones(dniSocio);
+							if(numeroSancion==0){
 								System.out.print("Anota el título del libro: ");
 								titulo = sc.nextLine();
 								titulo=titulo.toUpperCase();
@@ -142,27 +143,22 @@ public class SoftRol {
 
 								if (titulo.equals(libroValidado)) {
 									System.out.println("Ha seleccionado el libro " + titulo);
-									do {
-										System.out.print("¿Desea realizar la operación? (si / no):");
-										operacion = sc.nextLine();
-									} while (operacion.equals("si") != true && operacion.equals("no") != true);
-									if (operacion.equals("si")) {
-
-										System.out.println("Acaba de reservar el libro " + titulo);
-										System.out.println();
-										//FALTA COMPROBAR SANCIONES
-										// AQUI FALTA AÑADIR A LA TABLA RESERVAS Y CAMBIAR EL ESTADO_LIBRO
-									}
-									if (operacion.equals("no")) {
-										System.out.println("Operación cancelada.");
-									}
-									repetir = "no";
-								} else {
-									System.out.println("No existe el libro.");
-									System.out.print("¿Desea repetir la operación? (si / no):");
-									repetir = sc.nextLine();
+	
+									
+									
+									
 								}
-							} while (repetir.equals("no") != true);
+								else{
+									System.out.println("El libro "+titulo+" no está disponible en nuestro repertorio.");
+								}
+							}
+							else{
+								System.out.println("El socio "+ dniSocio+" tiene "+ numeroSancion+" sanciones pendientes. No puede alquilar libros.");
+								System.out.println();
+							}
+
+
+
 						} else {
 							System.out.println("No existe el socio con dni: " + dniSocio);
 						}
@@ -248,10 +244,10 @@ public class SoftRol {
 									String nombre = sc.nextLine();
 
 									do{
-										
+
 										System.out.print("Teléfono :");
 										telefono = sc.nextLine();
-										
+
 										telefonoValidado=Socio.validarTelefono(telefono);
 										//if(telefonoValidado==null){
 										//	System.out.println("El teléfono debe ser válido.");
