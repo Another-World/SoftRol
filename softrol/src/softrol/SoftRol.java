@@ -143,9 +143,15 @@ public class SoftRol {
 
 								if (titulo.equals(libroValidado)) {
 									System.out.println("Ha seleccionado el libro " + titulo);
-	
 									
+									//falta comprobar si el libro ya está reservado
+									lib = new Libro(titulo);
+									mibase.abrir();
+									BBDDLibro.actualizarEstadoTrue(lib, mibase.getConexion());// cambiar el boolean a true para reservarlo
+									mibase.cerrar();
+									//falta crear ticket
 									
+									//aqui va ticket
 									
 								}
 								else{
