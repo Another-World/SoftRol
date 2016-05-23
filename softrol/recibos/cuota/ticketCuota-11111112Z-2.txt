@@ -1,0 +1,14 @@
+--------------------------------------------
+
+    Ticket: Pago
+
+	Nombre: PEPE
+	DNI: 11111112Z
+	Fecha del pago: 2016-05-19
+	Importe: 25 € 
+
+
+
+    *VALIDEZ PARA EL MES EN CURSO* 
+
+--------------------------------------------

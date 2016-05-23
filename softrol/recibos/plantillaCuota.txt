@@ -1,0 +1,14 @@
+--------------------------------------------
+
+    Ticket: Pago
+
+	Nombre: <nombre>
+	DNI: <dni>
+	Fecha del pago: <fpago>
+	Importe: <importe> 
+
+
+
+    *VALIDEZ PARA EL MES EN CURSO* 
+
+--------------------------------------------

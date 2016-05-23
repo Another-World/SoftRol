@@ -1,0 +1,14 @@
+--------------------------------------------
+
+    Ticket: Pago
+
+	Nombre: pepe
+	DNI: 123
+	Fecha del pago: 2016-05-19
+	Importe: 35 € 
+
+
+
+    *VALIDEZ PARA EL MES EN CURSO* 
+
+--------------------------------------------

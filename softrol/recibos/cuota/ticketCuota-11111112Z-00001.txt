@@ -1,0 +1,14 @@
+--------------------------------------------
+
+    Ticket: Pago
+
+	Nombre: asd
+	DNI: 1234tyu
+	Fecha del pago: 2016-05-19
+	Importe: 35 € 
+
+
+
+    *VALIDEZ PARA EL MES EN CURSO* 
+
+--------------------------------------------
