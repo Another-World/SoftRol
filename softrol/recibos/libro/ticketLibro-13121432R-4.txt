@@ -1,0 +1,14 @@
+--------------------------------------------
+
+    Ticket: Libro
+
+	Titulo: EYES ONLY
+	DNI socio: 13121432R
+	Fecha del alquiler: 2016-05-23
+	Fecha de final: 2006-09-12
+	Tiempo DE PRESTAMO: 25
+
+
+    *VALIDEZ PARA EL TIEMPO DE PRESTAMO* 
+
+--------------------------------------------

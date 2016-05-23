@@ -151,6 +151,33 @@ public class SoftRol {
 									mibase.cerrar();
 									//falta crear ticket
 									
+									 Path salidaticketLibro=Paths.get("recibos/libro/ticketLibro-"+dniSocio+"-"+enumerarTicket(2,dniSocio)+".txt"); //crear el nombre del ticket
+									 
+	                                    String bufferIn = "";
+	                                     
+	                                    try{
+	                                        input = Files.newBufferedReader(plantillaLibro);
+	                                        output = Files.newBufferedWriter(salidaticketLibro);
+	                                        String fechaActual=LocalDate.now().toString();
+	                                        while ( (bufferIn = input.readLine()) != null){
+	                                            //aqui se forma el ticket, sustituimos los campos entre "<" y ">" por los datos pertinentes
+	                                            bufferIn=bufferIn.replaceAll("<titulo>",titulo);
+	                                            bufferIn=bufferIn.replaceAll("<dni>",dniSocio);
+	                                            bufferIn=bufferIn.replaceAll("<falquiler>",fechaActual); 
+	                                            bufferIn=bufferIn.replaceAll("<ffinal>","2006-09-12");
+	                                            bufferIn=bufferIn.replaceAll("<tiempo>","25");
+	                                            output.write(bufferIn);
+	                                            output.newLine();
+	                                            System.out.println(bufferIn);
+	                                        }
+	                                        input.close();
+	                                        output.close();
+	                                     
+	                                    }catch(IOException e){
+	                                        //e.printStackTrace();
+	                                        System.out.println("Error:"+e.getMessage());
+	                                    }
+									
 									
 									//aqui va ticket
 									

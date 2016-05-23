@@ -1,0 +1,14 @@
+--------------------------------------------
+
+    Ticket: Libro
+
+	Titulo: <titulo>
+	DNI socio: <dni>
+	Fecha del alquiler: <falquiler>
+	Fecha de final: <ffinal>
+	Tiempo DE PRESTAMO: <tiempo>
+
+
+    *VALIDEZ PARA EL TIEMPO DE PRESTAMO* 
+
+--------------------------------------------
