@@ -55,7 +55,9 @@ public class SoftRol {
 		Path salidaMesa=Paths.get("recibos/mesa");
 		//variables
 		int opc = 1, opc2, idLibro;
-		String dniSocio, operacion, titulo, repetir, usuario, dniValidado;
+		String dniSocio, operacion, titulo, repetir, usuario, dniValidado,telefonoValidado, telefono;
+		LocalDate fechaValidada, fecha;
+		boolean comprobar;
 		// inicio de sesión
 		do {
 			System.out.println("--- Iniciar sesión ---");
@@ -122,13 +124,12 @@ public class SoftRol {
 					switch (opc2) {
 					case 2:
 						System.out.println("--- Alquilar libro ---");
-						String comprobar;
 						do {
 							System.out.print("Introduce el DNI del socio: ");
 							dniSocio = sc.nextLine();
 							comprobar=Socio.validarLongitudDni(dniSocio);
 							//System.out.println(comprobar);
-						}while (comprobar == null);
+						}while (comprobar == false);
 						dniValidado = Socio.comprobarDni(dniSocio); // validar si el socio existe en la BBDD para poder tener acceso a los libros
 
 						if (dniSocio.equals(dniValidado)) {
@@ -183,8 +184,11 @@ public class SoftRol {
 					break;//fin del menu gestion de libros
 					//-------------------------------------------------------------------------------------------------------------------------------
 				case 3: // Gestion de las mesas
-					System.out.print("Introduce el DNI del socio: ");
-					dniSocio = sc.nextLine();
+					do{
+						System.out.print("Introduce el DNI del socio: ");
+						dniSocio = sc.nextLine();
+						comprobar=Socio.validarLongitudDni(dniSocio);
+					}while (comprobar == false);
 					dniValidado = Socio.comprobarDni(dniSocio); //validar si el socio está en la BBDD para poder reservar una mesa
 
 					if (dniSocio.equals(dniValidado)) {
@@ -224,59 +228,91 @@ public class SoftRol {
 					case 2:
 						System.out.println("--- Dar de alta ---");
 						// comprobación para validar existencia del socio
-						System.out.print("Introduce el DNI del socio: ");
-						dniSocio = sc.nextLine();
-						dniValidado = Socio.comprobarDni(dniSocio);
-						if (dniSocio.equals(dniValidado)) {
-							System.out.println("ERROR. El socio ya existe.");
-						} else {
-							// registrar datos del socio
-							System.out.println("Introduce los datos del socio: ");
-							System.out.print("Nombre :");
-							String nombre = sc.nextLine();
-							System.out.print("Teléfono :");
-							String telefono = sc.nextLine();
-							System.out.print("Fecha de nacimiento (año-mes-dia) :");
-							String fechaNacimiento = sc.nextLine();
-							LocalDate fecha = LocalDate.parse(fechaNacimiento);
-							// añadir socio a la BBDD
-							soc = new Socio(nombre, telefono, dniSocio, fecha);
-							mibase.abrir();
-							BBDDSocio.añadir(soc, mibase.getConexion());
-							mibase.cerrar();
-							System.out.println("El usuario "+ nombre +" ha sido dado de alta correctamente.");
-							System.out.print("¿Desea un recibo de la operación? (si / no):");
-							repetir = sc.nextLine();
-							if(repetir.equals("si")){
-								Path salidaCuota=Paths.get("recibos/cuota/ticketCuota-"+dniSocio+"-"+enumerarTicket(1,dniSocio)+".txt"); //crear el nombre del ticket
-								Socio soci=Socio.ticketCuota(dniSocio); // extraer los datos del socio para plasmarlos en el ticket
-								String importeCuota=Cuota.comprobarCuota(dniSocio); //extraer el precio de la cuota
-								String bufferIn = "";
-								try{
-									input = Files.newBufferedReader(plantillaCuota);
-									output = Files.newBufferedWriter(salidaCuota);
-									String fechaPago=LocalDate.now().toString();
-									while ( (bufferIn = input.readLine()) != null){
-										//aqui se forma el ticket, sustituimos los campos entre "<" y ">" por los datos pertinentes
-										bufferIn=bufferIn.replaceAll("<nombre>",soci.getNombre());
-										bufferIn=bufferIn.replaceAll("<dni>",soci.getDni_socio());
-										bufferIn=bufferIn.replaceAll("<fpago>",fechaPago); 
-										bufferIn=bufferIn.replaceAll("<importe>",importeCuota+" €");
-										output.write(bufferIn);
-										output.newLine();
-										System.out.println(bufferIn);
-									}
-									input.close();
-									output.close();
-
-								}catch(IOException e){
-									//e.printStackTrace();
-									System.out.println("Error:"+e.getMessage());
-								}
-								String nombreTicket=salidaCuota.getFileName().toString();
-								System.out.println("Se ha guardado el ticket: "+ nombreTicket +".");
+						do{
+							System.out.print("Introduce el DNI del socio: ");
+							dniSocio = sc.nextLine();
+							comprobar=Socio.validarLongitudDni(dniSocio);
+							if (comprobar == false) {
+								System.out.println("El dni es incorrecto.");
+								break;
 							}
-						}
+							else {
+
+								dniValidado = Socio.comprobarDni(dniSocio);
+								if (dniSocio.equals(dniValidado)) {
+									System.out.println("ERROR. El socio ya existe.");
+								} else {
+									// registrar datos del socio
+									System.out.println("Introduce los datos del socio. ");
+									System.out.print("Nombre :");
+									String nombre = sc.nextLine();
+
+									do{
+										System.out.print("Teléfono :");
+										telefono = sc.nextLine();
+										telefonoValidado=Socio.validarTelefono(telefono);
+										if(telefonoValidado==null){
+											System.out.println("El teléfono debe ser válido.");
+										}
+									}while(telefonoValidado==null);
+									do {
+										System.out.print("Fecha de nacimiento (año-mes-dia) :");
+										String fechaNacimiento = sc.nextLine();
+										fecha = LocalDate.parse(fechaNacimiento);
+										fechaValidada = Socio.validarFechaNacimiento(fecha);
+										if (fechaValidada == null) {
+											System.out.println("El socio debe tener más de 14 años. ");
+											repetir="no";
+											break;
+										}
+										else{
+											soc = new Socio(nombre, telefono, dniSocio, fecha);
+											mibase.abrir();
+											BBDDSocio.añadir(soc, mibase.getConexion());
+											mibase.cerrar();
+											System.out.println("El usuario "+ nombre +" ha sido dado de alta correctamente.");
+											System.out.print("¿Desea un recibo de la operación? (si / no):");
+											repetir = sc.nextLine();
+
+										}
+									} while (fechaValidada == null);
+									// añadir socio a la BBDD
+
+									if(repetir.equals("si")){
+										Path salidaCuota=Paths.get("recibos/cuota/ticketCuota-"+dniSocio+"-"+enumerarTicket(1,dniSocio)+".txt"); //crear el nombre del ticket
+										Socio soci=Socio.ticketCuota(dniSocio); // extraer los datos del socio para plasmarlos en el ticket
+										String importeCuota=Cuota.comprobarCuota(dniSocio); //extraer el precio de la cuota
+										String bufferIn = "";
+										try{
+											input = Files.newBufferedReader(plantillaCuota);
+											output = Files.newBufferedWriter(salidaCuota);
+											String fechaPago=LocalDate.now().toString();
+											while ( (bufferIn = input.readLine()) != null){
+												//aqui se forma el ticket, sustituimos los campos entre "<" y ">" por los datos pertinentes
+												bufferIn=bufferIn.replaceAll("<nombre>",soci.getNombre());
+												bufferIn=bufferIn.replaceAll("<dni>",soci.getDni_socio());
+												bufferIn=bufferIn.replaceAll("<fpago>",fechaPago); 
+												bufferIn=bufferIn.replaceAll("<importe>",importeCuota+" €");
+												output.write(bufferIn);
+												output.newLine();
+												System.out.println(bufferIn);
+											}
+											input.close();
+											output.close();
+
+										}catch(IOException e){
+											//e.printStackTrace();
+											System.out.println("Error:"+e.getMessage());
+										}
+										String nombreTicket=salidaCuota.getFileName().toString();
+										System.out.println("Se ha guardado el ticket: "+ nombreTicket +".");
+									}
+								}
+							}
+
+						}while (comprobar == false);
+
+
 						break;
 					case 3:
 						System.out.println("--- Dar de baja ---");
@@ -349,7 +385,7 @@ public class SoftRol {
 		}
 
 
-		if(tipo==2){//introducir el tipo 1 al llamar a la funcion para los recibos de LIBRO
+		if(tipo==2){//introducir el tipo 2 al llamar a la funcion para los recibos de LIBRO
 			Path salidaLibro=Paths.get("recibos/libro");
 
 			try{
@@ -377,7 +413,7 @@ public class SoftRol {
 			}
 		}
 
-		if(tipo==3){//introducir el tipo 1 al llamar a la funcion para los recibos de MESA
+		if(tipo==3){//introducir el tipo 3 al llamar a la funcion para los recibos de MESA
 			Path salidaMesa=Paths.get("recibos/mesa");
 
 			try{

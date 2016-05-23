@@ -1,0 +1,14 @@
+--------------------------------------------
+
+    Ticket: Pago
+
+	Nombre: wer
+	DNI: 342
+	Fecha del pago: 2016-05-23
+	Importe: 25 € 
+
+
+
+    *VALIDEZ PARA EL MES EN CURSO* 
+
+--------------------------------------------

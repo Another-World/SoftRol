@@ -92,38 +92,46 @@ public class Socio {
 		return tipo_cuota;
 	}
 
-	
 
-	public static String validarLongitudDni(String dniSocio){ // Validación del DNI
-		    if (dniSocio.length()!=9)
-		    	return null;
-			int numeros= Integer.parseInt(dniSocio.substring(0,8));
-			String letra= dniSocio.substring(8,9);
-		
-			char letra2=letra.charAt(0);
-			letra2=Character.toUpperCase(letra2);
-		if (numeros>0 && numeros<99999999 && letra2>='A' && letra2<='Z'){
-			
-			return dniSocio;
-		}
-		return null;
+
+	public static boolean validarLongitudDni(String dni){ // Validación del DNI
+
+		String letradni="TRWAGMYFPDXBNJZSQVHLCKE";
+		int l=dni.length();
+		if (l!=9)
+			return false;
+
+		dni=dni.toUpperCase();
+		char letra= dni.charAt(8);
+		if (letra<'A' || letra>'Z')
+			return false;
+		//hay que comprobar que los 8 primeros son digitos//
+		String numero=dni.substring(0,8);
+		long n=Long.parseLong(numero);
+		int pos=(int)(n%23);
+		if (letradni.charAt(pos)!=letra)
+			return false;
+		return true;
+
 	}
-	
+
+
+
 	public static String validarTelefono(String telefono) {  // Validación de telefono
 		if (telefono.length() != 9)
 			return null;
 		int numeros = Integer.parseInt(telefono.substring(0, 9));
 		int condicion = Integer.parseInt(telefono.substring(0, 1));
-		
+
 		if (condicion == 6 || condicion == 7 || condicion == 9) {
 
 			return telefono;
 		}
 		return null;
 	}
-	
-	public  LocalDate validarFechaNacimiento(LocalDate fechanacimiento){  //validación de fecha de nacimiento
-		Period fecha=Period.between(this.fecha_nacimiento,LocalDate.now());
+
+	public static LocalDate validarFechaNacimiento(LocalDate fechanacimiento){  //validación de fecha de nacimiento
+		Period fecha=Period.between(fechanacimiento,LocalDate.now());
 		if(fecha.getYears()<=14){
 			return null;
 		}
@@ -132,7 +140,7 @@ public class Socio {
 		}
 
 	}
-	
+
 
 	@Override
 	public String toString() {
