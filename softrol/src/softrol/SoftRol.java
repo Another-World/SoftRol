@@ -127,7 +127,7 @@ public class SoftRol {
 						do {
 							System.out.print("Introduce el DNI del socio: ");
 							dniSocio = sc.nextLine();
-							comprobar=Socio.validarLongitudDni(dniSocio);
+							comprobar=Socio.validarDni(dniSocio);
 							//System.out.println(comprobar);
 						}while (comprobar == false);
 						dniValidado = Socio.comprobarDni(dniSocio); // validar si el socio existe en la BBDD para poder tener acceso a los libros
@@ -187,7 +187,7 @@ public class SoftRol {
 					do{
 						System.out.print("Introduce el DNI del socio: ");
 						dniSocio = sc.nextLine();
-						comprobar=Socio.validarLongitudDni(dniSocio);
+						comprobar=Socio.validarDni(dniSocio);
 					}while (comprobar == false);
 					dniValidado = Socio.comprobarDni(dniSocio); //validar si el socio está en la BBDD para poder reservar una mesa
 
@@ -231,7 +231,7 @@ public class SoftRol {
 						do{
 							System.out.print("Introduce el DNI del socio: ");
 							dniSocio = sc.nextLine();
-							comprobar=Socio.validarLongitudDni(dniSocio);
+							comprobar=Socio.validarDni(dniSocio);
 							if (comprobar == false) {
 								System.out.println("El dni es incorrecto.");
 								break;
@@ -349,7 +349,7 @@ public class SoftRol {
 		} while (usuario.equals("administrador") != true && usuario.equals("empleado") != true);
 
 		System.out.println("Programa finalizado.");
-	}
+	}//cierre del Main
 
 
 	// --------------------------------------------------------- METHODS -------------------------------------------------------------

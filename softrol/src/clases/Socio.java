@@ -94,7 +94,7 @@ public class Socio {
 
 
 
-	public static boolean validarLongitudDni(String dni){ // Validación del DNI
+	public static boolean validarDni(String dni){ // Validación del DNI
 
 		String letradni="TRWAGMYFPDXBNJZSQVHLCKE";
 		int l=dni.length();
