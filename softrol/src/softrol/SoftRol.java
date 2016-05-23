@@ -151,6 +151,7 @@ public class SoftRol {
 									mibase.cerrar();
 									//falta crear ticket
 									
+									
 									//aqui va ticket
 									
 								}
