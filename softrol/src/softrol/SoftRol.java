@@ -55,7 +55,7 @@ public class SoftRol {
 		Path salidaMesa=Paths.get("recibos/mesa");
 		//variables
 		int opc = 1, opc2, idLibro;
-		String dniSocio, operacion, titulo, repetir, usuario, dniValidado,telefonoValidado, telefono;
+		String dniSocio, operacion, titulo, repetir, usuario, dniValidado,telefonoValidado, telefono="";
 		LocalDate fechaValidada, fecha;
 		boolean comprobar;
 		// inicio de sesión
@@ -248,12 +248,14 @@ public class SoftRol {
 									String nombre = sc.nextLine();
 
 									do{
+										
 										System.out.print("Teléfono :");
 										telefono = sc.nextLine();
+										
 										telefonoValidado=Socio.validarTelefono(telefono);
-										if(telefonoValidado==null){
-											System.out.println("El teléfono debe ser válido.");
-										}
+										//if(telefonoValidado==null){
+										//	System.out.println("El teléfono debe ser válido.");
+										//}
 									}while(telefonoValidado==null);
 									do {
 										System.out.print("Fecha de nacimiento (año-mes-dia) :");

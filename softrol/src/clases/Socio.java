@@ -118,14 +118,26 @@ public class Socio {
 
 
 	public static String validarTelefono(String telefono) {  // Validación de telefono
-		if (telefono.length() != 9)
+		if (telefono.length() != 9){
+			System.out.println("No tiene la longitud adecuada.");
+		
 			return null;
+		}
+		try {
+					
 		int numeros = Integer.parseInt(telefono.substring(0, 9));
 		int condicion = Integer.parseInt(telefono.substring(0, 1));
-
+		
+		if (numeros<600000000 && numeros>999999999) {
+			return null;
+		}
 		if (condicion == 6 || condicion == 7 || condicion == 9) {
 
 			return telefono;
+		}
+		return null;
+		}catch(NumberFormatException e){
+			System.out.println("El teléfono debe ser válido.");
 		}
 		return null;
 	}
