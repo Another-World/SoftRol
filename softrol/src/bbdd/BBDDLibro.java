@@ -105,4 +105,26 @@ public class BBDDLibro {
 			
 		}
 	}
+	
+	public static String buscarEstadoLibro(Libro lib, Connection c){ //metodo para comprobar estado del libro
+		String cadena="SELECT estado_alquilado FROM libros WHERE titulo='" + lib.getTitulo() +"'";
+		try{
+			s=c.createStatement();
+			reg=s.executeQuery(cadena);
+			if ( reg.next()){
+				String t=reg.getString(1);
+				s.close();
+				return t;
+			}
+			
+			s.close();
+			return "";
+		}
+		catch ( SQLException e){
+	//		System.out.println(e.getMessage());
+			return null;
+		
+		}
+	}
+	
 	}
