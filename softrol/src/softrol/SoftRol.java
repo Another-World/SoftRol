@@ -162,9 +162,10 @@ public class SoftRol {
 											System.out.println("Ha seleccionado usar en el local.");
 											System.out.print("Introduce el tiempo que desea reservarlo: ");
 											int tiempoReserva=sc.nextInt();
-
-											LocalTime horaReserva=LocalTime.now();
-											LocalTime horaFinal= LocalTime.now().plusHours(tiempoReserva);
+											
+						//***				// dar formato a la fecha para poder añadirla a la BBDD correctamente
+											LocalDateTime horaReserva=LocalDate.now().atTime(LocalTime.now());
+											LocalDateTime horaFinal= LocalDate.now().atTime(LocalTime.now()).plusHours(tiempoReserva);
 											System.out.println("La hora actual es: "+ horaReserva.getHour()+" horas y "+horaReserva.getMinute()+" minutos.");
 											System.out.println("debe devolver el libro a las: "+ horaFinal.getHour()+" horas y "+horaFinal.getMinute()+" minutos.");
 
