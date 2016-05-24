@@ -1,6 +1,8 @@
 package clases;
 //Esta es la clase con los datos de los socios.
 import java.time.*;
+import java.util.Vector;
+
 import clases.*;
 import bbdd.*;
 public class Socio {
@@ -30,12 +32,20 @@ public class Socio {
 		}
 
 	}
-	
+
 
 	public Socio(String nombre, String telefono, String dni_socio,int cuota_pagada) {
 
 		this.nombre = nombre;
 		this.telefono = telefono;
+		this.dni_socio = dni_socio;
+		this.cuota_pagada = cuota_pagada;
+	}
+
+
+
+	public Socio(String dni_socio, int cuota_pagada) {
+		super();
 		this.dni_socio = dni_socio;
 		this.cuota_pagada = cuota_pagada;
 	}
@@ -130,22 +140,22 @@ public class Socio {
 	public static String validarTelefono(String telefono) {  // Validación de telefono
 		if (telefono.length() != 9){
 			System.out.println("No tiene la longitud adecuada.");
-		
+
 			return null;
 		}
 		try {
-					
-		int numeros = Integer.parseInt(telefono.substring(0, 9));
-		int condicion = Integer.parseInt(telefono.substring(0, 1));
-		
-		if (numeros<600000000 && numeros>999999999) {
-			return null;
-		}
-		if (condicion == 6 || condicion == 7 || condicion == 9) {
 
-			return telefono;
-		}
-		return null;
+			int numeros = Integer.parseInt(telefono.substring(0, 9));
+			int condicion = Integer.parseInt(telefono.substring(0, 1));
+
+			if (numeros<600000000 && numeros>999999999) {
+				return null;
+			}
+			if (condicion == 6 || condicion == 7 || condicion == 9) {
+
+				return telefono;
+			}
+			return null;
 		}catch(NumberFormatException e){
 			System.out.println("El teléfono debe ser válido.");
 		}
@@ -160,6 +170,27 @@ public class Socio {
 		else{
 			return fechanacimiento;
 		}
+	}
+
+	public static void eliminarSocioMoroso() {
+		BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");
+		mibase.abrir();
+		for(int i=0; i< BBDDSocio.EliminarSocio(mibase.getConexion()).size(); i++) {
+			Socio soc;
+
+			soc = new Socio( BBDDSocio.EliminarSocio(mibase.getConexion()).get(i).getDni_socio());
+			
+
+			int cuotaComprobada = BBDDSocio.comprobarCuotaPagada(soc, mibase.getConexion());
+			
+			if (cuotaComprobada == 0) {
+
+				if (LocalDate.now().getDayOfMonth() > 7) {
+					System.out.println("socio eliminado por moroso");
+				}
+			}
+		}
+		mibase.cerrar();
 	}
 	//Listar socios
 	@Override

@@ -113,4 +113,48 @@ public class BBDDSocio {
 
 
 	}
+	
+	public static Vector<Socio> EliminarSocio(Connection c){
+		String cadena="SELECT dni_socio FROM socios"; //Select para eliminar los socios
+		Vector <Socio> EliminarSocio=new Vector<Socio>();
+		try{
+			s=c.createStatement();
+			reg=s.executeQuery(cadena);
+			while ( reg.next()){
+				Socio soc=new Socio(reg.getString("dni_socio"));
+				EliminarSocio.add(soc);
+			}
+			s.close();
+			return EliminarSocio;
+		}
+		catch ( SQLException e){
+			//		System.out.println(e.getMessage());
+			return null;
+		}
+
+
+	}
+	
+	public static int comprobarCuotaPagada(Socio soc, Connection c){
+		String cadena="SELECT cuota_pagada FROM socios WHERE dni_socio='" + soc.getDni_socio() +"'";
+		/*
+		 * buscamos los datos del socio mediante su dni
+		 */
+		try{
+			s=c.createStatement();
+			reg=s.executeQuery(cadena);
+			if ( reg.next()){
+				int t=reg.getInt(1);
+				s.close();
+				return t;
+			}
+
+			s.close();
+			return -1;
+		}
+		catch ( SQLException e){
+			//		System.out.println(e.getMessage());
+			return -1;
+		}
+	}
 }

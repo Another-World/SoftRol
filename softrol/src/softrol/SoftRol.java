@@ -59,6 +59,7 @@ public class SoftRol {
 		LocalDate fechaValidada, fecha;
 		boolean comprobar;
 		// inicio de sesión
+		Socio.eliminarSocioMoroso();
 		do {
 			System.out.println("--- Iniciar sesión ---");
 			System.out.print("Usuario: ");
