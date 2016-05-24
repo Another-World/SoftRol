@@ -127,7 +127,7 @@ public class BBDDLibro {
 		}
 	}
 	
-	public static int buscarIdLibro(Libro lib, Connection c){ //metodo para comprobar estado del libro
+	public static int buscarIdLibro(Libro lib, Connection c){ //metodo para buscar id del libro
 		String cadena="SELECT id_libro FROM libros WHERE titulo='" + lib.getTitulo() +"'";
 		try{
 			s=c.createStatement();
