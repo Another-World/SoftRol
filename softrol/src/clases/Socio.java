@@ -30,6 +30,16 @@ public class Socio {
 		}
 
 	}
+	
+
+	public Socio(String nombre, String telefono, String dni_socio,int cuota_pagada) {
+
+		this.nombre = nombre;
+		this.telefono = telefono;
+		this.dni_socio = dni_socio;
+		this.cuota_pagada = cuota_pagada;
+	}
+
 
 	public Socio(String dni_socio) {
 		this.dni_socio = dni_socio;
@@ -150,15 +160,11 @@ public class Socio {
 		else{
 			return fechanacimiento;
 		}
-
 	}
-
-
+	//Listar socios
 	@Override
 	public String toString() {
-		return "Socio [nombre=" + nombre + ", telefono=" + telefono + ", dni_socio=" + dni_socio + ", fecha_nacimiento="
-				+ fecha_nacimiento + ", fecha_alta=" + fecha_alta + ", cuota_pagada=" + cuota_pagada + ", tipo_cuota="
-				+ tipo_cuota + "]";
+		return "Socio nombre=" + nombre + "\n\t telefono=" + telefono + "\n\t  dni_socio=" + dni_socio + "\n\t cuota_pagada=" + cuota_pagada + "\n\n";
 	}
 
 
