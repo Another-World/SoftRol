@@ -160,7 +160,6 @@ public class Socio {
 		else{
 			return fechanacimiento;
 		}
-
 	}
 	//Listar socios
 	@Override
