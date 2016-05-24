@@ -127,4 +127,26 @@ public class BBDDLibro {
 		}
 	}
 	
+	public static int buscarIdLibro(Libro lib, Connection c){ //metodo para comprobar estado del libro
+		String cadena="SELECT id_libro FROM libros WHERE titulo='" + lib.getTitulo() +"'";
+		try{
+			s=c.createStatement();
+			reg=s.executeQuery(cadena);
+			if ( reg.next()){
+				int t=reg.getInt(1);
+				s.close();
+				return t;
+			}
+
+			s.close();
+			return 0;
+		}
+		catch ( SQLException e){
+			
+	//		System.out.println(e.getMessage());
+			return 0;
+		
+		}
+	}
+	
 	}
