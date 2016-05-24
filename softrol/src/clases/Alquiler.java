@@ -3,12 +3,12 @@ package clases;
 import java.time.*;
 public class Alquiler {
 
-	private LocalDate fecha_inicio;
-	private LocalDate fecha_final;
+	private LocalTime fecha_inicio;
+	private LocalTime fecha_final;
 	private String estado_peticion;
 	private int id_libro;
 	private String dni_socio;
-	public Alquiler(LocalDate fecha_inicio, LocalDate fecha_final, String estado_peticion, int id_libro,
+	public Alquiler(LocalTime fecha_inicio, LocalTime fecha_final, String estado_peticion, int id_libro,
 			String dni_socio) {
 		
 		this.fecha_inicio = fecha_inicio;
@@ -17,10 +17,10 @@ public class Alquiler {
 		this.id_libro = id_libro;
 		this.dni_socio = dni_socio;
 	}
-	public LocalDate getFecha_inicio() {
+	public LocalTime getFecha_inicio() {
 		return fecha_inicio;
 	}
-	public LocalDate getFecha_final() {
+	public LocalTime getFecha_final() {
 		return fecha_final;
 	}
 	public String getEstado_peticion() {

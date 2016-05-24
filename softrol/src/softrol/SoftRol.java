@@ -143,44 +143,96 @@ public class SoftRol {
 
 								if (titulo.equals(libroValidado)) {
 									System.out.println("Ha seleccionado el libro " + titulo);
-									
-									//falta comprobar si el libro ya está reservado
 									lib = new Libro(titulo);
 									mibase.abrir();
-									BBDDLibro.actualizarEstadoTrue(lib, mibase.getConexion());// cambiar el boolean a true para reservarlo
+									String estadoLibro =BBDDLibro.buscarEstadoLibro(lib, mibase.getConexion()); // comprobar si el libro ya esta reservado
 									mibase.cerrar();
-									//falta crear ticket
-									
-									 Path salidaticketLibro=Paths.get("recibos/libro/ticketLibro-"+dniSocio+"-"+enumerarTicket(2,dniSocio)+".txt"); //crear el nombre del ticket
-									 
-	                                    String bufferIn = "";
-	                                     
-	                                    try{
-	                                        input = Files.newBufferedReader(plantillaLibro);
-	                                        output = Files.newBufferedWriter(salidaticketLibro);
-	                                        String fechaActual=LocalDate.now().toString();
-	                                        while ( (bufferIn = input.readLine()) != null){
-	                                            //aqui se forma el ticket, sustituimos los campos entre "<" y ">" por los datos pertinentes
-	                                            bufferIn=bufferIn.replaceAll("<titulo>",titulo);
-	                                            bufferIn=bufferIn.replaceAll("<dni>",dniSocio);
-	                                            bufferIn=bufferIn.replaceAll("<falquiler>",fechaActual); 
-	                                            bufferIn=bufferIn.replaceAll("<ffinal>","2006-09-12");
-	                                            bufferIn=bufferIn.replaceAll("<tiempo>","25");
-	                                            output.write(bufferIn);
-	                                            output.newLine();
-	                                            System.out.println(bufferIn);
-	                                        }
-	                                        input.close();
-	                                        output.close();
-	                                     
-	                                    }catch(IOException e){
-	                                        //e.printStackTrace();
-	                                        System.out.println("Error:"+e.getMessage());
-	                                    }
-									
-									
-									//aqui va ticket
-									
+
+									if(estadoLibro.equals("0")){
+										System.out.println("Desea llevar el libro a casa o usarlo en el local?");
+										System.out.println("1. Cancelar.");
+										System.out.println("2. Usar en local.");
+										System.out.println("3. Llevar a casa.");
+										System.out.print("Introduce opción: ");
+										opc=sc.nextInt();
+
+										switch(opc){
+										case 2:
+											System.out.println("Ha seleccionado usar en el local.");
+											System.out.print("Introduce el tiempo que desea reservarlo: ");
+											int tiempoReserva=sc.nextInt();
+
+											LocalTime horaReserva=LocalTime.now();
+											LocalTime horaFinal= LocalTime.now().plusHours(tiempoReserva);
+											System.out.println("La hora actual es: "+ horaReserva.getHour()+" horas y "+horaReserva.getMinute()+" minutos.");
+											System.out.println("debe devolver el libro a las: "+ horaFinal.getHour()+" horas y "+horaFinal.getMinute()+" minutos.");
+
+											mibase.abrir();
+											BBDDLibro.actualizarEstadoTrue(lib, mibase.getConexion());// cambiar el boolean a true para reservarlo
+											mibase.cerrar();
+
+											lib=new Libro(titulo);
+											mibase.abrir();
+											idLibro =BBDDLibro.buscarIdLibro(lib, mibase.getConexion()); //buscar el id del libro para añadirlo a la tabla de reservas
+											mibase.cerrar();
+
+											alq=new Alquiler(horaReserva,horaFinal,"alquilado",idLibro,dniSocio);
+											mibase.abrir();
+											BBDDAlquiler.añadir(alq, mibase.getConexion()); // añadir la reserva a la BBDD
+											mibase.cerrar();
+
+											//creacion del ticket del libro
+											Path salidaticketLibro=Paths.get("recibos/libro/ticketLibro-"+dniSocio+"-"+enumerarTicket(2,dniSocio)+".txt"); //crear el nombre del ticket
+
+											String bufferIn = "";
+
+											try{
+												input = Files.newBufferedReader(plantillaLibro);
+												output = Files.newBufferedWriter(salidaticketLibro);
+												String fechaActual=LocalDate.now().toString();
+												String fechaFinal=horaFinal.toString();
+												while ( (bufferIn = input.readLine()) != null){
+													//aqui se forma el ticket, sustituimos los campos entre "<" y ">" por los datos pertinentes
+													bufferIn=bufferIn.replaceAll("<titulo>",titulo);
+													bufferIn=bufferIn.replaceAll("<dni>",dniSocio);
+													bufferIn=bufferIn.replaceAll("<falquiler>",fechaActual); 
+													bufferIn=bufferIn.replaceAll("<ffinal>",fechaFinal);
+													bufferIn=bufferIn.replaceAll("<tiempo>",tiempoReserva+" horas");
+													output.write(bufferIn);
+													output.newLine();
+													System.out.println(bufferIn);
+												}
+												input.close();
+												output.close();
+
+											}catch(IOException e){
+												//e.printStackTrace();
+												System.out.println("Error:"+e.getMessage());
+											}// fin del ticket
+
+
+											break;
+										case 3:
+											System.out.println("Ha seleccionado llevar a casa.");
+											System.out.print("Introduce el número de dias que desea reservar: ");
+											//incompleto
+
+
+											break;
+										}//fin de switch 
+									}
+									else{
+										System.out.println("El libro "+ titulo+ " ya está alquilado.");
+										System.out.print("¿Quieres reservarlo cuando sea devuelto? (si / no): ");
+										repetir=sc.nextLine();
+										if(repetir.equals("si")){
+											// aqui hacer reserva para cuando sea devuelto
+										}
+										else{
+											System.out.println("Operación cancelada. El libro no ha sido reservado.");
+										}
+									}
+
 								}
 								else{
 									System.out.println("El libro "+titulo+" no está disponible en nuestro repertorio.");
@@ -214,7 +266,9 @@ public class SoftRol {
 					break;//fin del menu gestion de libros
 					//-------------------------------------------------------------------------------------------------------------------------------
 				case 3: // Gestion de las mesas
+					sc.nextLine(); // limpiar Scanner para que no salte el dni
 					do{
+
 						System.out.print("Introduce el DNI del socio: ");
 						dniSocio = sc.nextLine();
 						comprobar=Socio.validarDni(dniSocio);
@@ -364,7 +418,10 @@ public class SoftRol {
 						break;
 					case 4:
 						System.out.println("--- Listar socios ---");
-
+						mibase.abrir();
+						Vector<Socio>  listarSocio = BBDDSocio.listarSocio(mibase.getConexion());//listar socios con un vector
+						mibase.cerrar();
+						System.out.println(listarSocio);	
 						break;
 					}
 
