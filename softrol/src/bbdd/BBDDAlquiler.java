@@ -2,7 +2,7 @@ package bbdd;
 
 import java.sql.*;
 import clases.Alquiler;
-
+import java.time.*;
 
 public class BBDDAlquiler {
 	private static Statement s;
@@ -10,7 +10,7 @@ public class BBDDAlquiler {
 	private static ResultSet reg;
 	
 	public static void añadir(Alquiler alq, Connection c){
-		String cadena="INSERT INTO alquileres_libro VALUES('" + alq.getFecha_inicio() + "','" + alq.getFecha_final()+"','" + alq.getEstado_peticion()+"','" + alq.getId_libro()+"','"+ alq.getDni_socio() +"')"; 	
+		String cadena="INSERT INTO alquileres_libro VALUES('" + alq.getFecha_inicio() + "','" + alq.getFecha_final()+"','" + alq.getId_libro()+"','"+ alq.getDni_socio() +"')"; 	
 		/*
 		 * añadimos un socio a la tabla introduciendo todos sus datos esenciales.
 		 */
@@ -40,8 +40,8 @@ public class BBDDAlquiler {
 		}
 	}
 	
-	public static String buscarDatosAlquiler(Alquiler alq, Connection c){
-		String cadena="SELECT * FROM alquileres_libros WHERE dni_socio='" + alq.getDni_socio() +"'";
+	public static Date buscarFechaFinalAlquiler(Alquiler alq, Connection c){
+		String cadena="SELECT MAX(fecha_final) FROM alquileres_libro WHERE id_libro=" + alq.getId_libro() ;
 		/*
 		 * esta consulta la utilizaremos para saber mediante el dni_socio que libros tiene ese socio en alquiler.
 		 */
@@ -49,12 +49,12 @@ public class BBDDAlquiler {
 			s=c.createStatement();
 			reg=s.executeQuery(cadena);
 			if ( reg.next()){
-				String t=reg.getString(1);
+				java.sql.Date  t=reg.getDate(1);
 				s.close();
 				return t;
 			}
 			s.close();
-			return "";
+			return null;
 		}
 		catch ( SQLException e){
 	//		System.out.println(e.getMessage());

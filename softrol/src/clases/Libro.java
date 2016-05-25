@@ -36,7 +36,15 @@ public class Libro {
 	}
 	
 	
-	
+	public static int buscarIdLibro( String titulo){
+		Libro lib;
+		BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");
+		lib=new Libro(titulo);
+		mibase.abrir();
+		int idLibro =BBDDLibro.buscarIdLibro(lib, mibase.getConexion()); //buscar el id del libro para añadirlo a la tabla de reservas
+		mibase.cerrar();
+		return idLibro;
+	}
 	
 	public Libro(String titulo) {
 		this.titulo = titulo;

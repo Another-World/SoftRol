@@ -160,25 +160,23 @@ public class SoftRol {
 										switch(opc){
 										case 2:
 											System.out.println("Ha seleccionado usar en el local.");
-											System.out.print("Introduce el tiempo que desea reservarlo: ");
-											int tiempoReserva=sc.nextInt();
 											
-						//***				// dar formato a la fecha para poder añadirla a la BBDD correctamente
-											LocalDateTime horaReserva=LocalDate.now().atTime(LocalTime.now());
-											LocalDateTime horaFinal= LocalDate.now().atTime(LocalTime.now()).plusHours(tiempoReserva);
-											System.out.println("La hora actual es: "+ horaReserva.getHour()+" horas y "+horaReserva.getMinute()+" minutos.");
-											System.out.println("debe devolver el libro a las: "+ horaFinal.getHour()+" horas y "+horaFinal.getMinute()+" minutos.");
+											
+						
+											LocalDate DiaReservado=LocalDate.now();
+											
+											
+											System.out.println("debe devolver el libro el día: "+ DiaReservado);
 
 											mibase.abrir();
 											BBDDLibro.actualizarEstadoTrue(lib, mibase.getConexion());// cambiar el boolean a true para reservarlo
 											mibase.cerrar();
 
-											lib=new Libro(titulo);
-											mibase.abrir();
-											idLibro =BBDDLibro.buscarIdLibro(lib, mibase.getConexion()); //buscar el id del libro para añadirlo a la tabla de reservas
-											mibase.cerrar();
+											
+											idLibro =Libro.buscarIdLibro(titulo); //buscar el id del libro para añadirlo a la tabla de reservas
+											
 
-											alq=new Alquiler(horaReserva,horaFinal,"alquilado",idLibro,dniSocio);
+											alq=new Alquiler(DiaReservado,DiaReservado,idLibro,dniSocio);
 											mibase.abrir();
 											BBDDAlquiler.añadir(alq, mibase.getConexion()); // añadir la reserva a la BBDD
 											mibase.cerrar();
@@ -191,15 +189,14 @@ public class SoftRol {
 											try{
 												input = Files.newBufferedReader(plantillaLibro);
 												output = Files.newBufferedWriter(salidaticketLibro);
-												String fechaActual=LocalDate.now().toString();
-												String fechaFinal=horaFinal.toString();
+												String fechaFinal=DiaReservado.toString();
 												while ( (bufferIn = input.readLine()) != null){
 													//aqui se forma el ticket, sustituimos los campos entre "<" y ">" por los datos pertinentes
 													bufferIn=bufferIn.replaceAll("<titulo>",titulo);
 													bufferIn=bufferIn.replaceAll("<dni>",dniSocio);
-													bufferIn=bufferIn.replaceAll("<falquiler>",fechaActual); 
+													bufferIn=bufferIn.replaceAll("<falquiler>",fechaFinal); 
 													bufferIn=bufferIn.replaceAll("<ffinal>",fechaFinal);
-													bufferIn=bufferIn.replaceAll("<tiempo>",tiempoReserva+" horas");
+													bufferIn=bufferIn.replaceAll("<tiempo>",1+" Dia");
 													output.write(bufferIn);
 													output.newLine();
 													System.out.println(bufferIn);
@@ -224,15 +221,18 @@ public class SoftRol {
 										}//fin de switch 
 									}
 									else{
+
+										
+										idLibro =Libro.buscarIdLibro(titulo); //buscar el id del libro para añadirlo a la tabla de reservas
+										
+										alq=new Alquiler(idLibro);
+										mibase.abrir();
+										java.sql.Date fechaMayor=BBDDAlquiler.buscarFechaFinalAlquiler(alq, mibase.getConexion()); // buscar fechaFinal del libro alquilado
+										mibase.cerrar();
+										
 										System.out.println("El libro "+ titulo+ " ya está alquilado.");
-										System.out.print("¿Quieres reservarlo cuando sea devuelto? (si / no): ");
-										repetir=sc.nextLine();
-										if(repetir.equals("si")){
-											// aqui hacer reserva para cuando sea devuelto
-										}
-										else{
-											System.out.println("Operación cancelada. El libro no ha sido reservado.");
-										}
+										System.out.println("La fecha de devolución es: " +fechaMayor);
+										
 									}
 
 								}
