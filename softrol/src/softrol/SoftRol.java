@@ -160,32 +160,22 @@ public class SoftRol {
 										switch(opc){
 										case 2:
 											System.out.println("Ha seleccionado usar en el local.");
-											
-											
-						
 											LocalDate DiaReservado=LocalDate.now();
-											
-											
 											System.out.println("debe devolver el libro el día: "+ DiaReservado);
 
 											mibase.abrir();
 											BBDDLibro.actualizarEstadoTrue(lib, mibase.getConexion());// cambiar el boolean a true para reservarlo
 											mibase.cerrar();
-
 											
 											idLibro =Libro.buscarIdLibro(titulo); //buscar el id del libro para añadirlo a la tabla de reservas
 											
-
 											alq=new Alquiler(DiaReservado,DiaReservado,idLibro,dniSocio);
 											mibase.abrir();
 											BBDDAlquiler.añadir(alq, mibase.getConexion()); // añadir la reserva a la BBDD
 											mibase.cerrar();
-
 											//creacion del ticket del libro
 											Path salidaticketLibro=Paths.get("recibos/libro/ticketLibro-"+dniSocio+"-"+enumerarTicket(2,dniSocio)+".txt"); //crear el nombre del ticket
-
 											String bufferIn = "";
-
 											try{
 												input = Files.newBufferedReader(plantillaLibro);
 												output = Files.newBufferedWriter(salidaticketLibro);
@@ -214,7 +204,48 @@ public class SoftRol {
 										case 3:
 											System.out.println("Ha seleccionado llevar a casa.");
 											System.out.print("Introduce el número de dias que desea reservar: ");
-											//incompleto
+											int Ndias=sc.nextInt();
+											DiaReservado=LocalDate.now();
+											System.out.println("El dia actual es: "+ DiaReservado);
+											LocalDate DiaDevolucion= DiaReservado=LocalDate.now().plusDays(Ndias);
+											System.out.println("debe devolver el libro el día: "+ DiaDevolucion);
+											mibase.abrir();
+											BBDDLibro.actualizarEstadoTrue(lib, mibase.getConexion());// cambiar el boolean a true para reservarlo
+											mibase.cerrar();
+											
+											idLibro =Libro.buscarIdLibro(titulo); //buscar el id del libro para añadirlo a la tabla de reservas
+											
+											alq=new Alquiler(DiaReservado,DiaDevolucion,idLibro,dniSocio);
+											mibase.abrir();
+											BBDDAlquiler.añadir(alq, mibase.getConexion()); // añadir la reserva a la BBDD
+											mibase.cerrar();
+											//creacion del ticket del libro
+											salidaticketLibro=Paths.get("recibos/libro/ticketLibro-"+dniSocio+"-"+enumerarTicket(2,dniSocio)+".txt"); //crear el nombre del ticket
+											bufferIn = "";
+											try{
+												input = Files.newBufferedReader(plantillaLibro);
+												output = Files.newBufferedWriter(salidaticketLibro);
+												String fechainicial=DiaReservado.toString();
+												String fechaFinal=DiaDevolucion.toString();
+												while ( (bufferIn = input.readLine()) != null){
+													//aqui se forma el ticket, sustituimos los campos entre "<" y ">" por los datos pertinentes
+													bufferIn=bufferIn.replaceAll("<titulo>",titulo);
+													bufferIn=bufferIn.replaceAll("<dni>",dniSocio);
+													bufferIn=bufferIn.replaceAll("<falquiler>",fechainicial); 
+													bufferIn=bufferIn.replaceAll("<ffinal>",fechaFinal);
+													bufferIn=bufferIn.replaceAll("<tiempo>",Ndias+" Dia(s)");
+													output.write(bufferIn);
+													output.newLine();
+													System.out.println(bufferIn);
+												}
+												input.close();
+												output.close();
+
+											}catch(IOException e){
+												//e.printStackTrace();
+												System.out.println("Error:"+e.getMessage());
+											}// fin del ticket
+
 
 
 											break;
