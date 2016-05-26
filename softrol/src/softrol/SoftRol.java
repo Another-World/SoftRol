@@ -54,10 +54,10 @@ public class SoftRol {
 		Path salidaLibro=Paths.get("recibos/libro");
 		Path salidaMesa=Paths.get("recibos/mesa");
 		//variables
-		int opc = 1, opc2, idLibro;
-		String dniSocio, operacion, titulo, repetir, usuario, dniValidado,telefonoValidado, telefono="";
+		int opc = 1, opc2, idLibro,mesasLibres;
+		String dniSocio, operacion, titulo, repetir, usuario, dniValidado,telefonoValidado,tipo, telefono="";
 		LocalDate fechaValidada, fecha;
-		boolean comprobar,seguir=false;
+		boolean comprobar;
 		// inicio de sesión
 		Socio.eliminarSocioMoroso();
 		do {
@@ -74,501 +74,516 @@ public class SoftRol {
 			mibase.cerrar();
 
 			do {
-				
-				try{
-					seguir=false;
-					if (usuario.equals("administrador")) { // Menú principal para los usuarios que sean administradores
+				if (usuario.equals("administrador")) { // Menú principal para los usuarios que sean administradores
+					do {
+						System.out.println("       --- Menú ---");
+						System.out.println("1. Salir de la aplicación");
+						System.out.println("2. Gestión de biblioteca");
+						System.out.println("3. Gestión de mesas");
+						System.out.println("4. Gestión de socios");
+						System.out.println("5. Gestión de cuotas");
+						System.out.print("Introduce una opción: ");
+						opc = sc.nextInt();
+						System.out.println();
+						if (opc < 1 || opc > 5) {
+							System.out.println("Introduce una opción entre 1 y 5.");
+						}
+					} while (opc < 1 || opc > 5);
+				} else {
+					if (usuario.equals("empleado")) { // Menú principal para los usuarios que sean empleados
 						do {
-							System.out.println("       --- Menú ---");
+							System.out.println("--- Menú ---");
 							System.out.println("1. Salir de la aplicación");
 							System.out.println("2. Gestión de biblioteca");
 							System.out.println("3. Gestión de mesas");
-							System.out.println("4. Gestión de socios");
-							System.out.println("5. Gestión de cuotas");
 							System.out.print("Introduce una opción: ");
 							opc = sc.nextInt();
 							System.out.println();
-							if (opc < 1 || opc > 5) {
-								System.out.println("Introduce una opción entre 1 y 5.");
+							if (opc < 1 || opc > 3) {
+								System.out.println("Introduce una opción entre 1 y 3.");
 							}
-						} while (opc < 1 || opc > 5);
+						} while (opc < 1 || opc > 3);
 					} else {
-						if (usuario.equals("empleado")) { // Menú principal para los usuarios que sean empleados
-							do {
-								System.out.println("--- Menú ---");
-								System.out.println("1. Salir de la aplicación");
-								System.out.println("2. Gestión de biblioteca");
-								System.out.println("3. Gestión de mesas");
-								System.out.print("Introduce una opción: ");
-								opc = sc.nextInt();
-								System.out.println();
-								if (opc < 1 || opc > 3) {
-									System.out.println("Introduce una opción entre 1 y 3.");
-								}
-							} while (opc < 1 || opc > 3);
-						} else {
-							System.out.println("Usuario o contraseña incorrectos.");
-						}
-
+						System.out.println("Usuario o contraseña incorrectos.");
 					}
-					//----------------------------------------- PARTES DEL MENÚ  -----------------------------------------
-					switch (opc) {
-					case 2: // Gestion de la biblioteca
-						do {
-							System.out.println("--- Gestión de biblioteca ---");
-							System.out.println("1. Volver al menú");
-							System.out.println("2. Alquilar libro");
-							System.out.println("3. Devolver libro");
-							System.out.println("4. Listar libros");
-							System.out.print("Introduce una opción: ");
-							opc2 = sc.nextInt();
-							sc.nextLine();
-							System.out.println();
-						} while (opc2 < 1 || opc2 > 4);
-						switch (opc2) {
-						case 2:
-							System.out.println("--- Alquilar libro ---");
-							do {
-								System.out.print("Introduce el DNI del socio: ");
-								dniSocio = sc.nextLine();
-								comprobar=Socio.validarDni(dniSocio);
-								//System.out.println(comprobar);
-							}while (comprobar == false);
-							dniValidado = Socio.comprobarDni(dniSocio); // validar si el socio existe en la BBDD para poder tener acceso a los libros
 
-							if (dniSocio.equals(dniValidado)) {
-
-								int numeroSancion=Sancion.numeroSanciones(dniSocio);
-								if(numeroSancion==0){
-									System.out.print("Anota el título del libro: ");
-									titulo = sc.nextLine();
-									titulo=titulo.toUpperCase();
-									String libroValidado=Libro.comprobarLibro(titulo); // comprobar si existe el libro solicitado
-
-									if (titulo.equals(libroValidado)) {
-										System.out.println("Ha seleccionado el libro " + titulo);
-										lib = new Libro(titulo);
-										mibase.abrir();
-										String estadoLibro =BBDDLibro.buscarEstadoLibro(lib, mibase.getConexion()); // comprobar si el libro ya esta reservado
-										mibase.cerrar();
-
-										if(estadoLibro.equals("0")){
-											System.out.println("Desea llevar el libro a casa o usarlo en el local?");
-											System.out.println("1. Cancelar.");
-											System.out.println("2. Usar en local.");
-											System.out.println("3. Llevar a casa.");
-											System.out.print("Introduce opción: ");
-											opc2=sc.nextInt();
-
-											switch(opc2){
-											case 2:
-												System.out.println("Ha seleccionado usar en el local.");
-												LocalDate DiaReservado=LocalDate.now();
-												System.out.println("debe devolver el libro el día: "+ DiaReservado);
-
-												mibase.abrir();
-												BBDDLibro.actualizarEstadoLibroTrue(lib, mibase.getConexion());// cambiar el boolean a true para reservarlo
-												mibase.cerrar();
-
-												idLibro =Libro.buscarIdLibro(titulo); //buscar el id del libro para añadirlo a la tabla de reservas
-
-												alq=new Alquiler(DiaReservado,DiaReservado,idLibro,dniSocio);
-												mibase.abrir();
-												BBDDAlquiler.añadir(alq, mibase.getConexion()); // añadir la reserva a la BBDD
-												mibase.cerrar();
-												//creacion del ticket del libro
-												Path salidaticketLibro=Paths.get("recibos/libro/ticketLibro-"+dniSocio+"-"+enumerarTicket(2,dniSocio)+".txt"); //crear el nombre del ticket
-												String bufferIn = "";
-												try{
-													input = Files.newBufferedReader(plantillaLibro);
-													output = Files.newBufferedWriter(salidaticketLibro);
-													String fechaFinal=DiaReservado.toString();
-													while ( (bufferIn = input.readLine()) != null){
-														//aqui se forma el ticket, sustituimos los campos entre "<" y ">" por los datos pertinentes
-														bufferIn=bufferIn.replaceAll("<titulo>",titulo);
-														bufferIn=bufferIn.replaceAll("<dni>",dniSocio);
-														bufferIn=bufferIn.replaceAll("<falquiler>",fechaFinal); 
-														bufferIn=bufferIn.replaceAll("<ffinal>",fechaFinal);
-														bufferIn=bufferIn.replaceAll("<tiempo>",1+" Dia");
-														output.write(bufferIn);
-														output.newLine();
-														System.out.println(bufferIn);
-													}
-													input.close();
-													output.close();
-
-												}catch(IOException e){
-													//e.printStackTrace();
-													System.out.println("Error:"+e.getMessage());
-												}// fin del ticket
-												String nombreTicket=salidaticketLibro.getFileName().toString();
-												System.out.println("Se ha guardado el ticket: "+ nombreTicket +".");
-
-												break;
-											case 3:
-												System.out.println("Ha seleccionado llevar a casa.");
-												System.out.print("Introduce el número de dias que desea reservar: ");
-												int Ndias=sc.nextInt();
-												DiaReservado=LocalDate.now();
-												System.out.println("El dia actual es: "+ DiaReservado);
-												LocalDate DiaDevolucion=LocalDate.now().plusDays(Ndias);
-												System.out.println("debe devolver el libro el día: "+ DiaDevolucion);
-												mibase.abrir();
-												BBDDLibro.actualizarEstadoLibroTrue(lib, mibase.getConexion());// cambiar el boolean a true para reservarlo
-												mibase.cerrar();
-
-												idLibro =Libro.buscarIdLibro(titulo); //buscar el id del libro para añadirlo a la tabla de reservas
-
-												alq=new Alquiler(DiaReservado,DiaDevolucion,idLibro,dniSocio);
-												mibase.abrir();
-												BBDDAlquiler.añadir(alq, mibase.getConexion()); // añadir la reserva a la BBDD
-												mibase.cerrar();
-												//creacion del ticket del libro
-												salidaticketLibro=Paths.get("recibos/libro/ticketLibro-"+dniSocio+"-"+enumerarTicket(2,dniSocio)+".txt"); //crear el nombre del ticket
-												bufferIn = "";
-												try{
-													input = Files.newBufferedReader(plantillaLibro);
-													output = Files.newBufferedWriter(salidaticketLibro);
-													String fechainicial=DiaReservado.toString();
-													String fechaFinal=DiaDevolucion.toString();
-													while ( (bufferIn = input.readLine()) != null){
-														//aqui se forma el ticket, sustituimos los campos entre "<" y ">" por los datos pertinentes
-														bufferIn=bufferIn.replaceAll("<titulo>",titulo);
-														bufferIn=bufferIn.replaceAll("<dni>",dniSocio);
-														bufferIn=bufferIn.replaceAll("<falquiler>",fechainicial); 
-														bufferIn=bufferIn.replaceAll("<ffinal>",fechaFinal);
-														bufferIn=bufferIn.replaceAll("<tiempo>",Ndias+" Dia(s)");
-														output.write(bufferIn);
-														output.newLine();
-														System.out.println(bufferIn);
-													}
-													input.close();
-													output.close();
-
-												}catch(IOException e){
-													//e.printStackTrace();
-													System.out.println("Error:"+e.getMessage());
-												}// fin del ticket
-												nombreTicket=salidaticketLibro.getFileName().toString();
-												System.out.println("Se ha guardado el ticket: "+ nombreTicket +".");
-
-
-												break;
-											}//fin de switch 
-										}
-										else{
-
-
-											idLibro =Libro.buscarIdLibro(titulo); //buscar el id del libro para añadirlo a la tabla de reservas
-
-											alq=new Alquiler(idLibro);
-											mibase.abrir();
-											java.sql.Date fechaMayor=BBDDAlquiler.buscarFechaFinalAlquiler(alq, mibase.getConexion()); // buscar fechaFinal del libro alquilado
-											mibase.cerrar();
-
-											System.out.println("El libro "+ titulo+ " ya está alquilado.");
-											System.out.println("La fecha de devolución es: " +fechaMayor);
-
-										}
-
-									}
-									else{
-										System.out.println("El libro "+titulo+" no está disponible en nuestro repertorio.");
-									}
-								}
-								else{
-									System.out.println("El socio "+ dniSocio+" tiene "+ numeroSancion+" sanciones pendientes. No puede alquilar libros.");
-									System.out.println();
-								}
-
-
-
-							} else {
-								System.out.println("No existe el socio con dni: " + dniSocio);
-							}
-
-							break;
-
-						case 3:
-							System.out.println("--- Devolver libro ---");
-							break;
-						case 4:
-							System.out.println("--- Listar libros ---");
-
-							mibase.abrir();
-							Vector<Libro>  listaLibros = BBDDLibro.listarLibros(mibase.getConexion());//listar libros con un vector
-							mibase.cerrar();
-							System.out.println(listaLibros);
-							break;
-						}
-						break;//fin del menu gestion de libros
-						//-------------------------------------------------------------------------------------------------------------------------------
-					case 3: // Gestion de las mesas
-						sc.nextLine(); // limpiar Scanner para que no salte el dni
-						do{
-
-							System.out.print("Introduce el DNI del socio: ");
-							dniSocio = sc.nextLine();
-							comprobar=Socio.validarDni(dniSocio);
-						}while (comprobar == false);
-						dniValidado = Socio.comprobarDni(dniSocio); //validar si el socio está en la BBDD para poder reservar una mesa
-
-						if (dniSocio.equals(dniValidado)) {
-							System.out.println("--- Gestión de mesas ---");
-							System.out.println("1. Volver al menú");
-							System.out.println("2. Mesa de: Rol");
-							System.out.println("3. Mesa de: Estrategia");
-							System.out.println("4. Listar mesas");
-							System.out.print("Introduce una opción: ");
-							opc2 = sc.nextInt();
-							switch (opc2) {
-							case 2:
-
-								break;
-							case 3:
-
-								break;
-							case 4:
-								System.out.println("--- Listar mesas ---");
-								mibase.abrir();
-								Vector<Mesa>  listarMesa = BBDDMesa.listarMesa(mibase.getConexion());//listar mesas con un vector
-								mibase.cerrar();
-								System.out.println(listarMesa);	
-								break;
-							}
-						} else {
-							System.out.println("No se puede reservar mesa sin ser socio.");
-						}
-						break;// fin de gestion de mesas
-						//-------------------------------------------------------------------------------------------------------------------------------			
-					case 4:// Gestion de los socios
-
-						do {
-							System.out.println("--- Gestión de socios ---");
-							System.out.println("1. Volver al menú");
-							System.out.println("2. Dar de alta");
-							System.out.println("3. Dar de baja");
-							System.out.println("4. Listar socios");
-							System.out.print("Introduce una opción: ");
-							opc2 = sc.nextInt();
-							sc.nextLine();
-							System.out.println();
-						} while (opc2 < 1 || opc2 > 4);
-
-						switch (opc2) { //Submenú de gestion de socios
-						case 2:
-							System.out.println("--- Dar de alta ---");
-							// comprobación para validar existencia del socio
-							do{
-								System.out.print("Introduce el DNI del socio: ");
-								dniSocio = sc.nextLine();
-								comprobar=Socio.validarDni(dniSocio);
-								if (comprobar == false) {
-									System.out.println("El dni es incorrecto.");
-									break;
-								}
-								else {
-
-									dniValidado = Socio.comprobarDni(dniSocio);
-									if (dniSocio.equals(dniValidado)) {
-										System.out.println("ERROR. El socio ya existe.");
-									} else {
-										// registrar datos del socio
-										System.out.println("Introduce los datos del socio. ");
-										System.out.print("Nombre :");
-										String nombre = sc.nextLine();
-
-										do{
-
-											System.out.print("Teléfono :");
-											telefono = sc.nextLine();
-
-											telefonoValidado=Socio.validarTelefono(telefono);
-											//if(telefonoValidado==null){
-											//	System.out.println("El teléfono debe ser válido.");
-											//}
-										}while(telefonoValidado==null);
-										do {
-											System.out.print("Fecha de nacimiento (año-mes-dia) :");
-											String fechaNacimiento = sc.nextLine();
-											fecha = LocalDate.parse(fechaNacimiento);
-											fechaValidada = Socio.validarFechaNacimiento(fecha);
-											if (fechaValidada == null) {
-												System.out.println("El socio debe tener más de 14 años. ");
-												repetir="no";
-												break;
-											}
-											else{
-												//añadir socio a la BBDD
-												soc = new Socio(nombre, telefono, dniSocio, fecha);
-												mibase.abrir();
-												BBDDSocio.añadir(soc, mibase.getConexion());
-												mibase.cerrar();
-												System.out.println("El usuario "+ nombre +" ha sido dado de alta correctamente.");
-
-
-											}
-										} while (fechaValidada == null);
-
-										//creacion de ticket del pago de la cuota
-										Path salidaCuota=Paths.get("recibos/cuota/ticketCuota-"+dniSocio+"-"+enumerarTicket(1,dniSocio)+".txt"); //crear el nombre del ticket
-										Socio soci=Socio.ticketCuota(dniSocio); // extraer los datos del socio para plasmarlos en el ticket
-										String importeCuota=Cuota.comprobarCuota(dniSocio); //extraer el precio de la cuota
-										String bufferIn = "";
-										try{
-											input = Files.newBufferedReader(plantillaCuota);
-											output = Files.newBufferedWriter(salidaCuota);
-											String fechaPago=LocalDate.now().toString();
-											while ( (bufferIn = input.readLine()) != null){
-												//aqui se forma el ticket, sustituimos los campos entre "<" y ">" por los datos pertinentes
-												bufferIn=bufferIn.replaceAll("<nombre>",soci.getNombre());
-												bufferIn=bufferIn.replaceAll("<dni>",soci.getDni_socio());
-												bufferIn=bufferIn.replaceAll("<fpago>",fechaPago); 
-												bufferIn=bufferIn.replaceAll("<importe>",importeCuota+" €");
-												output.write(bufferIn);
-												output.newLine();
-												System.out.println(bufferIn);
-											}
-											input.close();
-											output.close();
-
-										}catch(IOException e){
-											//e.printStackTrace();
-											System.out.println("Error:"+e.getMessage());
-										}
-										String nombreTicket=salidaCuota.getFileName().toString();
-										System.out.println("Se ha guardado el ticket: "+ nombreTicket +".");
-
-									}
-								}
-
-							}while (comprobar == false);
-
-
-							break;
-						case 3:
-							System.out.println("--- Dar de baja ---");
-
-							System.out.print("Introduce el DNI del socio: ");
-							dniSocio = sc.nextLine();
-							dniValidado = Socio.comprobarDni(dniSocio);
-
-							if (dniSocio.equals(dniValidado)) {
-
-								System.out.println("comprobar si posee libros."); // continuar por aqui
-
-
-							} else {
-								System.out.println("No existe el socio con dni: " + dniSocio);
-							}
-							break;
-						case 4:
-							System.out.println("--- Listar socios ---");
-							mibase.abrir();
-							Vector<Socio>  listarSocio = BBDDSocio.listarSocio(mibase.getConexion());//listar socios con un vector
-							mibase.cerrar();
-							System.out.println(listarSocio);	
-							break;
-						}
-
-						break; // fin de gestion de socios
-						//-------------------------------------------------------------------------------------------------------------------------------
-					case 5: // gestion de cuotas
-						System.out.println("--- Gestión de cuotas ---");
+				}
+				//----------------------------------------- PARTES DEL MENÚ  -----------------------------------------
+				switch (opc) {
+				case 2: // Gestion de la biblioteca
+					do {
+						System.out.println("--- Gestión de biblioteca ---");
 						System.out.println("1. Volver al menú");
-						System.out.println("2. Pagar Cuota");
-						System.out.println("3. Listar Cuotas");
+						System.out.println("2. Alquilar libro");
+						System.out.println("3. Devolver libro");
+						System.out.println("4. Listar libros");
 						System.out.print("Introduce una opción: ");
 						opc2 = sc.nextInt();
 						sc.nextLine();
 						System.out.println();
-						switch(opc2){
-						case 2://aqui se pagan las cuotas
-							System.out.println("--- Pagar cuota ---");
+					} while (opc2 < 1 || opc2 > 4);
+					switch (opc2) {
+					case 2:
+						System.out.println("--- Alquilar libro ---");
+						do {
+							System.out.print("Introduce el DNI del socio: ");
+							dniSocio = sc.nextLine();
+							comprobar=Socio.validarDni(dniSocio);
+							//System.out.println(comprobar);
+						}while (comprobar == false);
+						dniValidado = Socio.comprobarDni(dniSocio); // validar si el socio existe en la BBDD para poder tener acceso a los libros
 
-							do {
-								System.out.print("Introduce el DNI del socio: ");
-								dniSocio = sc.nextLine();
-								comprobar=Socio.validarDni(dniSocio);
-								//System.out.println(comprobar);
-							}while (comprobar == false);
-							dniValidado = Socio.comprobarDni(dniSocio); // validar si el socio existe en la BBDD para realizar el pago de la cuota.
+						if (dniSocio.equals(dniValidado)) {
 
+							int numeroSancion=Sancion.numeroSanciones(dniSocio);
+							if(numeroSancion==0){
+								System.out.print("Anota el título del libro: ");
+								titulo = sc.nextLine();
+								titulo=titulo.toUpperCase();
+								String libroValidado=Libro.comprobarLibro(titulo); // comprobar si existe el libro solicitado
 
-							do{
-								System.out.println("¿Estás seguro de querer realizar la operación? (si / no)" );
-								repetir=sc.nextLine();
-							}while(repetir.equals("si")!=true && repetir.equals("no")!=true);
-							if(repetir.equals("si")){
-								if (dniSocio.equals(dniValidado)) {
-									soc = new Socio(dniSocio);
+								if (titulo.equals(libroValidado)) {
+									System.out.println("Ha seleccionado el libro " + titulo);
+									lib = new Libro(titulo);
 									mibase.abrir();
-									int cuotaPagada=BBDDSocio.comprobarCuotaPagada(soc, mibase.getConexion());
+									String estadoLibro =BBDDLibro.buscarEstadoLibro(lib, mibase.getConexion()); // comprobar si el libro ya esta reservado
 									mibase.cerrar();
-									if (cuotaPagada==0){
-										//creacion de ticket del pago de la cuota
-										Path salidaCuota=Paths.get("recibos/cuota/ticketCuota-"+dniSocio+"-"+enumerarTicket(1,dniSocio)+".txt"); //crear el nombre del ticket
-										Socio soci=Socio.ticketCuota(dniSocio); // extraer los datos del socio para plasmarlos en el ticket
-										String importeCuota=Cuota.comprobarCuota(dniSocio); //extraer el precio de la cuota
-										String bufferIn = "";
-										try{
-											input = Files.newBufferedReader(plantillaCuota);
-											output = Files.newBufferedWriter(salidaCuota);
-											String fechaPago=LocalDate.now().toString();
-											while ( (bufferIn = input.readLine()) != null){
-												//aqui se forma el ticket, sustituimos los campos entre "<" y ">" por los datos pertinentes
-												bufferIn=bufferIn.replaceAll("<nombre>",soci.getNombre());
-												bufferIn=bufferIn.replaceAll("<dni>",soci.getDni_socio());
-												bufferIn=bufferIn.replaceAll("<fpago>",fechaPago); 
-												bufferIn=bufferIn.replaceAll("<importe>",importeCuota+" €");
-												output.write(bufferIn);
-												output.newLine();
-												System.out.println(bufferIn);
-											}
-											input.close();
-											output.close();
 
-										}catch(IOException e){
-											//e.printStackTrace();
-											System.out.println("Error:"+e.getMessage());
-										}
-										String nombreTicket=salidaCuota.getFileName().toString();
-										System.out.println("Se ha guardado el ticket: "+ nombreTicket +".");
+									if(estadoLibro.equals("0")){
+										System.out.println("Desea llevar el libro a casa o usarlo en el local?");
+										System.out.println("1. Cancelar.");
+										System.out.println("2. Usar en local.");
+										System.out.println("3. Llevar a casa.");
+										System.out.print("Introduce opción: ");
+										opc2=sc.nextInt();
+
+										switch(opc2){
+										case 2:
+											System.out.println("Ha seleccionado usar en el local.");
+											LocalDate DiaReservado=LocalDate.now();
+											System.out.println("debe devolver el libro el día: "+ DiaReservado);
+
+											mibase.abrir();
+											BBDDLibro.actualizarEstadoLibroTrue(lib, mibase.getConexion());// cambiar el boolean a true para reservarlo
+											mibase.cerrar();
+
+											idLibro =Libro.buscarIdLibro(titulo); //buscar el id del libro para añadirlo a la tabla de reservas
+
+											alq=new Alquiler(DiaReservado,DiaReservado,idLibro,dniSocio);
+											mibase.abrir();
+											BBDDAlquiler.añadir(alq, mibase.getConexion()); // añadir la reserva a la BBDD
+											mibase.cerrar();
+											//creacion del ticket del libro
+											Path salidaticketLibro=Paths.get("recibos/libro/ticketLibro-"+dniSocio+"-"+enumerarTicket(2,dniSocio)+".txt"); //crear el nombre del ticket
+											String bufferIn = "";
+											try{
+												input = Files.newBufferedReader(plantillaLibro);
+												output = Files.newBufferedWriter(salidaticketLibro);
+												String fechaFinal=DiaReservado.toString();
+												while ( (bufferIn = input.readLine()) != null){
+													//aqui se forma el ticket, sustituimos los campos entre "<" y ">" por los datos pertinentes
+													bufferIn=bufferIn.replaceAll("<titulo>",titulo);
+													bufferIn=bufferIn.replaceAll("<dni>",dniSocio);
+													bufferIn=bufferIn.replaceAll("<falquiler>",fechaFinal); 
+													bufferIn=bufferIn.replaceAll("<ffinal>",fechaFinal);
+													bufferIn=bufferIn.replaceAll("<tiempo>",1+" Dia");
+													output.write(bufferIn);
+													output.newLine();
+													System.out.println(bufferIn);
+												}
+												input.close();
+												output.close();
+
+											}catch(IOException e){
+												//e.printStackTrace();
+												System.out.println("Error:"+e.getMessage());
+											}// fin del ticket
+											String nombreTicket=salidaticketLibro.getFileName().toString();
+											System.out.println("Se ha guardado el ticket: "+ nombreTicket +".");
+
+											break;
+										case 3:
+											System.out.println("Ha seleccionado llevar a casa.");
+											System.out.print("Introduce el número de dias que desea reservar: ");
+											int Ndias=sc.nextInt();
+											DiaReservado=LocalDate.now();
+											System.out.println("El dia actual es: "+ DiaReservado);
+											LocalDate DiaDevolucion=LocalDate.now().plusDays(Ndias);
+											System.out.println("debe devolver el libro el día: "+ DiaDevolucion);
+											mibase.abrir();
+											BBDDLibro.actualizarEstadoLibroTrue(lib, mibase.getConexion());// cambiar el boolean a true para reservarlo
+											mibase.cerrar();
+
+											idLibro =Libro.buscarIdLibro(titulo); //buscar el id del libro para añadirlo a la tabla de reservas
+
+											alq=new Alquiler(DiaReservado,DiaDevolucion,idLibro,dniSocio);
+											mibase.abrir();
+											BBDDAlquiler.añadir(alq, mibase.getConexion()); // añadir la reserva a la BBDD
+											mibase.cerrar();
+											//creacion del ticket del libro
+											salidaticketLibro=Paths.get("recibos/libro/ticketLibro-"+dniSocio+"-"+enumerarTicket(2,dniSocio)+".txt"); //crear el nombre del ticket
+											bufferIn = "";
+											try{
+												input = Files.newBufferedReader(plantillaLibro);
+												output = Files.newBufferedWriter(salidaticketLibro);
+												String fechainicial=DiaReservado.toString();
+												String fechaFinal=DiaDevolucion.toString();
+												while ( (bufferIn = input.readLine()) != null){
+													//aqui se forma el ticket, sustituimos los campos entre "<" y ">" por los datos pertinentes
+													bufferIn=bufferIn.replaceAll("<titulo>",titulo);
+													bufferIn=bufferIn.replaceAll("<dni>",dniSocio);
+													bufferIn=bufferIn.replaceAll("<falquiler>",fechainicial); 
+													bufferIn=bufferIn.replaceAll("<ffinal>",fechaFinal);
+													bufferIn=bufferIn.replaceAll("<tiempo>",Ndias+" Dia(s)");
+													output.write(bufferIn);
+													output.newLine();
+													System.out.println(bufferIn);
+												}
+												input.close();
+												output.close();
+
+											}catch(IOException e){
+												//e.printStackTrace();
+												System.out.println("Error:"+e.getMessage());
+											}// fin del ticket
+											nombreTicket=salidaticketLibro.getFileName().toString();
+											System.out.println("Se ha guardado el ticket: "+ nombreTicket +".");
 
 
+											break;
+										}//fin de switch 
+									}
+									else{
 
-										System.out.println("");
-									}else{
-										System.out.println("la cuota del socio " +dniSocio+" ya está pagada para el mes en curso. ");
+
+										idLibro =Libro.buscarIdLibro(titulo); //buscar el id del libro para añadirlo a la tabla de reservas
+
+										alq=new Alquiler(idLibro);
+										mibase.abrir();
+										java.sql.Date fechaMayor=BBDDAlquiler.buscarFechaFinalAlquiler(alq, mibase.getConexion()); // buscar fechaFinal del libro alquilado
+										mibase.cerrar();
+
+										System.out.println("El libro "+ titulo+ " ya está alquilado.");
+										System.out.println("La fecha de devolución es: " +fechaMayor);
+
 									}
 
-								} else {
-									System.out.println("No existe el socio con dni: " + dniSocio);
 								}
-							}else{
-								System.out.println("La operación ha sido cancelada.");
+								else{
+									System.out.println("El libro "+titulo+" no está disponible en nuestro repertorio.");
+								}
+							}
+							else{
+								System.out.println("El socio "+ dniSocio+" tiene "+ numeroSancion+" sanciones pendientes. No puede alquilar libros.");
+								System.out.println();
 							}
 
-							break;//fin de pago de cuota
 
-						case 3:
-							//aqui  listamos las cuotas
-							System.out.println("--- Listar cuotas ---");
-							mibase.abrir();
-							Vector<Cuota>  listarCuota = BBDDCuota.listarCuota(mibase.getConexion());//listar cuotas con un vector
-							mibase.cerrar();
-							System.out.println(listarCuota);	
-							break;
-							//fin de listar cuotas
+
+						} else {
+							System.out.println("No existe el socio con dni: " + dniSocio);
 						}
 
-						break; // fin de gestion de socios
-					} // fin del case-menu principal
-				}catch(InputMismatchException IE){
-					System.out.println("Se ha producido un error inesperado.");
-					System.out.println("");
-				}
-	
+						break;
+
+					case 3:
+						System.out.println("--- Devolver libro ---");
+						break;
+					case 4:
+						System.out.println("--- Listar libros ---");
+
+						mibase.abrir();
+						Vector<Libro>  listaLibros = BBDDLibro.listarLibros(mibase.getConexion());//listar libros con un vector
+						mibase.cerrar();
+						System.out.println(listaLibros);
+						break;
+					}
+					break;//fin del menu gestion de libros
+					//-------------------------------------------------------------------------------------------------------------------------------
+				case 3: // Gestion de las mesas
+					sc.nextLine(); // limpiar Scanner para que no salte el dni
+					do{
+
+						System.out.print("Introduce el DNI del socio: ");
+						dniSocio = sc.nextLine();
+						comprobar=Socio.validarDni(dniSocio);
+					}while (comprobar == false);
+					dniValidado = Socio.comprobarDni(dniSocio); //validar si el socio está en la BBDD para poder reservar una mesa
+
+					if (dniSocio.equals(dniValidado)) {
+						System.out.println("--- Gestión de mesas ---");
+						System.out.println("1. Volver al menú");
+						System.out.println("2. Mesa de: Rol");
+						System.out.println("3. Mesa de: Estrategia");
+						System.out.println("4. Listar mesas");
+						System.out.print("Introduce una opción: ");
+						opc2 = sc.nextInt();
+						switch (opc2) {
+						case 2:
+
+						    tipo="rol";
+							mesa=new Mesa(tipo);
+							mibase.abrir();
+						    mesasLibres=BBDDMesa.buscarMesaLibres(mesa, mibase.getConexion()); // buscar mesasLibres de tipo rol
+							mibase.cerrar();
+							if(mesasLibres==0){
+								System.out.println("No quedan mesas disponibles de tipo rol.");
+							}
+							else{
+								Mesa.listadoMesasDisponibles(tipo);
+							}
+							break;
+						case 3:
+
+						    tipo="estrategia";
+							mesa=new Mesa(tipo);
+							mibase.abrir();
+						     mesasLibres=BBDDMesa.buscarMesaLibres(mesa, mibase.getConexion()); // buscar mesas libres de tipo estrategia
+							mibase.cerrar();
+							if(mesasLibres==0){
+								System.out.println("No quedan mesas disponibles de tipo estrategia.");
+							}
+							else{
+								//aquiiiiiiiii hay que ponerlo!!!!!!
+							}
+							break;
+						case 4:
+							System.out.println("--- Listar mesas ---");
+							mibase.abrir();
+							Vector<Mesa>  listarMesa = BBDDMesa.listarMesa(mibase.getConexion());//listar mesas con un vector
+							mibase.cerrar();
+							System.out.println(listarMesa);	
+							break;
+						}
+					} else {
+						System.out.println("No se puede reservar mesa sin ser socio.");
+					}
+					break;// fin de gestion de mesas
+					//-------------------------------------------------------------------------------------------------------------------------------			
+				case 4:// Gestion de los socios
+
+					do {
+						System.out.println("--- Gestión de socios ---");
+						System.out.println("1. Volver al menú");
+						System.out.println("2. Dar de alta");
+						System.out.println("3. Dar de baja");
+						System.out.println("4. Listar socios");
+						System.out.print("Introduce una opción: ");
+						opc2 = sc.nextInt();
+						sc.nextLine();
+						System.out.println();
+					} while (opc2 < 1 || opc2 > 4);
+
+					switch (opc2) { //Submenú de gestion de socios
+					case 2:
+						System.out.println("--- Dar de alta ---");
+						// comprobación para validar existencia del socio
+						do{
+							System.out.print("Introduce el DNI del socio: ");
+							dniSocio = sc.nextLine();
+							comprobar=Socio.validarDni(dniSocio);
+							if (comprobar == false) {
+								System.out.println("El dni es incorrecto.");
+								break;
+							}
+							else {
+
+								dniValidado = Socio.comprobarDni(dniSocio);
+								if (dniSocio.equals(dniValidado)) {
+									System.out.println("ERROR. El socio ya existe.");
+								} else {
+									// registrar datos del socio
+									System.out.println("Introduce los datos del socio. ");
+									System.out.print("Nombre :");
+									String nombre = sc.nextLine();
+
+									do{
+
+										System.out.print("Teléfono :");
+										telefono = sc.nextLine();
+
+										telefonoValidado=Socio.validarTelefono(telefono);
+										//if(telefonoValidado==null){
+										//	System.out.println("El teléfono debe ser válido.");
+										//}
+									}while(telefonoValidado==null);
+									do {
+										System.out.print("Fecha de nacimiento (año-mes-dia) :");
+										String fechaNacimiento = sc.nextLine();
+										fecha = LocalDate.parse(fechaNacimiento);
+										fechaValidada = Socio.validarFechaNacimiento(fecha);
+										if (fechaValidada == null) {
+											System.out.println("El socio debe tener más de 14 años. ");
+											repetir="no";
+											break;
+										}
+										else{
+											//añadir socio a la BBDD
+											soc = new Socio(nombre, telefono, dniSocio, fecha);
+											mibase.abrir();
+											BBDDSocio.añadir(soc, mibase.getConexion());
+											mibase.cerrar();
+											System.out.println("El usuario "+ nombre +" ha sido dado de alta correctamente.");
+
+
+										}
+									} while (fechaValidada == null);
+
+									//creacion de ticket del pago de la cuota
+									Path salidaCuota=Paths.get("recibos/cuota/ticketCuota-"+dniSocio+"-"+enumerarTicket(1,dniSocio)+".txt"); //crear el nombre del ticket
+									Socio soci=Socio.ticketCuota(dniSocio); // extraer los datos del socio para plasmarlos en el ticket
+									String importeCuota=Cuota.comprobarCuota(dniSocio); //extraer el precio de la cuota
+									String bufferIn = "";
+									try{
+										input = Files.newBufferedReader(plantillaCuota);
+										output = Files.newBufferedWriter(salidaCuota);
+										String fechaPago=LocalDate.now().toString();
+										while ( (bufferIn = input.readLine()) != null){
+											//aqui se forma el ticket, sustituimos los campos entre "<" y ">" por los datos pertinentes
+											bufferIn=bufferIn.replaceAll("<nombre>",soci.getNombre());
+											bufferIn=bufferIn.replaceAll("<dni>",soci.getDni_socio());
+											bufferIn=bufferIn.replaceAll("<fpago>",fechaPago); 
+											bufferIn=bufferIn.replaceAll("<importe>",importeCuota+" €");
+											output.write(bufferIn);
+											output.newLine();
+											System.out.println(bufferIn);
+										}
+										input.close();
+										output.close();
+
+									}catch(IOException e){
+										//e.printStackTrace();
+										System.out.println("Error:"+e.getMessage());
+									}
+									String nombreTicket=salidaCuota.getFileName().toString();
+									System.out.println("Se ha guardado el ticket: "+ nombreTicket +".");
+
+								}
+							}
+
+						}while (comprobar == false);
+
+
+						break;
+					case 3:
+						System.out.println("--- Dar de baja ---");
+
+						System.out.print("Introduce el DNI del socio: ");
+						dniSocio = sc.nextLine();
+						dniValidado = Socio.comprobarDni(dniSocio);
+
+						if (dniSocio.equals(dniValidado)) {
+
+							System.out.println("comprobar si posee libros."); // continuar por aqui
+
+
+						} else {
+							System.out.println("No existe el socio con dni: " + dniSocio);
+						}
+						break;
+					case 4:
+						System.out.println("--- Listar socios ---");
+						mibase.abrir();
+						Vector<Socio>  listarSocio = BBDDSocio.listarSocio(mibase.getConexion());//listar socios con un vector
+						mibase.cerrar();
+						System.out.println(listarSocio);	
+						break;
+					}
+
+					break; // fin de gestion de socios
+					//-------------------------------------------------------------------------------------------------------------------------------
+				case 5: // gestion de cuotas
+					System.out.println("--- Gestión de cuotas ---");
+					System.out.println("1. Volver al menú");
+					System.out.println("2. Pagar Cuota");
+					System.out.println("3. Listar Cuotas");
+					System.out.print("Introduce una opción: ");
+					opc2 = sc.nextInt();
+					sc.nextLine();
+					System.out.println();
+					switch(opc2){
+					case 2://aqui se pagan las cuotas
+						System.out.println("--- Pagar cuota ---");
+
+						do {
+							System.out.print("Introduce el DNI del socio: ");
+							dniSocio = sc.nextLine();
+							comprobar=Socio.validarDni(dniSocio);
+							//System.out.println(comprobar);
+						}while (comprobar == false);
+						dniValidado = Socio.comprobarDni(dniSocio); // validar si el socio existe en la BBDD para realizar el pago de la cuota.
+
+
+						do{
+							System.out.println("¿Estás seguro de querer realizar la operación? (si / no)" );
+							repetir=sc.nextLine();
+						}while(repetir.equals("si")!=true && repetir.equals("no")!=true);
+						if(repetir.equals("si")){
+							if (dniSocio.equals(dniValidado)) {
+								soc = new Socio(dniSocio);
+								mibase.abrir();
+								int cuotaPagada=BBDDSocio.comprobarCuotaPagada(soc, mibase.getConexion());
+								mibase.cerrar();
+								if (cuotaPagada==0){
+									//creacion de ticket del pago de la cuota
+									Path salidaCuota=Paths.get("recibos/cuota/ticketCuota-"+dniSocio+"-"+enumerarTicket(1,dniSocio)+".txt"); //crear el nombre del ticket
+									Socio soci=Socio.ticketCuota(dniSocio); // extraer los datos del socio para plasmarlos en el ticket
+									String importeCuota=Cuota.comprobarCuota(dniSocio); //extraer el precio de la cuota
+									String bufferIn = "";
+									try{
+										input = Files.newBufferedReader(plantillaCuota);
+										output = Files.newBufferedWriter(salidaCuota);
+										String fechaPago=LocalDate.now().toString();
+										while ( (bufferIn = input.readLine()) != null){
+											//aqui se forma el ticket, sustituimos los campos entre "<" y ">" por los datos pertinentes
+											bufferIn=bufferIn.replaceAll("<nombre>",soci.getNombre());
+											bufferIn=bufferIn.replaceAll("<dni>",soci.getDni_socio());
+											bufferIn=bufferIn.replaceAll("<fpago>",fechaPago); 
+											bufferIn=bufferIn.replaceAll("<importe>",importeCuota+" €");
+											output.write(bufferIn);
+											output.newLine();
+											System.out.println(bufferIn);
+										}
+										input.close();
+										output.close();
+
+									}catch(IOException e){
+										//e.printStackTrace();
+										System.out.println("Error:"+e.getMessage());
+									}
+									String nombreTicket=salidaCuota.getFileName().toString();
+									System.out.println("Se ha guardado el ticket: "+ nombreTicket +".");
+
+
+
+									System.out.println("");
+								}else{
+									System.out.println("la cuota del socio " +dniSocio+" ya está pagada para el mes en curso. ");
+								}
+
+							} else {
+								System.out.println("No existe el socio con dni: " + dniSocio);
+							}
+						}else{
+							System.out.println("La operación ha sido cancelada.");
+						}
+
+						break;//fin de pago de cuota
+
+					case 3:
+						//aqui  listamos las cuotas
+						System.out.println("--- Listar cuotas ---");
+						mibase.abrir();
+						Vector<Cuota>  listarCuota = BBDDCuota.listarCuota(mibase.getConexion());//listar cuotas con un vector
+						mibase.cerrar();
+						System.out.println(listarCuota);	
+						break;
+						//fin de listar cuotas
+					}
+
+					break; // fin de gestion de socios
+				} // fin del case-menu principal
+
 			} while (opc != 1);
 		} while (usuario.equals("administrador") != true && usuario.equals("empleado") != true);
 

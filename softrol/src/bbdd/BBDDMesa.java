@@ -86,8 +86,8 @@ public class BBDDMesa {
 
 	}
 	
-	public static String buscarMesaLibres(Mesa mesa, Connection c){
-		String cadena="SELECT estado FROM mesas WHERE tipo='" + mesa.getTipo() +"'";
+	public static int buscarMesaLibres(Mesa mesa, Connection c){
+		String cadena="SELECT count(estado) FROM mesas WHERE estado='libre' and tipo='" + mesa.getTipo() +"'";
 		/*
 		 * hacemos consulta mediante el tipo de mesa, para saber la info de las que estan libres.
 		 */
@@ -95,20 +95,41 @@ public class BBDDMesa {
 			s=c.createStatement();
 			reg=s.executeQuery(cadena);
 			if ( reg.next()){
-				String t=reg.getString(1);
+				int t=reg.getInt(1);
 				s.close();
 				return t;
 			}
 			s.close();
-			return "";
+			return 0;
 		}
 		catch ( SQLException e){
 	//		System.out.println(e.getMessage());
-			return null;
+			return 0;
 			
 		}
 				
 	
 	
+	}
+	
+	public static Vector<Mesa> listarMesaLibres(Mesa mesa,Connection c){
+		String cadena="SELECT n_mesa FROM mesas WHERE estado='libre' and tipo='"+mesa.getTipo() +"'"; //Select para listar las mesas
+		Vector <Mesa> mostrarLibres=new Vector<Mesa>();
+		try{
+			s=c.createStatement();
+			reg=s.executeQuery(cadena);
+			while ( reg.next()){
+				Mesa mes=new Mesa(reg.getInt("n_mesa"));
+				mostrarLibres.add(mes);
+			}
+			s.close();
+			return mostrarLibres;
+		}
+		catch ( SQLException e){
+			//		System.out.println(e.getMessage());
+			return null;
+		}
+
+
 	}
 }
