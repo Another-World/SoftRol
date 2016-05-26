@@ -1,0 +1,14 @@
+--------------------------------------------
+
+    Ticket: Mesa
+
+	Numero de mesa: <nmesa>
+	DNI socio: <dni>
+	Fecha del inicio: <finicio>
+	Fecha de final: <ffinal>
+	Tiempo de prestamo: <tiempo>
+
+
+    *VALIDEZ PARA EL TIEMPO DE RESERVA* 
+
+--------------------------------------------
