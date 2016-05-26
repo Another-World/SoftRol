@@ -85,4 +85,30 @@ public class BBDDMesa {
 
 
 	}
+	
+	public static String buscarMesaLibres(Mesa mesa, Connection c){
+		String cadena="SELECT estado FROM mesas WHERE tipo='" + mesa.getTipo() +"'";
+		/*
+		 * hacemos consulta mediante el tipo de mesa, para saber la info de las que estan libres.
+		 */
+		try{
+			s=c.createStatement();
+			reg=s.executeQuery(cadena);
+			if ( reg.next()){
+				String t=reg.getString(1);
+				s.close();
+				return t;
+			}
+			s.close();
+			return "";
+		}
+		catch ( SQLException e){
+	//		System.out.println(e.getMessage());
+			return null;
+			
+		}
+				
+	
+	
+	}
 }
