@@ -37,8 +37,5 @@ public class Alquiler {
 	public String toString() {
 		return "Alquiler [fecha_inicio=" + fecha_inicio + ", fecha_final=" + fecha_final + ", id_libro=" + id_libro + ", dni_socio=" + dni_socio + "]";
 	}
-	
-	
-
-	
+		
 }

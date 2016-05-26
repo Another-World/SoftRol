@@ -1,0 +1,14 @@
+--------------------------------------------
+
+    Ticket: Mesa
+
+	Numero de mesa: 7
+	DNI socio: 13121432R
+	Fecha del inicio: 21:33
+	Fecha de final: 0:33
+	Tiempo de prestamo: 3 hora(s)
+
+
+    *VALIDEZ PARA EL TIEMPO DE RESERVA* 
+
+--------------------------------------------
