@@ -482,7 +482,7 @@ public class SoftRol {
 						}while (comprobar == false);
 						dniValidado = Socio.comprobarDni(dniSocio); // validar si el socio existe en la BBDD para realizar el pago de la cuota.
 
-						
+
 						do{
 							System.out.println("¿Estás seguro de querer realizar la operación? (si / no)" );
 							repetir=sc.nextLine();
@@ -536,13 +536,18 @@ public class SoftRol {
 						}else{
 							System.out.println("La operación ha sido cancelada.");
 						}
-						
+
 						break;//fin de pago de cuota
 
-					case 3://aqui  listamos las cuotas
-
-						break;//fin de listar cuotas
-
+					case 3:
+						//aqui  listamos las cuotas
+						System.out.println("--- Listar cuotas ---");
+						mibase.abrir();
+						Vector<Cuota>  listarCuota = BBDDCuota.listarCuota(mibase.getConexion());//listar cuotas con un vector
+						mibase.cerrar();
+						System.out.println(listarCuota);	
+						break;
+						//fin de listar cuotas
 					}
 
 					break; // fin de gestion de socios

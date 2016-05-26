@@ -23,7 +23,7 @@ public class Cuota {
 	}
 	@Override
 	public String toString() {
-		return "Cuota [tipo=" + tipo + ", precio=" + precio + "]";
+		return "Cuota \n\t tipo=" + tipo + ",\n\t precio=" + precio + "\n\n";
 	}
 	
 	public Cuota(String tipo) {
