@@ -274,7 +274,7 @@ public class SoftRol {
 								}
 							}
 							else{
-								System.out.println("El socio "+ dniSocio+" tiene "+ numeroSancion+" sanciones pendientes. No puede alquilar libros.");
+								System.out.println("El socio "+ dniSocio+" tiene "+ numeroSancion+" sancion(es) pendientes. No puede alquilar libros.");
 								System.out.println();
 							}
 
@@ -311,159 +311,166 @@ public class SoftRol {
 					dniValidado = Socio.comprobarDni(dniSocio); //validar si el socio está en la BBDD para poder reservar una mesa
 
 					if (dniSocio.equals(dniValidado)) {
-						System.out.println("--- Gestión de mesas ---");
-						System.out.println("1. Volver al menú. ");
-						System.out.println("2. Seleccionar el tipo de mesa.");
-						System.out.println("3. Listar mesas");
-						System.out.print("Introduce una opción: ");
-						opc2 = sc.nextInt();
-						sc.nextLine();
-						switch (opc2) {
-						case 2:
+						int numeroSancion=Sancion.numeroSanciones(dniSocio);
+						if(numeroSancion==0){
+							System.out.println("--- Gestión de mesas ---");
+							System.out.println("1. Volver al menú. ");
+							System.out.println("2. Seleccionar el tipo de mesa.");
+							System.out.println("3. Listar mesas");
+							System.out.print("Introduce una opción: ");
+							opc2 = sc.nextInt();
+							sc.nextLine();
+							switch (opc2) {
+							case 2:
 
-							do{
-								System.out.println("introduce el tipo ( rol / estrategia ): ");
-								tematica=sc.nextLine();
-							}while(tematica.equals("rol")!=true && tematica.equals("estrategia")!=true);
+								do{
+									System.out.println("introduce el tipo ( rol / estrategia ): ");
+									tematica=sc.nextLine();
+								}while(tematica.equals("rol")!=true && tematica.equals("estrategia")!=true);
 
-							if(tematica.equals("rol")){
+								if(tematica.equals("rol")){
 
-								mesa=new Mesa(tematica);
-								mibase.abrir();
-								mesasLibres=BBDDMesa.buscarMesaLibres(mesa, mibase.getConexion()); // buscar mesasLibres de tipo rol
-								mibase.cerrar();
-								if(mesasLibres==0){
-									System.out.println("No quedan mesas disponibles de tipo rol.");
-								}
-								else{
-									Mesa.listadoMesasDisponibles(tematica);
-									System.out.println("Introduce el número de mesa que deseas elegir: ");
-									numeroMesa=sc.nextInt();
-
-									mesa=new Mesa(numeroMesa);
+									mesa=new Mesa(tematica);
 									mibase.abrir();
-									BBDDMesa.modificarEstadoMesaOcupado(mesa, mibase.getConexion()); // añadir la reserva a la BBDD
+									mesasLibres=BBDDMesa.buscarMesaLibres(mesa, mibase.getConexion()); // buscar mesasLibres de tipo rol
 									mibase.cerrar();
-									do{
-									System.out.println("Introduce el número de horas que desea reservar la mesa: ");
-									nHoras=sc.nextInt();
-									if(nHoras>4){
-										System.out.println("No se puede reservar más de 3 horas");
+									if(mesasLibres==0){
+										System.out.println("No quedan mesas disponibles de tipo rol.");
 									}
-									}while(nHoras>4);
-									res=new Reserva(LocalTime.now(),LocalTime.now().plusHours(nHoras),numeroMesa,dniSocio);
-									mibase.abrir();
-									BBDDReserva.añadir(res, mibase.getConexion()); // añadir la reserva a la BBDD
-									mibase.cerrar();
-									
-									//creacion del ticket del libro
-									Path salidaticketMesa=Paths.get("recibos/mesa/ticketMesa-"+dniSocio+"-"+enumerarTicket(3,dniSocio)+".txt"); //crear el nombre del ticket
-									String bufferIn = "";
-									try{
-										input = Files.newBufferedReader(plantillaMesa);
-										output = Files.newBufferedWriter(salidaticketMesa);
-										int fechaInicio=LocalTime.now().getHour();
-										int fechaInicio2=LocalTime.now().getMinute();
-										String fechaInicioCompleta=fechaInicio+":"+fechaInicio2;
-										int fechaFinal=LocalTime.now().plusHours(nHoras).getHour();
-										int fechaFinal2=LocalTime.now().plusHours(nHoras).getMinute();
-										String fechaFinalCompleta=fechaFinal+":"+fechaFinal2;
-										while ( (bufferIn = input.readLine()) != null){
-											//aqui se forma el ticket, sustituimos los campos entre "<" y ">" por los datos pertinentes
-											bufferIn=bufferIn.replaceAll("<nmesa>",numeroMesa+"");
-											bufferIn=bufferIn.replaceAll("<dni>",dniSocio);
-											bufferIn=bufferIn.replaceAll("<finicio>",fechaInicioCompleta); 
-											bufferIn=bufferIn.replaceAll("<ffinal>",fechaFinalCompleta);
-											bufferIn=bufferIn.replaceAll("<tiempo>",nHoras+" hora(s)");
-											output.write(bufferIn);
-											output.newLine();
-											System.out.println(bufferIn);
-										}
-										input.close();
-										output.close();
+									else{
+										Mesa.listadoMesasDisponibles(tematica);
+										System.out.println("Introduce el número de mesa que deseas elegir: ");
+										numeroMesa=sc.nextInt();
 
-									}catch(IOException e){
-										//e.printStackTrace();
-										System.out.println("Error:"+e.getMessage());
-									}// fin del ticket
-									nombreTicket=salidaticketMesa.getFileName().toString();
-									System.out.println("Se ha guardado el ticket: "+ nombreTicket +".");
-								}
+										mesa=new Mesa(numeroMesa);
+										mibase.abrir();
+										BBDDMesa.modificarEstadoMesaOcupado(mesa, mibase.getConexion()); // añadir la reserva a la BBDD
+										mibase.cerrar();
+										do{
+											System.out.println("Introduce el número de horas que desea reservar la mesa: ");
+											nHoras=sc.nextInt();
+											if(nHoras>4){
+												System.out.println("No se puede reservar más de 3 horas");
+											}
+										}while(nHoras>4);
+										res=new Reserva(LocalTime.now(),LocalTime.now().plusHours(nHoras),numeroMesa,dniSocio);
+										mibase.abrir();
+										BBDDReserva.añadir(res, mibase.getConexion()); // añadir la reserva a la BBDD
+										mibase.cerrar();
 
-							}
-							if(tematica.equals("estrategia")){
-								mesa=new Mesa(tematica);
-								mibase.abrir();
-								mesasLibres=BBDDMesa.buscarMesaLibres(mesa, mibase.getConexion()); // buscar mesasLibres de tipo rol
-								mibase.cerrar();
-								if(mesasLibres==0){
-									System.out.println("No quedan mesas disponibles de tipo rol.");
-								}
+										//creacion del ticket del libro
+										Path salidaticketMesa=Paths.get("recibos/mesa/ticketMesa-"+dniSocio+"-"+enumerarTicket(3,dniSocio)+".txt"); //crear el nombre del ticket
+										String bufferIn = "";
+										try{
+											input = Files.newBufferedReader(plantillaMesa);
+											output = Files.newBufferedWriter(salidaticketMesa);
+											int fechaInicio=LocalTime.now().getHour();
+											int fechaInicio2=LocalTime.now().getMinute();
+											String fechaInicioCompleta=fechaInicio+":"+fechaInicio2;
+											int fechaFinal=LocalTime.now().plusHours(nHoras).getHour();
+											int fechaFinal2=LocalTime.now().plusHours(nHoras).getMinute();
+											String fechaFinalCompleta=fechaFinal+":"+fechaFinal2;
+											while ( (bufferIn = input.readLine()) != null){
+												//aqui se forma el ticket, sustituimos los campos entre "<" y ">" por los datos pertinentes
+												bufferIn=bufferIn.replaceAll("<nmesa>",numeroMesa+"");
+												bufferIn=bufferIn.replaceAll("<dni>",dniSocio);
+												bufferIn=bufferIn.replaceAll("<finicio>",fechaInicioCompleta); 
+												bufferIn=bufferIn.replaceAll("<ffinal>",fechaFinalCompleta);
+												bufferIn=bufferIn.replaceAll("<tiempo>",nHoras+" hora(s)");
+												output.write(bufferIn);
+												output.newLine();
+												System.out.println(bufferIn);
+											}
+											input.close();
+											output.close();
 
-								else{
-									Mesa.listadoMesasDisponibles(tematica);
-									System.out.println("Introduce el número de mesa que deseas elegir: ");
-									numeroMesa=sc.nextInt();
-
-									mesa=new Mesa(numeroMesa);
-									mibase.abrir();
-									BBDDMesa.modificarEstadoMesaOcupado(mesa, mibase.getConexion()); // añadir la reserva a la BBDD
-									mibase.cerrar();
-									do{
-									System.out.println("Introduce el número de horas que desea reservar la mesa: ");
-									nHoras=sc.nextInt();
-									if(nHoras>4){
-										System.out.println("No se puede reservar más de 3 horas");
+										}catch(IOException e){
+											//e.printStackTrace();
+											System.out.println("Error:"+e.getMessage());
+										}// fin del ticket
+										nombreTicket=salidaticketMesa.getFileName().toString();
+										System.out.println("Se ha guardado el ticket: "+ nombreTicket +".");
 									}
-									}while(nHoras>4);
-									res=new Reserva(LocalTime.now(),LocalTime.now().plusHours(nHoras),numeroMesa,dniSocio);
-									mibase.abrir();
-									BBDDReserva.añadir(res, mibase.getConexion()); // añadir la reserva a la BBDD
-									mibase.cerrar();
-									
-									//creacion del ticket del libro
-									Path salidaticketMesa=Paths.get("recibos/mesa/ticketMesa-"+dniSocio+"-"+enumerarTicket(3,dniSocio)+".txt"); //crear el nombre del ticket
-									String bufferIn = "";
-									try{
-										input = Files.newBufferedReader(plantillaMesa);
-										output = Files.newBufferedWriter(salidaticketMesa);
-										int fechaInicio=LocalTime.now().getHour();
-										int fechaInicio2=LocalTime.now().getMinute();
-										String fechaInicioCompleta=fechaInicio+":"+fechaInicio2;
-										int fechaFinal=LocalTime.now().plusHours(nHoras).getHour();
-										int fechaFinal2=LocalTime.now().plusHours(nHoras).getMinute();
-										String fechaFinalCompleta=fechaFinal+":"+fechaFinal2;
-										while ( (bufferIn = input.readLine()) != null){
-											//aqui se forma el ticket, sustituimos los campos entre "<" y ">" por los datos pertinentes
-											bufferIn=bufferIn.replaceAll("<nmesa>",numeroMesa+"");
-											bufferIn=bufferIn.replaceAll("<dni>",dniSocio);
-											bufferIn=bufferIn.replaceAll("<finicio>",fechaInicioCompleta); 
-											bufferIn=bufferIn.replaceAll("<ffinal>",fechaFinalCompleta);
-											bufferIn=bufferIn.replaceAll("<tiempo>",nHoras+" hora(s)");
-											output.write(bufferIn);
-											output.newLine();
-											System.out.println(bufferIn);
-										}
-										input.close();
-										output.close();
 
-									}catch(IOException e){
-										//e.printStackTrace();
-										System.out.println("Error:"+e.getMessage());
-									}// fin del ticket
-									nombreTicket=salidaticketMesa.getFileName().toString();
-									System.out.println("Se ha guardado el ticket: "+ nombreTicket +".");
 								}
-							}
-							break;
+								if(tematica.equals("estrategia")){
+									mesa=new Mesa(tematica);
+									mibase.abrir();
+									mesasLibres=BBDDMesa.buscarMesaLibres(mesa, mibase.getConexion()); // buscar mesasLibres de tipo rol
+									mibase.cerrar();
+									if(mesasLibres==0){
+										System.out.println("No quedan mesas disponibles de tipo rol.");
+									}
 
-						case 3:
-							System.out.println("--- Listar mesas ---");
-							mibase.abrir();
-							Vector<Mesa>  listarMesa = BBDDMesa.listarMesa(mibase.getConexion());//listar mesas con un vector
-							mibase.cerrar();
-							System.out.println(listarMesa);	
-							break;
+									else{
+										Mesa.listadoMesasDisponibles(tematica);
+										System.out.println("Introduce el número de mesa que deseas elegir: ");
+										numeroMesa=sc.nextInt();
+
+										mesa=new Mesa(numeroMesa);
+										mibase.abrir();
+										BBDDMesa.modificarEstadoMesaOcupado(mesa, mibase.getConexion()); // añadir la reserva a la BBDD
+										mibase.cerrar();
+										do{
+											System.out.println("Introduce el número de horas que desea reservar la mesa: ");
+											nHoras=sc.nextInt();
+											if(nHoras>4){
+												System.out.println("No se puede reservar más de 3 horas");
+											}
+										}while(nHoras>4);
+										res=new Reserva(LocalTime.now(),LocalTime.now().plusHours(nHoras),numeroMesa,dniSocio);
+										mibase.abrir();
+										BBDDReserva.añadir(res, mibase.getConexion()); // añadir la reserva a la BBDD
+										mibase.cerrar();
+
+										//creacion del ticket del libro
+										Path salidaticketMesa=Paths.get("recibos/mesa/ticketMesa-"+dniSocio+"-"+enumerarTicket(3,dniSocio)+".txt"); //crear el nombre del ticket
+										String bufferIn = "";
+										try{
+											input = Files.newBufferedReader(plantillaMesa);
+											output = Files.newBufferedWriter(salidaticketMesa);
+											int fechaInicio=LocalTime.now().getHour();
+											int fechaInicio2=LocalTime.now().getMinute();
+											String fechaInicioCompleta=fechaInicio+":"+fechaInicio2;
+											int fechaFinal=LocalTime.now().plusHours(nHoras).getHour();
+											int fechaFinal2=LocalTime.now().plusHours(nHoras).getMinute();
+											String fechaFinalCompleta=fechaFinal+":"+fechaFinal2;
+											while ( (bufferIn = input.readLine()) != null){
+												//aqui se forma el ticket, sustituimos los campos entre "<" y ">" por los datos pertinentes
+												bufferIn=bufferIn.replaceAll("<nmesa>",numeroMesa+"");
+												bufferIn=bufferIn.replaceAll("<dni>",dniSocio);
+												bufferIn=bufferIn.replaceAll("<finicio>",fechaInicioCompleta); 
+												bufferIn=bufferIn.replaceAll("<ffinal>",fechaFinalCompleta);
+												bufferIn=bufferIn.replaceAll("<tiempo>",nHoras+" hora(s)");
+												output.write(bufferIn);
+												output.newLine();
+												System.out.println(bufferIn);
+											}
+											input.close();
+											output.close();
+
+										}catch(IOException e){
+											//e.printStackTrace();
+											System.out.println("Error:"+e.getMessage());
+										}// fin del ticket
+										nombreTicket=salidaticketMesa.getFileName().toString();
+										System.out.println("Se ha guardado el ticket: "+ nombreTicket +".");
+									}
+								}
+								break;
+
+							case 3:
+								System.out.println("--- Listar mesas ---");
+								mibase.abrir();
+								Vector<Mesa>  listarMesa = BBDDMesa.listarMesa(mibase.getConexion());//listar mesas con un vector
+								mibase.cerrar();
+								System.out.println(listarMesa);	
+								break;
+							}
+						}
+						else{
+							System.out.println("El socio "+ dniSocio+" tiene "+ numeroSancion+" sancion(es) pendientes. No puede reservar pesas.");
+							System.out.println();
 						}
 					} else {
 						System.out.println("No se puede reservar mesa sin ser socio.");
