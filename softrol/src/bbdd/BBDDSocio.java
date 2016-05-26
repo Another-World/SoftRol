@@ -157,4 +157,30 @@ public class BBDDSocio {
 			return -1;
 		}
 	}
+	
+	public static void actualizarEstadoCuotaTrue(Socio soc, Connection c){//metodo actualizar la cuota del socio a pagado
+		String cadena="UPDATE socios SET cuota_pagada=1 WHERE dni_socio='"+soc.getDni_socio()+"'"; 	
+		
+		try{
+		s=c.createStatement();
+		s.executeUpdate(cadena);
+		s.close();
+		}
+		catch ( SQLException e){
+			System.out.println(e.getMessage());
+		}
+}
+	
+	public static void actualizarEstadoCuotaFalse(Socio soc, Connection c){//metodo actualizar la cuota del socio a NO pagado
+		String cadena="UPDATE socios SET cuota_pagada=0 WHERE dni_socio='"+soc.getDni_socio()+"'"; 	
+		
+		try{
+		s=c.createStatement();
+		s.executeUpdate(cadena);
+		s.close();
+		}
+		catch ( SQLException e){
+			System.out.println(e.getMessage());
+		}
+}
 }

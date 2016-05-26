@@ -27,12 +27,7 @@ public class BBDDCuota {
 			return null;
 			
 		}
-			/*
-			  SELECT `cuotas`.`TIPO`, `cuotas`.`PRECIO`, `socios`.`dni_socio`
-				FROM cuotas, socios
-				WHERE `cuotas`.`TIPO`=`socios`.`TIPO_CUOTA`
-				AND `dni_socio`='22222222B'	
-			 */
+			
 	
 	
 	}

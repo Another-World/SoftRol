@@ -25,7 +25,7 @@ public class BBDDLibro {
 		}
 }
 	
-	public static void actualizarEstadoTrue(Libro lib, Connection c){//metodo para alquilar un libro cambiando el estado
+	public static void actualizarEstadoLibroTrue(Libro lib, Connection c){//metodo para alquilar un libro cambiando el estado
 		String cadena="UPDATE libros SET estado_Alquilado=1 WHERE titulo='"+lib.getTitulo()+"'"; 	
 		
 		try{
@@ -38,7 +38,7 @@ public class BBDDLibro {
 		}
 }
 	
-	public static void actualizarEstadoFalse(Libro lib, Connection c){//metodo para devolver un libro cambiando el estado
+	public static void actualizarEstadoLibroFalse(Libro lib, Connection c){//metodo para devolver un libro cambiando el estado
 		String cadena="UPDATE libros SET estado_Alquilado=0 WHERE titulo='"+lib.getTitulo()+"'"; 
 		
 		try{
