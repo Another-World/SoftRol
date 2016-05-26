@@ -482,6 +482,7 @@ public class SoftRol {
 						}while (comprobar == false);
 						dniValidado = Socio.comprobarDni(dniSocio); // validar si el socio existe en la BBDD para realizar el pago de la cuota.
 
+						
 						do{
 							System.out.println("¿Estás seguro de querer realizar la operación? (si / no)" );
 							repetir=sc.nextLine();
