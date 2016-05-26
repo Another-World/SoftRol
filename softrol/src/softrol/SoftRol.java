@@ -315,6 +315,8 @@ public class SoftRol {
 						System.out.println("1. Volver al menú");
 						System.out.println("2. Mesa de: Rol");
 						System.out.println("3. Mesa de: Estrategia");
+						System.out.println("4. Listar mesas");
+						System.out.print("Introduce una opción: ");
 						opc2 = sc.nextInt();
 						switch (opc2) {
 						case 2:
@@ -322,6 +324,13 @@ public class SoftRol {
 							break;
 						case 3:
 
+							break;
+						case 4:
+							System.out.println("--- Listar mesas ---");
+							mibase.abrir();
+							Vector<Mesa>  listarMesa = BBDDMesa.listarMesa(mibase.getConexion());//listar mesas con un vector
+							mibase.cerrar();
+							System.out.println(listarMesa);	
 							break;
 						}
 					} else {

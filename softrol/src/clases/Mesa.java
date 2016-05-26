@@ -27,7 +27,7 @@ public class Mesa {
 
 	@Override
 	public String toString() {
-		return "Mesa [n_mesa=" + n_mesa + ", tipo=" + tipo + ", estado=" + estado + "]";
+		return "Mesa \n\t n_mesa=" + n_mesa + ",\n\t tipo=" + tipo + ",\n\t estado=" + estado + "\n\n";
 	}
 	
 	
