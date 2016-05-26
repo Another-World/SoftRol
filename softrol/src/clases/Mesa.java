@@ -58,7 +58,7 @@ public class Mesa {
 		int longitud=BBDDMesa.listarMesaLibres(mesa, mibase.getConexion()).size();
 		System.out.print("Estas son las mesas disponibles: ");
 		for(int i=0; i<longitud; i++) {
-			int numeroMesa =(BBDDMesa.listarMesaLibres(mesa, mibase.getConexion()).get(i).getN_mesa());
+			int numeroMesa=(BBDDMesa.listarMesaLibres(mesa, mibase.getConexion()).get(i).getN_mesa());
 			System.out.print(numeroMesa+" ");
 		}
 		System.out.println("");

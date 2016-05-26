@@ -132,4 +132,35 @@ public class BBDDMesa {
 
 
 	}
+	
+	public static void modificarEstadoMesaOcupado(Mesa mesa, Connection c){
+		String cadena="UPDATE mesas SET estado='ocupado' WHERE n_mesa='"+mesa.getN_mesa()+"'"; 	
+		/*
+		 * damos de alta una reserva introduciendo su estado.
+		 */
+		try{
+			s=c.createStatement();
+			s.executeUpdate(cadena);
+			s.close();
+		}
+		catch ( SQLException e){
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	public static void modificarEstadoLibre(Mesa mesa, Connection c){
+		String cadena="UPDATE mesas SET estado='libre' WHERE n_mesa='"+mesa.getN_mesa()+"'"; 	
+		/*
+		 * damos de alta una reserva introduciendo su estado.
+		 */
+		try{
+			s=c.createStatement();
+			s.executeUpdate(cadena);
+			s.close();
+		}
+		catch ( SQLException e){
+			System.out.println(e.getMessage());
+		}
+	}
+	
 }

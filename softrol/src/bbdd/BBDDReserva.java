@@ -2,6 +2,7 @@ package bbdd;
 
 import java.sql.*;
 
+import clases.Mesa;
 import clases.Reserva;
 
 
@@ -74,4 +75,5 @@ public class BBDDReserva {
 	
 	
 	}
+	
 }

@@ -54,7 +54,7 @@ public class SoftRol {
 		Path salidaLibro=Paths.get("recibos/libro");
 		Path salidaMesa=Paths.get("recibos/mesa");
 		//variables
-		int opc = 1, opc2, idLibro,mesasLibres;
+		int opc = 1, opc2, idLibro,mesasLibres,numeroMesa;
 		String dniSocio, operacion, titulo, repetir, usuario, dniValidado,telefonoValidado,tipo, telefono="";
 		LocalDate fechaValidada, fecha;
 		boolean comprobar;
@@ -331,6 +331,13 @@ public class SoftRol {
 							}
 							else{
 								Mesa.listadoMesasDisponibles(tipo);
+								System.out.println("Introduce el numeros de mesa que deseas elegir: ");
+								numeroMesa=sc.nextInt();
+								
+								mesa=new Mesa(numeroMesa);
+								mibase.abrir();
+								BBDDMesa.modificarEstadoMesaOcupado(mesa, mibase.getConexion()); // añadir la reserva a la BBDD
+								mibase.cerrar();
 							}
 							break;
 						case 3:
@@ -344,7 +351,7 @@ public class SoftRol {
 								System.out.println("No quedan mesas disponibles de tipo estrategia.");
 							}
 							else{
-								//aquiiiiiiiii hay que ponerlo!!!!!!
+								Mesa.listadoMesasDisponibles(tipo);
 							}
 							break;
 						case 4:
