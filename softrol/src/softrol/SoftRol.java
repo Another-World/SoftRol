@@ -57,7 +57,7 @@ public class SoftRol {
 		int opc = 1, opc2, idLibro,mesasLibres,numeroMesa,nHoras;
 		String dniSocio, operacion, titulo, repetir, usuario, dniValidado,telefonoValidado,tipo, telefono="", tematica, nombreTicket;
 		LocalDate fechaValidada, fecha;
-		boolean comprobar;
+		boolean comprobar,validar;
 		// inicio de sesión
 		Socio.eliminarSocioMoroso();
 		do {
@@ -302,27 +302,27 @@ public class SoftRol {
 					//-------------------------------------------------------------------------------------------------------------------------------
 				case 3: // Gestion de las mesas
 					sc.nextLine(); // limpiar Scanner para que no salte el dni
-					do{
 
-						System.out.print("Introduce el DNI del socio: ");
-						dniSocio = sc.nextLine();
-						comprobar=Socio.validarDni(dniSocio);
-					}while (comprobar == false);
-					dniValidado = Socio.comprobarDni(dniSocio); //validar si el socio está en la BBDD para poder reservar una mesa
+					System.out.println("--- Gestión de mesas ---");
+					System.out.println("1. Volver al menú. ");
+					System.out.println("2. Seleccionar el tipo de mesa.");
+					System.out.println("3. Listar mesas");
+					System.out.print("Introduce una opción: ");
+					opc2 = sc.nextInt();
+					sc.nextLine();
+					switch (opc2) {
+					case 2:
+						do{
 
-					if (dniSocio.equals(dniValidado)) {
-						int numeroSancion=Sancion.numeroSanciones(dniSocio);
-						if(numeroSancion==0){
-							System.out.println("--- Gestión de mesas ---");
-							System.out.println("1. Volver al menú. ");
-							System.out.println("2. Seleccionar el tipo de mesa.");
-							System.out.println("3. Listar mesas");
-							System.out.print("Introduce una opción: ");
-							opc2 = sc.nextInt();
-							sc.nextLine();
-							switch (opc2) {
-							case 2:
+							System.out.print("Introduce el DNI del socio: ");
+							dniSocio = sc.nextLine();
+							comprobar=Socio.validarDni(dniSocio);
+						}while (comprobar == false);
+						dniValidado = Socio.comprobarDni(dniSocio); //validar si el socio está en la BBDD para poder reservar una mesa
 
+						if (dniSocio.equals(dniValidado)) {
+							int numeroSancion=Sancion.numeroSanciones(dniSocio);
+							if(numeroSancion==0){
 								do{
 									System.out.println("introduce el tipo ( rol / estrategia ): ");
 									tematica=sc.nextLine();
@@ -339,9 +339,12 @@ public class SoftRol {
 									}
 									else{
 										Mesa.listadoMesasDisponibles(tematica);
-										System.out.println("Introduce el número de mesa que deseas elegir: ");
+										
+										do{
+										System.out.print("Introduce el número de mesa que deseas elegir: ");
 										numeroMesa=sc.nextInt();
-
+										validar=Mesa.compararMesasDisponibles(tematica, numeroMesa);
+										}while(validar!=true);
 										mesa=new Mesa(numeroMesa);
 										mibase.abrir();
 										BBDDMesa.modificarEstadoMesaOcupado(mesa, mibase.getConexion()); // añadir la reserva a la BBDD
@@ -404,9 +407,11 @@ public class SoftRol {
 
 									else{
 										Mesa.listadoMesasDisponibles(tematica);
-										System.out.println("Introduce el número de mesa que deseas elegir: ");
-										numeroMesa=sc.nextInt();
-
+										do{
+											System.out.print("Introduce el número de mesa que deseas elegir: ");
+											numeroMesa=sc.nextInt();
+											validar=Mesa.compararMesasDisponibles(tematica, numeroMesa);
+											}while(validar!=true);
 										mesa=new Mesa(numeroMesa);
 										mibase.abrir();
 										BBDDMesa.modificarEstadoMesaOcupado(mesa, mibase.getConexion()); // añadir la reserva a la BBDD
@@ -457,24 +462,26 @@ public class SoftRol {
 										System.out.println("Se ha guardado el ticket: "+ nombreTicket +".");
 									}
 								}
-								break;
-
-							case 3:
-								System.out.println("--- Listar mesas ---");
-								mibase.abrir();
-								Vector<Mesa>  listarMesa = BBDDMesa.listarMesa(mibase.getConexion());//listar mesas con un vector
-								mibase.cerrar();
-								System.out.println(listarMesa);	
-								break;
 							}
+							else{
+								System.out.println("El socio "+ dniSocio+" tiene "+ numeroSancion+" sancion(es) pendientes. No puede reservar pesas.");
+								System.out.println();
+							}
+						} else {
+							System.out.println("No se puede reservar mesa sin ser socio.");
 						}
-						else{
-							System.out.println("El socio "+ dniSocio+" tiene "+ numeroSancion+" sancion(es) pendientes. No puede reservar pesas.");
-							System.out.println();
-						}
-					} else {
-						System.out.println("No se puede reservar mesa sin ser socio.");
+
+						break;
+
+					case 3:
+						System.out.println("--- Listar mesas ---");
+						mibase.abrir();
+						Vector<Mesa>  listarMesa = BBDDMesa.listarMesa(mibase.getConexion());//listar mesas con un vector
+						mibase.cerrar();
+						System.out.println(listarMesa);	
+						break;
 					}
+
 					break;// fin de gestion de mesas
 					//-------------------------------------------------------------------------------------------------------------------------------			
 				case 4:// Gestion de los socios

@@ -64,7 +64,25 @@ public class Mesa {
 		System.out.println("");
 		mibase.cerrar();
 
-	
 
-}
+
 	}
+	public static boolean compararMesasDisponibles(String tipo, int nMesa){
+		Mesa mesa;
+		BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");
+		mesa=new Mesa(tipo);
+		mibase.abrir();
+		int longitud=BBDDMesa.listarMesaLibres(mesa, mibase.getConexion()).size();
+		for(int i=0; i<longitud; i++) {
+			int numeroMesa=(BBDDMesa.listarMesaLibres(mesa, mibase.getConexion()).get(i).getN_mesa());
+			if(nMesa==numeroMesa){
+				return true;
+			}
+		}
+		mibase.cerrar();
+
+		return false;
+
+	}
+	
+}
