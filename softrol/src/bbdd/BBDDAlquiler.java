@@ -67,8 +67,38 @@ public class BBDDAlquiler {
 	}
 
 	//Metodo para buscar en la base de datos el id_libro del socio recibido en cada caso
-	public static Vector<Libro> consultarIDLibro( Socio soc, Connection c){
-		String cadena="SELECT id_libro FROM aquileres_libro WHERE dni_socio='" + soc.getDni_socio()+"'" ;
+	public static int consultarIDLibro(Socio soc, Connection c){
+		String cadena="SELECT COUNT(id_libro) FROM alquileres_libro WHERE dni_socio='"+soc.getDni_socio()+"'";//consultar por qué falla
+
+		try{
+			s=c.createStatement();
+			reg=s.executeQuery(cadena);
+			if ( reg.next()){
+				int t=reg.getInt(1);
+				s.close();
+				return t;
+			}
+
+			s.close();
+			return 0;
+		}
+		catch ( SQLException e){
+			
+		System.out.println(e.getMessage());
+			return 0;
+		
+		}
+
+	}
+
+
+
+public static Vector<Libro> consultarIDLibro2(int id_libro,int numero,Socio soc, Connection c){
+	if(numero==0){
+		System.out.println("No posee libros alquilados");
+	}
+	else{
+		String cadena="SELECT id_libro FROM alquileres_libro WHERE dni_socio='" + soc.getDni_socio()+"'" ;
 		Vector <Libro> IDLibros=new Vector<Libro>(); //vector para almacenar el id_libro
 		try{
 			s=c.createStatement();
@@ -81,10 +111,12 @@ public class BBDDAlquiler {
 			return IDLibros;
 		}
 		catch ( SQLException e){
-			//		System.out.println(e.getMessage());
-			return null;
+				System.out.println(e.getMessage());
+				return null;
 
 		}
+		
 	}
-
+	return null;
+}
 }

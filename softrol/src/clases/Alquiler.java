@@ -47,13 +47,14 @@ public class Alquiler {
 	public String getDni_socio() {
 		return dni_socio;
 	}
-
+/*
 	public static boolean compararIdLibro(int id_libro,Socio soc){
 		BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");
 		mibase.abrir();
-		int ides=id_libro;
-		for(int i=0; i<ides; i++) {
-			if (ides==BBDDAlquiler.consultarIDLibro(soc,  mibase.getConexion()).get(i).getId_libro()){
+		int longitud=BBDDAlquiler.consultarIDLibro(soc, mibase.getConexion()).size();
+		System.out.println(longitud);
+		for(int i=0; i<longitud; i++) {
+			if (id_libro==BBDDAlquiler.consultarIDLibro(soc, mibase.getConexion()).get(i).getId_libro()){
 				return true;
 			}
 
@@ -62,16 +63,23 @@ public class Alquiler {
 		return false;
 		
 	}
-	
+	*/
 	public static boolean pasarDeTiempo(Alquiler alq){
 		BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");
 		mibase.abrir();
-		java.util.Date fecha = new Date(LocalDate.now().getYear()-LocalDate.now().getMonth()-LocalDate.now().getDayOfMonth());
+		int año=LocalDate.now().getYear()-1900;
+		int mes=LocalDate.now().getMonthValue()-1;
+		int dia=LocalDate.now().getDayOfMonth();
+		@SuppressWarnings("deprecation")
+		java.util.Date fecha = new Date(año, mes, dia);
+		
 		java.util.Date fechafinal= BBDDAlquiler.buscarFechaFinalAlquiler(alq, mibase.getConexion());
 		if(fechafinal.compareTo(fecha)>0){
 			
+			System.out.println(fechafinal);
+			return true;
 		}
-		
+		return false;
 	}
 	@Override
 	public String toString() {

@@ -15,6 +15,8 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Connection;
+
 import static java.nio.file.StandardOpenOption.APPEND;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -57,7 +59,7 @@ public class SoftRol {
 		int opc = 1, opc2, idLibro,mesasLibres,numeroMesa,nHoras;
 		String dniSocio, operacion, titulo, repetir, usuario, dniValidado,telefonoValidado,tipo, telefono="", tematica, nombreTicket;
 		LocalDate fechaValidada, fecha;
-		boolean comprobar,validar;
+		boolean comprobar,validar,comprobarLibros=false;
 		// inicio de sesión
 		Socio.eliminarSocioMoroso();
 		do {
@@ -288,7 +290,74 @@ public class SoftRol {
 
 					case 3:
 						System.out.println("--- Devolver libro ---");
-						break;
+						do{
+
+							System.out.print("Introduce el DNI del socio: ");
+							dniSocio = sc.nextLine();
+							comprobar=Socio.validarDni(dniSocio);
+						}while (comprobar == false);
+						dniValidado = Socio.comprobarDni(dniSocio); //validar si el socio está en la BBDD para poder devolver el libro
+						if (dniSocio.equals(dniValidado)) {
+
+							System.out.print("Introduce el titulo del libro que deseas devolver: ");
+							titulo=sc.nextLine();
+
+							lib=new Libro(titulo);
+							mibase.abrir();
+							idLibro=BBDDLibro.buscarIdLibro(lib,  mibase.getConexion()); //busca el id del libro a partir del titulo
+							mibase.cerrar();
+
+							soc=new Socio(dniSocio);
+							mibase.abrir();
+							int numeroLibros=BBDDAlquiler.consultarIDLibro(soc, mibase.getConexion()); // devuelve el numero de libros que tiene el socio en su poder
+							mibase.cerrar();
+
+							mibase.abrir();
+							int longitud=BBDDAlquiler.consultarIDLibro2(idLibro,numeroLibros, soc, mibase.getConexion()).size();
+							for(int i=0; i<longitud; i++) {
+								if (idLibro==BBDDAlquiler.consultarIDLibro2(idLibro,numeroLibros, soc, mibase.getConexion()).get(i).getId_libro()){//busca si el socio tiene el libro especificado en su poder
+									comprobarLibros=true;
+								}
+							}
+							mibase.cerrar();
+
+							if(comprobarLibros==true){
+								
+								alq =new Alquiler(idLibro);
+								mibase.abrir();
+								//PENDIENTE DE VERIFICAR SI FUNCIONA *************************
+								boolean tiempoExcedido=Alquiler.pasarDeTiempo(alq);//ver si ha excedido el tiempo 
+								mibase.cerrar();
+								
+								if(tiempoExcedido==true){
+									System.out.println("El socio ha excedido el tiempo de préstamo.");
+									//realizar sancion
+									//devolver libro 
+								}else{
+									//devolver libro aqui sin sancion
+									System.out.println("sin sancion, devolver libro aqui");
+									/*
+									lib=new Libro(titulo);
+									mibase.abrir();
+									BBDDLibro.actualizarEstadoLibroFalse(lib,  mibase.getConexion()); //cambiar estado de libro a 0 para devolverlo
+									mibase.cerrar();
+
+
+									alq=new Alquiler(idLibro, dniSocio);
+									mibase.abrir();
+									BBDDAlquiler.borrar(alq,  mibase.getConexion()); //borrar registro de la reserva una vez devuelto el libro
+									mibase.cerrar();
+
+									 */
+								}
+
+							}else{
+								System.out.println("El socio"+dniSocio+" no tiene en su poder el libro \""+ titulo+"\" o no existe.");
+							}
+						} else {
+							System.out.println("El DNI no pertenece a un socio..");
+						}
+						break;//fin de devolver libro
 					case 4:
 						System.out.println("--- Listar libros ---");
 
@@ -339,11 +408,11 @@ public class SoftRol {
 									}
 									else{
 										Mesa.listadoMesasDisponibles(tematica);
-										
+
 										do{
-										System.out.print("Introduce el número de mesa que deseas elegir: ");
-										numeroMesa=sc.nextInt();
-										validar=Mesa.compararMesasDisponibles(tematica, numeroMesa);
+											System.out.print("Introduce el número de mesa que deseas elegir: ");
+											numeroMesa=sc.nextInt();
+											validar=Mesa.compararMesasDisponibles(tematica, numeroMesa);
 										}while(validar!=true);
 										mesa=new Mesa(numeroMesa);
 										mibase.abrir();
@@ -411,7 +480,7 @@ public class SoftRol {
 											System.out.print("Introduce el número de mesa que deseas elegir: ");
 											numeroMesa=sc.nextInt();
 											validar=Mesa.compararMesasDisponibles(tematica, numeroMesa);
-											}while(validar!=true);
+										}while(validar!=true);
 										mesa=new Mesa(numeroMesa);
 										mibase.abrir();
 										BBDDMesa.modificarEstadoMesaOcupado(mesa, mibase.getConexion()); // añadir la reserva a la BBDD
