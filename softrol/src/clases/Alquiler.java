@@ -1,6 +1,10 @@
 package clases;
 //clase con los datos de alquileres de los libros.
 import java.time.*;
+
+import bbdd.*;
+import bbdd.BaseDatosC;
+
 public class Alquiler {
 
 	private LocalDate fecha_inicio;
@@ -10,13 +14,13 @@ public class Alquiler {
 	private String dni_socio;
 	public Alquiler(LocalDate fecha_inicio, LocalDate fecha_final, int id_libro,
 			String dni_socio) {
-		
+
 		this.fecha_inicio = fecha_inicio;
 		this.fecha_final = fecha_final;
 		this.id_libro = id_libro;
 		this.dni_socio = dni_socio;
 	}
-	
+
 	public Alquiler(int id_libro) {
 		this.id_libro = id_libro;
 	}
@@ -33,9 +37,34 @@ public class Alquiler {
 	public String getDni_socio() {
 		return dni_socio;
 	}
+
+	public static boolean compararIdLibro(int id_libro, String titulo,Socio soc){
+		Libro lib;
+		BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");
+		lib=new Libro(titulo);
+		mibase.abrir();
+		int ides=id_libro;
+		for(int i=0; i<ides; i++) {
+			if (ides==BBDDAlquiler.consultarIDLibro(soc,  mibase.getConexion()).get(i).getId_libro()){
+				return true;
+			}
+
+		}
+		mibase.cerrar();
+		return false;
+		
+	}
+	
+	public static boolean pasarDeTiempo(){
+		LocalDate hoy= LocalDate.now();
+		if(l> hoy){
+			
+		}
+		
+	}
 	@Override
 	public String toString() {
 		return "Alquiler [fecha_inicio=" + fecha_inicio + ", fecha_final=" + fecha_final + ", id_libro=" + id_libro + ", dni_socio=" + dni_socio + "]";
 	}
-		
+
 }

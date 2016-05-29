@@ -44,7 +44,7 @@ public class BBDDAlquiler {
 	}
 
 	public static Date buscarFechaFinalAlquiler(Alquiler alq, Connection c){
-		String cadena="SELECT MAX(fecha_final) FROM alquileres_libro WHERE id_libro=" + alq.getId_libro() ;
+		String cadena="SELECT fecha_final FROM alquileres_libro WHERE id_libro=" + alq.getId_libro() ;
 		/*
 		 * esta consulta la utilizaremos para saber mediante el dni_socio que libros tiene ese socio en alquiler.
 		 */
