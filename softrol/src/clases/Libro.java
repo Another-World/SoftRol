@@ -49,6 +49,11 @@ public class Libro {
 	public Libro(String titulo) {
 		this.titulo = titulo;
 	}
+	
+
+	public Libro(int id_libro) {
+		this.id_libro = id_libro;
+	}
 
 
 	public String getTitulo() {
