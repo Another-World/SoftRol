@@ -38,10 +38,8 @@ public class Alquiler {
 		return dni_socio;
 	}
 
-	public static boolean compararIdLibro(int id_libro, String titulo,Socio soc){
-		Libro lib;
+	public static boolean compararIdLibro(int id_libro,Socio soc){
 		BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");
-		lib=new Libro(titulo);
 		mibase.abrir();
 		int ides=id_libro;
 		for(int i=0; i<ides; i++) {
@@ -57,6 +55,7 @@ public class Alquiler {
 	
 	public static boolean pasarDeTiempo(){
 		LocalDate hoy= LocalDate.now();
+		Date final= BBDDAlquiler.buscarFechaFinalAlquiler(alq, mibase.getConexion())
 		if(l> hoy){
 			
 		}
