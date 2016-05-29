@@ -1,4 +1,5 @@
 package clases;
+import java.sql.Date;
 //clase con los datos de alquileres de los libros.
 import java.time.*;
 import bbdd.*;
@@ -65,9 +66,9 @@ public class Alquiler {
 	public static boolean pasarDeTiempo(Alquiler alq){
 		BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");
 		mibase.abrir();
-		LocalDate hoy= LocalDate.now();
-		LocalDate fechafinal= BBDDAlquiler.buscarFechaFinalAlquiler(alq, mibase.getConexion())
-		if(fechafinal> hoy){
+		java.util.Date fecha = new Date(LocalDate.now().getYear()-LocalDate.now().getMonth()-LocalDate.now().getDayOfMonth());
+		java.util.Date fechafinal= BBDDAlquiler.buscarFechaFinalAlquiler(alq, mibase.getConexion());
+		if(fechafinal.compareTo(fecha)>0){
 			
 		}
 		
