@@ -13,7 +13,7 @@ public class BBDDSancion {
 	private static ResultSet reg;
 	
 	public static void añadir(Sancion san, Connection c){
-		String cadena="INSERT INTO sanciones VALUES('" + san.getN_sancion() + "','" + san.getFecha_inicio()+"','" + san.getFecha_final()+"','" + san.getMotivo()+"','" + san.getDni_socio()+"','"+ san.getDni_emple() +"')"; 	
+		String cadena="INSERT INTO sanciones(fecha_inicio, fecha_final, motivo, dni_socio, dni_emple) VALUES('" +  san.getFecha_inicio()+"','" + san.getFecha_final()+"','" + san.getMotivo()+"','" + san.getDni_socio()+"','"+ san.getDni_emple() +"')"; 	
 		/*
 		 * insertamos los valores de la sancion para darla de alta
 		 */

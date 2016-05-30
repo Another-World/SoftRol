@@ -7,13 +7,13 @@ import bbdd.BaseDatosC;
 public class Sancion {
 
 	private int n_sancion;
-	private String fecha_inicio;
+	private LocalDate fecha_inicio;
 	private LocalDate fecha_final;
-	private LocalDate motivo;
+	private String motivo;
 	private String dni_socio;
 	private String dni_emple;
 	
-	public Sancion(int n_sancion, String fecha_inicio, LocalDate fecha_final, LocalDate motivo, String dni_socio,
+	public Sancion(int n_sancion, LocalDate fecha_inicio, LocalDate fecha_final, String motivo, String dni_socio,
 			String dni_emple) {
 		
 		this.n_sancion = n_sancion;
@@ -29,6 +29,14 @@ public class Sancion {
 	}
 
 	
+	public Sancion(LocalDate fecha_inicio, LocalDate fecha_final, String motivo, String dni_socio, String dni_emple) {
+		this.fecha_inicio = fecha_inicio;
+		this.fecha_final = fecha_final;
+		this.motivo = motivo;
+		this.dni_socio = dni_socio;
+		this.dni_emple = dni_emple;
+	}
+
 	public static int numeroSanciones(String dni){
 		Sancion san;
 		BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");
@@ -45,7 +53,7 @@ public class Sancion {
 		return n_sancion;
 	}
 
-	public String getFecha_inicio() {
+	public LocalDate getFecha_inicio() {
 		return fecha_inicio;
 	}
 
@@ -53,7 +61,7 @@ public class Sancion {
 		return fecha_final;
 	}
 
-	public LocalDate getMotivo() {
+	public String getMotivo() {
 		return motivo;
 	}
 

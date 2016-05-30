@@ -57,7 +57,7 @@ public class SoftRol {
 		Path salidaMesa=Paths.get("recibos/mesa");
 		//variables
 		int opc = 1, opc2, idLibro,mesasLibres,numeroMesa,nHoras;
-		String dniSocio, operacion, titulo, repetir, usuario, dniValidado,telefonoValidado,tipo, telefono="", tematica, nombreTicket;
+		String dniSocio, operacion, titulo,rango, repetir, usuario, dniValidado,telefonoValidado,tipo, telefono="", tematica, nombreTicket;
 		LocalDate fechaValidada, fecha;
 		boolean comprobar,validar,comprobarLibros=false;
 		// inicio de sesión
@@ -72,11 +72,11 @@ public class SoftRol {
 
 			emp = new Empleado(usuario, password);
 			mibase.abrir();
-			usuario = BBDDEmpleado.comprobarRango(emp, mibase.getConexion());
+			rango = BBDDEmpleado.comprobarRango(emp, mibase.getConexion());
 			mibase.cerrar();
 
 			do {
-				if (usuario.equals("administrador")) { // Menú principal para los usuarios que sean administradores
+				if (rango.equals("administrador")) { // Menú principal para los usuarios que sean administradores
 					do {
 						System.out.println("       --- Menú ---");
 						System.out.println("1. Salir de la aplicación");
@@ -92,7 +92,7 @@ public class SoftRol {
 						}
 					} while (opc < 1 || opc > 5);
 				} else {
-					if (usuario.equals("empleado")) { // Menú principal para los usuarios que sean empleados
+					if (rango.equals("empleado")) { // Menú principal para los usuarios que sean empleados
 						do {
 							System.out.println("--- Menú ---");
 							System.out.println("1. Salir de la aplicación");
@@ -325,18 +325,40 @@ public class SoftRol {
 								
 								alq =new Alquiler(idLibro);
 								mibase.abrir();
-								//PENDIENTE DE VERIFICAR SI FUNCIONA *************************
 								boolean tiempoExcedido=Alquiler.pasarDeTiempo(alq);//ver si ha excedido el tiempo 
 								mibase.cerrar();
 								
 								if(tiempoExcedido==true){
-									System.out.println("El socio ha excedido el tiempo de préstamo.");
-									//realizar sancion
-									//devolver libro 
+									System.out.println("El socio ha excedido el tiempo de préstamo. Se procede a poner una sanción de 7 días.");
+									//insert sancion
+									
+									LocalDate fecha_inicio=LocalDate.now();
+									LocalDate fecha_final=LocalDate.now().plusDays(7);
+									System.out.println("Introduce motivo de sanción: ");
+									String motivo=sc.nextLine();
+									
+									
+									
+									san=new Sancion(fecha_inicio,fecha_final,motivo,dniSocio,usuario); //consultar autoIncremental
+									mibase.abrir();
+									BBDDSancion.añadir(san,  mibase.getConexion()); 
+									mibase.cerrar();
+									
+									lib=new Libro(titulo);
+									mibase.abrir();
+									BBDDLibro.actualizarEstadoLibroFalse(lib,  mibase.getConexion()); //cambiar estado de libro a 0 para devolverlo
+									mibase.cerrar();
+
+
+									alq=new Alquiler(idLibro, dniSocio);
+									mibase.abrir();
+									BBDDAlquiler.borrar(alq,  mibase.getConexion()); //borrar registro de la reserva una vez devuelto el libro
+									mibase.cerrar();
+									
 								}else{
 									//devolver libro aqui sin sancion
 									System.out.println("sin sancion, devolver libro aqui");
-									/*
+									
 									lib=new Libro(titulo);
 									mibase.abrir();
 									BBDDLibro.actualizarEstadoLibroFalse(lib,  mibase.getConexion()); //cambiar estado de libro a 0 para devolverlo
@@ -348,7 +370,7 @@ public class SoftRol {
 									BBDDAlquiler.borrar(alq,  mibase.getConexion()); //borrar registro de la reserva una vez devuelto el libro
 									mibase.cerrar();
 
-									 */
+									 
 								}
 
 							}else{
@@ -778,7 +800,7 @@ public class SoftRol {
 				} // fin del case-menu principal
 
 			} while (opc != 1);
-		} while (usuario.equals("administrador") != true && usuario.equals("empleado") != true);
+		} while (rango.equals("administrador") != true && rango.equals("empleado") != true);
 
 		System.out.println("Programa finalizado.");
 	}//cierre del Main
