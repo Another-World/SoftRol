@@ -68,15 +68,15 @@ public class Alquiler {
 		BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");
 		mibase.abrir();
 		int año=LocalDate.now().getYear()-1900;
-		int mes=LocalDate.now().getMonthValue()-1;
+		int mes=LocalDate.now().getMonthValue();
 		int dia=LocalDate.now().getDayOfMonth();
 		@SuppressWarnings("deprecation")
-		java.util.Date fecha = new Date(año, mes, dia);
+		java.util.Date fecha = new Date(año, mes-1, dia);
 		
 		java.util.Date fechafinal= BBDDAlquiler.buscarFechaFinalAlquiler(alq, mibase.getConexion());
-		if(fechafinal.compareTo(fecha)>0){
-			
-			System.out.println(fechafinal);
+		if(fecha.compareTo(fechafinal)>0){
+			System.out.println("Fecha actual: "+fecha);
+			System.out.println("Fecha devolución: "+fechafinal);
 			return true;
 		}
 		return false;
