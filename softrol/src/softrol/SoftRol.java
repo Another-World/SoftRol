@@ -357,7 +357,7 @@ public class SoftRol {
 									
 								}else{
 									//devolver libro aqui sin sancion
-									System.out.println("sin sancion, devolver libro aqui");
+									
 									
 									lib=new Libro(titulo);
 									mibase.abrir();
@@ -369,7 +369,7 @@ public class SoftRol {
 									mibase.abrir();
 									BBDDAlquiler.borrar(alq,  mibase.getConexion()); //borrar registro de la reserva una vez devuelto el libro
 									mibase.cerrar();
-
+									System.out.println("El libro "+ titulo+" ha sido devuelto correctamente.");
 									 
 								}
 
