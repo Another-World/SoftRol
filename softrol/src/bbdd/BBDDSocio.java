@@ -30,7 +30,7 @@ public class BBDDSocio {
 	}
 
 	public static void borrar(Socio soc, Connection c){
-		String cadena="DELETE FROM socios WHERE nombre='" +  soc.getNombre() + "' AND dni_socio='" + soc.getDni_socio()+"' AND telefono='" + soc.getTelefono()+ "'";	
+		String cadena="DELETE FROM socios WHERE dni_socio='" + soc.getDni_socio()+ "'";	
 		/*
 		 * borramos a los socios mediantes los campos
 		 * nombre,dni_socio y telefono

@@ -56,7 +56,7 @@ public class SoftRol {
 		Path salidaLibro=Paths.get("recibos/libro");
 		Path salidaMesa=Paths.get("recibos/mesa");
 		//variables
-		int opc = 1, opc2, idLibro,mesasLibres,numeroMesa,nHoras;
+		int opc = 1, opc2, idLibro,mesasLibres,numeroMesa,nHoras, Ndias;
 		String dniSocio, operacion, titulo,rango, repetir, usuario, dniValidado,telefonoValidado,tipo, telefono="", tematica, nombreTicket;
 		LocalDate fechaValidada, fecha;
 		boolean comprobar,validar,comprobarLibros=false;
@@ -206,8 +206,13 @@ public class SoftRol {
 											break;
 										case 3:
 											System.out.println("Ha seleccionado llevar a casa.");
+											do {
 											System.out.print("Introduce el número de dias que desea reservar: ");
-											int Ndias=sc.nextInt();
+											Ndias=sc.nextInt();
+											if (Ndias>14) {
+												System.out.println("El libro no puede ser reservado más de 14 días. ");
+											}
+											} while(Ndias>14);
 											DiaReservado=LocalDate.now();
 											System.out.println("El dia actual es: "+ DiaReservado);
 											LocalDate DiaDevolucion=LocalDate.now().plusDays(Ndias);
@@ -394,6 +399,8 @@ public class SoftRol {
 				case 3: // Gestion de las mesas
 					sc.nextLine(); // limpiar Scanner para que no salte el dni
 
+					Reserva.recorrerReservas();
+					
 					System.out.println("--- Gestión de mesas ---");
 					System.out.println("1. Volver al menú. ");
 					System.out.println("2. Seleccionar el tipo de mesa.");
@@ -689,7 +696,22 @@ public class SoftRol {
 
 						if (dniSocio.equals(dniValidado)) {
 
-							System.out.println("comprobar si posee libros."); // continuar por aqui
+							soc = new Socio(dniSocio);
+							mibase.abrir();
+							int nLibros = BBDDAlquiler.consultarIDLibro(soc, mibase.getConexion());
+							mibase.cerrar();
+							
+							if(nLibros==0){
+								soc = new Socio(dniSocio);
+								mibase.abrir();
+								BBDDSocio.borrar(soc, mibase.getConexion());
+								mibase.cerrar();
+								System.out.println("El socio con "+dniSocio+" ha sido eliminado. ");
+							}
+							else{
+								System.out.println("El socio con DNI: "+dniSocio+" No ha podido ser eliminado ya que tiene "+nLibros+" libro(s) en su poder");
+							}
+							
 
 
 						} else {
