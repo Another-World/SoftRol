@@ -2,11 +2,18 @@ package bbdd;
 
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.util.Vector;
 
+import clases.Sancion;
 import clases.Sancion;
 
 
 
+/**
+ * @author marcelo
+ *
+ */
 public class BBDDSancion {
 	private static Statement s;
 	private static Connection c;
@@ -26,13 +33,9 @@ public class BBDDSancion {
 			System.out.println(e.getMessage());
 		}
 }
-	public static void borrar(Sancion san, Connection c){
-		String cadena="DELETE FROM sanciones WHERE n_sancion='" +  san.getN_sancion() + "' AND motivo='" + san.getMotivo()+"' AND dni_socio='" + san.getDni_socio()+ "'";	
-		/*
-		 * a la hora de borrar la sancion
-		 * lo hacemos mediante numero de sancion
-		 * ,motivo y dni del socio
-		 */
+	public static void borrar(int numero, Connection c){
+		String cadena="DELETE FROM sanciones WHERE n_sancion=" + numero;	
+		
 		try{
 		s=c.createStatement();
 		s.executeUpdate(cadena);
@@ -65,6 +68,33 @@ public class BBDDSancion {
 			return null;
 			
 		}
+
+	}
+	
+public static Vector<Sancion> buscarSancion2(Connection c){
+		
+		String cadena="SELECT fecha_final, n_sancion FROM sanciones";
+		Vector <Sancion> buscarSancion=new Vector<Sancion>();
+		try{
+			s=c.createStatement();
+			reg=s.executeQuery(cadena);
+			while ( reg.next()){
+				java.sql.Date f=reg.getDate("fecha_final");
+				int d=f.getDay();
+				int m=f.getMonth();
+				int a=f.getYear();
+				LocalDate fecha_final=LocalDate.of(a,m,d);
+				Sancion san=new Sancion(fecha_final,reg.getInt("n_sancion"));
+				buscarSancion.add(san);
+			}
+			s.close();
+			return buscarSancion;
+		}
+		catch ( SQLException e){
+			//		System.out.println(e.getMessage());
+			return null;
+		}
+
 
 	}
 }

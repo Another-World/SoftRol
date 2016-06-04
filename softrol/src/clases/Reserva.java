@@ -4,6 +4,7 @@ import java.time.*;
 import java.util.Date;
 
 import bbdd.BBDDReserva;
+import bbdd.BBDDSancion;
 import bbdd.BaseDatosC;
 public class Reserva {
 
@@ -21,9 +22,16 @@ public class Reserva {
 
 
 	public static void recorrerReservas(){
+		int cont=0;
 		BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");
 		mibase.abrir();
 		int numero;
+		for (int i = 0; i <BBDDReserva.buscarReserva(mibase.getConexion()).size(); i++) {
+			if(BBDDReserva.buscarReserva(mibase.getConexion()).get(i).getFecha_final().compareTo(LocalTime.now())<0){
+				cont++;
+			}
+		}
+		if(cont>0){
 		System.out.print("Las siguientes mesas pasan a estar disponibles: ");
 		for (int i = 0; i <BBDDReserva.buscarReserva(mibase.getConexion()).size(); i++) {
 			if(BBDDReserva.buscarReserva(mibase.getConexion()).get(i).getFecha_final().compareTo(LocalTime.now())<0){
@@ -33,6 +41,7 @@ public class Reserva {
 				System.out.print(numero+ " ");
 			}
 		}
+	}
 		System.out.println();
 		mibase.cerrar();
 	}
