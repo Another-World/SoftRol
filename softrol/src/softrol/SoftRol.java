@@ -56,10 +56,11 @@ public class SoftRol {
 		Path salidaLibro=Paths.get("recibos/libro");
 		Path salidaMesa=Paths.get("recibos/mesa");
 		//variables
-		int opc = 1, opc2, idLibro,mesasLibres,numeroMesa,nHoras, Ndias;
+		int opc = 1, opc2=1, idLibro=0,mesasLibres=0,numeroMesa=0,nHoras=0, Ndias=0;
 		String dniSocio, operacion, titulo,rango, repetir, usuario, dniValidado,telefonoValidado,tipo, telefono="", tematica, nombreTicket;
 		LocalDate fechaValidada, fecha;
-		boolean comprobar,validar,comprobarLibros=false;
+		boolean comprobar=false,validar=false,comprobarLibros=false, except=false;
+
 		// inicio de sesión
 		Socio.eliminarSocioMoroso();
 		do {
@@ -78,33 +79,47 @@ public class SoftRol {
 			do {
 				if (rango.equals("administrador")) { // Menú principal para los usuarios que sean administradores
 					do {
-						System.out.println("       --- Menú ---");
-						System.out.println("1. Salir de la aplicación");
-						System.out.println("2. Gestión de biblioteca");
-						System.out.println("3. Gestión de mesas");
-						System.out.println("4. Gestión de socios");
-						System.out.println("5. Gestión de cuotas");
-						System.out.print("Introduce una opción: ");
-						opc = sc.nextInt();
-						System.out.println();
-						if (opc < 1 || opc > 5) {
-							System.out.println("Introduce una opción entre 1 y 5.");
-						}
-					} while (opc < 1 || opc > 5);
-				} else {
-					if (rango.equals("empleado")) { // Menú principal para los usuarios que sean empleados
-						do {
-							System.out.println("--- Menú ---");
+						except=false;
+						try{
+							System.out.println("       --- Menú ---");
 							System.out.println("1. Salir de la aplicación");
 							System.out.println("2. Gestión de biblioteca");
 							System.out.println("3. Gestión de mesas");
+							System.out.println("4. Gestión de socios");
+							System.out.println("5. Gestión de cuotas");
 							System.out.print("Introduce una opción: ");
 							opc = sc.nextInt();
 							System.out.println();
-							if (opc < 1 || opc > 3) {
-								System.out.println("Introduce una opción entre 1 y 3.");
+							if (opc < 1 || opc > 5) {
+								System.out.println("Introduce una opción entre 1 y 5.");
 							}
-						} while (opc < 1 || opc > 3);
+						}catch(InputMismatchException ie){
+							System.out.println("Debe introducir un valor numérico.");
+							except=true;
+							sc.nextLine();
+						}
+					} while (opc < 1 || opc > 5 || except==true);
+				} else {
+					if (rango.equals("empleado")) { // Menú principal para los usuarios que sean empleados
+						do {
+							except=false;
+							try{
+								System.out.println("       --- Menú ---");
+								System.out.println("1. Salir de la aplicación");
+								System.out.println("2. Gestión de biblioteca");
+								System.out.println("3. Gestión de mesas");
+								System.out.print("Introduce una opción: ");
+								opc = sc.nextInt();
+								System.out.println();
+								if (opc < 1 || opc > 3) {
+									System.out.println("Introduce una opción entre 1 y 3.");
+								}
+							}catch(InputMismatchException ie){
+								System.out.println("Debe introducir un valor numérico.");
+								except=true;
+								sc.nextLine();
+							}
+						} while (opc < 1 || opc > 3 || except==true);
 					} else {
 						System.out.println("Usuario o contraseña incorrectos.");
 					}
@@ -114,16 +129,28 @@ public class SoftRol {
 				switch (opc) {
 				case 2: // Gestion de la biblioteca
 					do {
-						System.out.println("--- Gestión de biblioteca ---");
-						System.out.println("1. Volver al menú");
-						System.out.println("2. Alquilar libro");
-						System.out.println("3. Devolver libro");
-						System.out.println("4. Listar libros");
-						System.out.print("Introduce una opción: ");
-						opc2 = sc.nextInt();
-						sc.nextLine();
+						except=false;
+						try{
+							
+							System.out.println("--- Gestión de biblioteca ---");
+							System.out.println("1. Volver al menú");
+							System.out.println("2. Alquilar libro");
+							System.out.println("3. Devolver libro");
+							System.out.println("4. Listar libros");
+							System.out.print("Introduce una opción: ");
+							opc2 = sc.nextInt();
+							if(opc2<1 || opc2>4){
+								System.out.println("Introduce una opción entre 1 y 4");
+							}
+						}catch(InputMismatchException ie){
+							System.out.println("Debe introducir un valor numérico.");
+							except=true;
+							sc.nextLine();
+						}
+						
 						System.out.println();
-					} while (opc2 < 1 || opc2 > 4);
+					} while (opc2 < 1 || opc2 > 4 || except==true);
+					sc.nextLine();
 					switch (opc2) {
 					case 2:
 						System.out.println("--- Alquilar libro ---");
@@ -152,13 +179,24 @@ public class SoftRol {
 									mibase.cerrar();
 
 									if(estadoLibro.equals("0")){
-										System.out.println("Desea llevar el libro a casa o usarlo en el local?");
-										System.out.println("1. Cancelar.");
-										System.out.println("2. Usar en local.");
-										System.out.println("3. Llevar a casa.");
-										System.out.print("Introduce opción: ");
-										opc2=sc.nextInt();
-
+										do{
+											except=false;
+											try{
+											System.out.println("Desea llevar el libro a casa o usarlo en el local?");
+											System.out.println("1. Cancelar.");
+											System.out.println("2. Usar en local.");
+											System.out.println("3. Llevar a casa.");
+											System.out.print("Introduce opción: ");
+											opc2=sc.nextInt();
+											if(opc2<1 || opc2>3){
+												System.out.println("Introduce una opción entre 1 y 3");
+											}
+											}catch(InputMismatchException ie){
+												System.out.println("Debe introducir un valor numérico.");
+												except=true;
+												sc.nextLine();
+											}
+										}while(opc2<1 || opc2>3 || except==true);
 										switch(opc2){
 										case 2:
 											System.out.println("Ha seleccionado usar en el local.");
@@ -207,12 +245,19 @@ public class SoftRol {
 										case 3:
 											System.out.println("Ha seleccionado llevar a casa.");
 											do {
-											System.out.print("Introduce el número de dias que desea reservar: ");
-											Ndias=sc.nextInt();
-											if (Ndias>14) {
-												System.out.println("El libro no puede ser reservado más de 14 días. ");
-											}
-											} while(Ndias>14);
+												except=false;
+												try{
+												System.out.print("Introduce el número de dias que desea reservar: ");
+												Ndias=sc.nextInt();
+												if (Ndias>14) {
+													System.out.println("El libro no puede ser reservado más de 14 días. ");
+												}
+												}catch(InputMismatchException ie){
+													System.out.println("Debe introducir un valor numérico.");
+													except=true;
+													sc.nextLine();
+												}
+											} while(Ndias>14 || except==true);
 											DiaReservado=LocalDate.now();
 											System.out.println("El dia actual es: "+ DiaReservado);
 											LocalDate DiaDevolucion=LocalDate.now().plusDays(Ndias);
@@ -327,28 +372,28 @@ public class SoftRol {
 							mibase.cerrar();
 
 							if(comprobarLibros==true){
-								
+
 								alq =new Alquiler(idLibro);
 								mibase.abrir();
 								boolean tiempoExcedido=Alquiler.pasarDeTiempo(alq);//ver si ha excedido el tiempo 
 								mibase.cerrar();
-								
+
 								if(tiempoExcedido==true){
 									System.out.println("El socio ha excedido el tiempo de préstamo. Se procede a poner una sanción de 7 días.");
 									//insert sancion
-									
+
 									LocalDate fecha_inicio=LocalDate.now();
 									LocalDate fecha_final=LocalDate.now().plusDays(7);
 									System.out.println("Introduce motivo de sanción: ");
 									String motivo=sc.nextLine();
-									
-									
-									
+
+
+
 									san=new Sancion(fecha_inicio,fecha_final,motivo,dniSocio,usuario); //consultar autoIncremental
 									mibase.abrir();
 									BBDDSancion.añadir(san,  mibase.getConexion()); 
 									mibase.cerrar();
-									
+
 									lib=new Libro(titulo);
 									mibase.abrir();
 									BBDDLibro.actualizarEstadoLibroFalse(lib,  mibase.getConexion()); //cambiar estado de libro a 0 para devolverlo
@@ -359,11 +404,11 @@ public class SoftRol {
 									mibase.abrir();
 									BBDDAlquiler.borrar(alq,  mibase.getConexion()); //borrar registro de la reserva una vez devuelto el libro
 									mibase.cerrar();
-									
+
 								}else{
 									//devolver libro aqui sin sancion
-									
-									
+
+
 									lib=new Libro(titulo);
 									mibase.abrir();
 									BBDDLibro.actualizarEstadoLibroFalse(lib,  mibase.getConexion()); //cambiar estado de libro a 0 para devolverlo
@@ -375,7 +420,7 @@ public class SoftRol {
 									BBDDAlquiler.borrar(alq,  mibase.getConexion()); //borrar registro de la reserva una vez devuelto el libro
 									mibase.cerrar();
 									System.out.println("El libro "+ titulo+" ha sido devuelto correctamente.");
-									 
+
 								}
 
 							}else{
@@ -400,13 +445,24 @@ public class SoftRol {
 					sc.nextLine(); // limpiar Scanner para que no salte el dni
 
 					Reserva.recorrerReservas();
-					
-					System.out.println("--- Gestión de mesas ---");
-					System.out.println("1. Volver al menú. ");
-					System.out.println("2. Seleccionar el tipo de mesa.");
-					System.out.println("3. Listar mesas");
-					System.out.print("Introduce una opción: ");
-					opc2 = sc.nextInt();
+					do{
+						except=false;
+						try{
+						System.out.println("--- Gestión de mesas ---");
+						System.out.println("1. Volver al menú. ");
+						System.out.println("2. Seleccionar el tipo de mesa.");
+						System.out.println("3. Listar mesas");
+						System.out.print("Introduce una opción: ");
+						opc2 = sc.nextInt();
+						if(opc2<1 || opc2>3){
+							System.out.println("Introduce una opción entre 1 y 3");
+						}
+						}catch(InputMismatchException ie){
+							System.out.println("Debe introducir un valor numérico.");
+							except=true;
+							sc.nextLine();
+						}
+					}while(opc2<1 || opc2>3 || except==true);
 					sc.nextLine();
 					switch (opc2) {
 					case 2:
@@ -439,21 +495,35 @@ public class SoftRol {
 										Mesa.listadoMesasDisponibles(tematica);
 
 										do{
+											except=false;
+											try{
 											System.out.print("Introduce el número de mesa que deseas elegir: ");
 											numeroMesa=sc.nextInt();
 											validar=Mesa.compararMesasDisponibles(tematica, numeroMesa);
-										}while(validar!=true);
+											}catch(InputMismatchException ie){
+												System.out.println("Debe introducir un valor numérico.");
+												except=true;
+												sc.nextLine();
+											}
+										}while(validar!=true || except==true); 
 										mesa=new Mesa(numeroMesa);
 										mibase.abrir();
 										BBDDMesa.modificarEstadoMesaOcupado(mesa, mibase.getConexion()); // añadir la reserva a la BBDD
 										mibase.cerrar();
 										do{
+											except=false;
+											try{
 											System.out.println("Introduce el número de horas que desea reservar la mesa: ");
 											nHoras=sc.nextInt();
 											if(nHoras>4){
 												System.out.println("No se puede reservar más de 3 horas");
 											}
-										}while(nHoras>4);
+											}catch(InputMismatchException ie){
+												System.out.println("Debe introducir un valor numérico.");
+												except=true;
+												sc.nextLine();
+											}
+										}while(nHoras>4 || except==true); 
 										res=new Reserva(LocalTime.now(),LocalTime.now().plusHours(nHoras),numeroMesa,dniSocio);
 										mibase.abrir();
 										BBDDReserva.añadir(res, mibase.getConexion()); // añadir la reserva a la BBDD
@@ -506,21 +576,35 @@ public class SoftRol {
 									else{
 										Mesa.listadoMesasDisponibles(tematica);
 										do{
+											except=false;
+											try{
 											System.out.print("Introduce el número de mesa que deseas elegir: ");
 											numeroMesa=sc.nextInt();
 											validar=Mesa.compararMesasDisponibles(tematica, numeroMesa);
-										}while(validar!=true);
+											}catch(InputMismatchException ie){
+												System.out.println("Debe introducir un valor numérico.");
+												except=true;
+												sc.nextLine();
+											}
+										}while(validar!=true || except==true);
 										mesa=new Mesa(numeroMesa);
 										mibase.abrir();
 										BBDDMesa.modificarEstadoMesaOcupado(mesa, mibase.getConexion()); // añadir la reserva a la BBDD
 										mibase.cerrar();
 										do{
+											except=false;
+											try{
 											System.out.println("Introduce el número de horas que desea reservar la mesa: ");
 											nHoras=sc.nextInt();
 											if(nHoras>4){
 												System.out.println("No se puede reservar más de 3 horas");
 											}
-										}while(nHoras>4);
+											}catch(InputMismatchException ie){
+												System.out.println("Debe introducir un valor numérico.");
+												except=true;
+												sc.nextLine();
+											}
+										}while(nHoras>4 || except==true);
 										res=new Reserva(LocalTime.now(),LocalTime.now().plusHours(nHoras),numeroMesa,dniSocio);
 										mibase.abrir();
 										BBDDReserva.añadir(res, mibase.getConexion()); // añadir la reserva a la BBDD
@@ -585,6 +669,8 @@ public class SoftRol {
 				case 4:// Gestion de los socios
 
 					do {
+						except=false;
+						try{
 						System.out.println("--- Gestión de socios ---");
 						System.out.println("1. Volver al menú");
 						System.out.println("2. Dar de alta");
@@ -594,7 +680,15 @@ public class SoftRol {
 						opc2 = sc.nextInt();
 						sc.nextLine();
 						System.out.println();
-					} while (opc2 < 1 || opc2 > 4);
+						if(opc2<1 || opc2>4){
+							System.out.println("Introduce una opción entre 1 y 4");
+						}
+						}catch(InputMismatchException ie){
+							System.out.println("Debe introducir un valor numérico.");
+							except=true;
+							sc.nextLine();
+						}
+					} while (opc2 < 1 || opc2 > 4|| except==true);
 
 					switch (opc2) { //Submenú de gestion de socios
 					case 2:
@@ -700,7 +794,7 @@ public class SoftRol {
 							mibase.abrir();
 							int nLibros = BBDDAlquiler.consultarIDLibro(soc, mibase.getConexion());
 							mibase.cerrar();
-							
+
 							if(nLibros==0){
 								soc = new Socio(dniSocio);
 								mibase.abrir();
@@ -711,7 +805,7 @@ public class SoftRol {
 							else{
 								System.out.println("El socio con DNI: "+dniSocio+" No ha podido ser eliminado ya que tiene "+nLibros+" libro(s) en su poder");
 							}
-							
+
 
 
 						} else {
@@ -730,13 +824,25 @@ public class SoftRol {
 					break; // fin de gestion de socios
 					//-------------------------------------------------------------------------------------------------------------------------------
 				case 5: // gestion de cuotas
-					System.out.println("--- Gestión de cuotas ---");
-					System.out.println("1. Volver al menú");
-					System.out.println("2. Pagar Cuota");
-					System.out.println("3. Listar Cuotas");
-					System.out.print("Introduce una opción: ");
-					opc2 = sc.nextInt();
-					sc.nextLine();
+					do{
+						except=false;
+						try{
+						System.out.println("--- Gestión de cuotas ---");
+						System.out.println("1. Volver al menú");
+						System.out.println("2. Pagar Cuota");
+						System.out.println("3. Listar Cuotas");
+						System.out.print("Introduce una opción: ");
+						opc2 = sc.nextInt();
+						sc.nextLine();
+						if(opc2<1 || opc2>3){
+							System.out.println("Introduce una opción entre 1 y 3");
+						}
+						}catch(InputMismatchException ie){
+							System.out.println("Debe introducir un valor numérico.");
+							except=true;
+							sc.nextLine();
+						}
+					} while (opc2 < 1 || opc2 > 3 || except==true);
 					System.out.println();
 					switch(opc2){
 					case 2://aqui se pagan las cuotas
@@ -823,6 +929,7 @@ public class SoftRol {
 
 			} while (opc != 1);
 		} while (rango.equals("administrador") != true && rango.equals("empleado") != true);
+
 
 		System.out.println("Programa finalizado.");
 	}//cierre del Main
