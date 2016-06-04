@@ -12,36 +12,44 @@ public class Reserva {
 	private int n_mesa;
 	private String dni_socio;
 	public Reserva(LocalTime fecha_inicio, LocalTime fecha_final, int n_mesa, String dni_socio) {
-		
+
 		this.fecha_inicio = fecha_inicio;
 		this.fecha_final = fecha_final;
 		this.n_mesa = n_mesa;
 		this.dni_socio = dni_socio;
 	}
-	
-	
+
+
 	public static void recorrerReservas(){
 		BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");
 		mibase.abrir();
-		int longitud= BBDDReserva.buscarReserva(mibase.getConexion()).size();
-		
-		for (int i = 0; i <longitud; i++) {
-			
-				
+		int numero;
+		System.out.print("Las siguientes mesas pasan a estar disponibles: ");
+		for (int i = 0; i <BBDDReserva.buscarReserva(mibase.getConexion()).size(); i++) {
 			if(BBDDReserva.buscarReserva(mibase.getConexion()).get(i).getFecha_final().compareTo(LocalTime.now())<0){
-				System.out.println(BBDDReserva.buscarReserva(mibase.getConexion()).get(i).getFecha_final());	
+				numero= BBDDReserva.buscarReserva(mibase.getConexion()).get(i).getN_mesa();
+				BBDDReserva.borrar(numero, mibase.getConexion());
+				i--;
+				System.out.print(numero+ " ");
 			}
 		}
+		System.out.println();
 		mibase.cerrar();
 	}
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+	public Reserva(int n_mesa) {
+		super();
+		this.n_mesa = n_mesa;
+	}
+
+
 	public Reserva(LocalTime fecha_final, int n_mesa) {
 		this.fecha_final = fecha_final;
 		this.n_mesa = n_mesa;
@@ -64,6 +72,6 @@ public class Reserva {
 		return "Reserva [fecha_inicio=" + fecha_inicio + ", fecha_final=" + fecha_final + ", n_mesa=" + n_mesa
 				+ ", dni_socio=" + dni_socio + "]";
 	}
-	
-	
+
+
 }

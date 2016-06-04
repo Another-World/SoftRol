@@ -32,8 +32,8 @@ public class BBDDReserva {
 		}
 	}
 
-	public static void borrar(Reserva res, Connection c){
-		String cadena="DELETE FROM reservas WHERE n_mesa='" +  res.getN_mesa()+ "'";	
+	public static void borrar(int numero, Connection c){
+		String cadena="DELETE FROM reservas WHERE n_mesa=" +  numero;	
 		/*
 		 * borramos una reserva mediante el numero de esta
 		 */
