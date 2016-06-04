@@ -2,6 +2,16 @@ package clases;
 //Esta es la clase con los datos de los socios.
 import java.time.*;
 import java.util.Vector;
+import java.util.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Scanner;
+
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.persistence.XmlArrayList;
+import com.thoughtworks.xstream.XStream;
 
 import clases.*;
 import bbdd.*;
@@ -42,6 +52,15 @@ public class Socio {
 		this.cuota_pagada = cuota_pagada;
 	}
 
+
+
+
+	public Socio(String nombre,  String dni_socio, String telefono) {
+		super();
+		this.nombre = nombre;
+		this.telefono = telefono;
+		this.dni_socio = dni_socio;
+	}
 
 
 	public Socio(String dni_socio, int cuota_pagada) {
@@ -171,11 +190,19 @@ public class Socio {
 			return fechanacimiento;
 		}
 	}
+	
+	
 
 	public static void eliminarSocioMoroso() {
+		//public static final int numeraso=1;
+		//private XStream xstream;
 		BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");
+		
 		mibase.abrir();
 		for(int i=0; i< BBDDSocio.EliminarSocio(mibase.getConexion()).size(); i++) {
+			
+		}
+		/*for(int i=0; i< BBDDSocio.EliminarSocio(mibase.getConexion()).size(); i++) {
 			Socio soc;
 
 			soc = new Socio( BBDDSocio.EliminarSocio(mibase.getConexion()).get(i).getDni_socio());
@@ -189,7 +216,8 @@ public class Socio {
 					System.out.println("socio eliminado por moroso");
 				}
 			}
-		}
+		}*/
+		BBDDSocio.EliminarSocio(mibase.getConexion());
 		mibase.cerrar();
 	}
 	//Listar socios
