@@ -27,9 +27,9 @@ public class BBDDCuota {
 		catch ( SQLException e){
 			//		System.out.println(e.getMessage());
 			return null;
-
-		}
+		} 
 	}
+	
 	//Metodo listar cuotas
 	public static Vector<Cuota> listarCuota(Connection c){
 		String cadena="SELECT * FROM cuotas "; //Select para listar las cuotas

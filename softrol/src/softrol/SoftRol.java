@@ -32,6 +32,7 @@ import org.omg.Messaging.SyncScopeHelper;
 
 public class SoftRol {
 
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");
