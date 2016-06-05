@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 17-05-2016 a las 07:23:02
+-- Tiempo de generación: 05-06-2016 a las 18:15:46
 -- Versión del servidor: 5.5.24-log
 -- Versión de PHP: 5.4.3
 
@@ -29,13 +29,21 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `alquileres_libro` (
   `fecha_inicio` date NOT NULL,
   `fecha_final` date NOT NULL,
-  `estado_peticion` varchar(20) NOT NULL,
   `id_libro` int(10) NOT NULL,
   `dni_socio` varchar(9) NOT NULL,
   PRIMARY KEY (`fecha_inicio`,`id_libro`),
   KEY `id_libro` (`id_libro`),
   KEY `dni_socio` (`dni_socio`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `alquileres_libro`
+--
+
+INSERT INTO `alquileres_libro` (`fecha_inicio`, `fecha_final`, `id_libro`, `dni_socio`) VALUES
+('2016-06-05', '2016-06-10', 22012112, '13121432R'),
+('2016-06-05', '2016-06-05', 341267865, '13121432R'),
+('2016-06-05', '2016-06-05', 586628680, '13121432R');
 
 -- --------------------------------------------------------
 
@@ -104,12 +112,12 @@ CREATE TABLE IF NOT EXISTS `libros` (
 
 INSERT INTO `libros` (`titulo`, `autor`, `editorial`, `estado_alquilado`, `id_libro`) VALUES
 ('Aquelarre', 'Ricard Ibáñez', 'NSR', 0, 12345606),
-('Cthulhu', 'Rachel Gray', 'ESP', 0, 22012112),
+('Cthulhu', 'Rachel Gray', 'ESP', 1, 22012112),
 ('Fragmentos', 'Sergio Marcos Vergara', 'Directors Cut', 0, 254411524),
-('Eyes Only', 'Pedro J. Ramos', 'STR', 0, 341267865),
+('Eyes Only', 'Pedro J. Ramos', 'STR', 1, 341267865),
 ('Cazadores de Leyendas', 'Ismael Díaz Sacaluga', 'LORE', 0, 357684912),
 ('El Reino de la Sombra', 'José Luis López Morales', 'NSR', 0, 558256652),
-('Masacre en la Galaxia', 'Gregor Hutton', 'LUZ', 0, 586628680),
+('Masacre en la Galaxia', 'Gregor Hutton', 'LUZ', 1, 586628680),
 ('Ars Malefica', 'Miguel Ángel Ruíz', 'DUNGEONSPAIN', 0, 852741611);
 
 -- --------------------------------------------------------
@@ -130,12 +138,12 @@ CREATE TABLE IF NOT EXISTS `mesas` (
 --
 
 INSERT INTO `mesas` (`n_mesa`, `tipo`, `estado`) VALUES
-(1, 'rol', 'ocupado'),
+(1, 'rol', 'libre'),
 (2, 'rol', 'libre'),
 (3, 'rol', 'libre'),
 (4, 'rol', 'libre'),
 (5, 'rol', 'libre'),
-(6, 'estrategia', 'ocupado'),
+(6, 'estrategia', 'libre'),
 (7, 'estrategia', 'libre'),
 (8, 'estrategia', 'libre'),
 (9, 'estrategia', 'libre'),
@@ -157,14 +165,6 @@ CREATE TABLE IF NOT EXISTS `reservas` (
   KEY `dni_socio` (`dni_socio`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Volcado de datos para la tabla `reservas`
---
-
-INSERT INTO `reservas` (`fecha_inicio`, `fecha_final`, `n_mesa`, `dni_socio`) VALUES
-('14:00:00', '15:30:00', 1, '47302193A'),
-('18:30:00', '20:00:00', 6, '51293458B');
-
 -- --------------------------------------------------------
 
 --
@@ -181,14 +181,7 @@ CREATE TABLE IF NOT EXISTS `sanciones` (
   PRIMARY KEY (`n_sancion`),
   KEY `dni_socio` (`dni_socio`),
   KEY `dni_emple` (`dni_emple`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
-
---
--- Volcado de datos para la tabla `sanciones`
---
-
-INSERT INTO `sanciones` (`n_sancion`, `fecha_inicio`, `fecha_final`, `motivo`, `dni_socio`, `dni_emple`) VALUES
-(1, '2016-05-13', '2016-05-20', 'No ha devuelto el libro a tiempo', '12345678Z', '47283104A');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -213,13 +206,14 @@ CREATE TABLE IF NOT EXISTS `socios` (
 --
 
 INSERT INTO `socios` (`nombre`, `dni_socio`, `telefono`, `fecha_nacimiento`, `fecha_alta`, `tipo_cuota`, `cuota_pagada`) VALUES
-('Paco Martinez Soria', '11111111A', '666666666', '1996-12-12', '2016-05-16', 'adulto', 1),
-('Pepito Arraz de la Vega', '12345678Z', '911112324', '1989-01-01', '2016-05-13', 'adulto', 1),
-('Juan Sánchez Gutiérrez', '47302193A', '762314584', '1996-03-01', '2016-05-08', 'adulto', 1),
-('Señor de Prueba', '50304956W', '656567843', '1992-03-02', '2016-05-16', 'adulto', 1),
-('Benito Pérez Nivelo', '51293458B', '722492545', '1998-01-01', '2016-05-01', 'juvenil', 1),
-('Niño de prueba', '94584345E', '914356543', '1999-09-23', '2016-05-16', 'juvenil', 1),
-('Bartolo', '98765432D', '913456781', '1990-07-20', '2016-05-17', 'adulto', 1);
+('Juana Benitez ', '13121432R', '912354564', '2000-09-23', '2016-05-23', 'juvenil', 1),
+('Eustaquia del Carmen ', '20932658J', '722345483', '1980-05-10', '2016-05-16', 'adulto', 1),
+('Pepito Arraz de la Vega', '23315996E', '911112324', '1989-01-01', '2016-05-13', 'adulto', 1),
+('prueba de xml', '27105899P', '612345677', '2000-03-04', '2016-06-05', 'juvenil', 1),
+('Raul Perez Castro', '35975269A', '695495049', '2000-05-09', '2016-05-09', 'juvenil', 1),
+('Juan Sánchez Gutiérrez', '45456338N', '762314584', '1996-03-01', '2016-05-08', 'adulto', 1),
+('Benito Pérez Nivelo', '51635476Q', '684539234', '1998-01-01', '2016-05-01', 'juvenil', 1),
+('Alejandro Sanchez Gutierrez', '72803494F', '634543245', '1990-05-02', '2016-05-16', 'adulto', 1);
 
 --
 -- Restricciones para tablas volcadas
