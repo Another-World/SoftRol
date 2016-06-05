@@ -224,7 +224,7 @@ public class Socio {
 
 			if (cuotaComprobada == 0) {
 
-				if (LocalDate.now().getDayOfMonth() > 4) { // CAMBIAR A 7
+				if (LocalDate.now().getDayOfMonth() > 4) { 
 					cont++;
 				}
 			}
@@ -240,10 +240,12 @@ public class Socio {
 
 				if (cuotaComprobada == 0) {
 
-					if (LocalDate.now().getDayOfMonth() > 4) { // CAMBIAR A 7
+					if (LocalDate.now().getDayOfMonth() > 4) { 
 						System.out.println("el socio: "+BBDDSocio.EliminarSocio2(mibase.getConexion()).get(i).getDni_socio() +" ha sido borrado por no pagar la cuota mensual.");
 						socXML= new Socio(BBDDSocio.EliminarSocio2(mibase.getConexion()).get(i).getNombre(), BBDDSocio.EliminarSocio2(mibase.getConexion()).get(i).getDni_socio(), BBDDSocio.EliminarSocio2(mibase.getConexion()).get(i).getTelefono());
 						moverAlXml.add(socXML);
+						BBDDSancion.borrarTodas(socXML, mibase.getConexion());
+						BBDDAlquiler.borrarTodos(socXML, mibase.getConexion());
 						BBDDSocio.borrar(socXML,mibase.getConexion());
 					}
 				}

@@ -685,8 +685,8 @@ public class SoftRol {
 							opc2 = sc.nextInt();
 							sc.nextLine();
 							System.out.println();
-							if(opc2<1 || opc2>4){
-								System.out.println("Introduce una opción entre 1 y 4");
+							if(opc2<1 || opc2>5){
+								System.out.println("Introduce una opción entre 1 y 5");
 							}
 						}catch(InputMismatchException ie){
 							System.out.println("Debe introducir un valor numérico.");
@@ -826,14 +826,23 @@ public class SoftRol {
 						break;
 					case 5:
 						System.out.println("--- Actualización de cuotas ---");
-						System.out.println("ATENCIÓN: esta acción solo debe realizarse una vez al mes. ");
+						System.out.println("ATENCIÓN: esta acción solo debe realizarse una vez al mes antes del dia 7. ");
 						System.out.println("Para realizar la acción escriba: ACTUALIZAR");
+						System.out.println("-->>Introduce cualquier caracter para cancelar la operación<<--");
+						System.out.println("Introduce la opción: ");
 						String leer=sc.nextLine();
 						if (leer.equals("ACTUALIZAR")) {
-							mibase.abrir();
-							BBDDSocio.cancelarPagos(mibase.getConexion());
-							mibase.cerrar();
-							System.out.println("Todos las pagos se han reiniciado. ");
+
+							if(LocalDate.now().getDayOfMonth()<7){
+								mibase.abrir();
+								BBDDSocio.cancelarPagos(mibase.getConexion());
+								mibase.cerrar();
+								System.out.println("Todos las pagos se han reiniciado. ");
+							}
+							else{
+								System.out.println("No se pueden actualizar las cuotas despues del dia 7");
+							}
+
 						}
 						else {
 							System.out.println("Operación cancelada. ");

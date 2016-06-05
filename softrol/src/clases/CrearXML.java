@@ -53,7 +53,7 @@ public class CrearXML {
 
 				if (cuotaComprobada == 0) {
 
-					if (LocalDate.now().getDayOfMonth() > 4) { // CAMBIAR A 7
+					if (LocalDate.now().getDayOfMonth() > 4) { 
 						cont++;
 					}
 				}

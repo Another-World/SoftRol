@@ -4,8 +4,7 @@ package bbdd;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.Vector;
-import clases.Sancion;
-import clases.Sancion;
+import clases.*;
 import clases.Sancion;
 
 
@@ -108,6 +107,19 @@ public class BBDDSancion {
 		catch ( SQLException e){
 			//  System.out.println(e.getMessage());
 			return null;
+		}
+	}
+	
+	public static void borrarTodas( Socio soc,Connection c){
+		String cadena="DELETE FROM sanciones WHERE dni_socio='" + soc.getDni_socio()+"'";    
+
+		try{
+			s=c.createStatement();
+			s.executeUpdate(cadena);
+			s.close();
+		}
+		catch ( SQLException e){
+			System.out.println(e.getMessage());
 		}
 	}
 }

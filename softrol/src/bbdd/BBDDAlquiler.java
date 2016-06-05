@@ -141,4 +141,17 @@ public static Vector<Libro> consultarIDLibro2(int id_libro,int numero,Socio soc,
 	}
 	return null;
 }
+
+public static void borrarTodos(Socio soc, Connection c){
+	String cadena="DELETE FROM alquileres_libro WHERE dni_socio='" + soc.getDni_socio()+ "'";	
+	
+	try{
+		s=c.createStatement();
+		s.executeUpdate(cadena);
+		s.close();
+	}
+	catch ( SQLException e){
+		System.out.println(e.getMessage());
+	}
+}
 }
