@@ -17,7 +17,7 @@ public class BBDDSancion {
 	/**
 	 * @see  método para añadir sanciones a los socios que no devuelvan los libros a tiempo
 	 */
-	public static void añadir(Sancion san, Connection c){
+	public static void anadir(Sancion san, Connection c){
 		String cadena="INSERT INTO sanciones(fecha_inicio, fecha_final, motivo, dni_socio, dni_emple) VALUES('" +  san.getFecha_inicio()+"','" + san.getFecha_final()+"','" + san.getMotivo()+"','" + san.getDni_socio()+"','"+ san.getDni_emple() +"')";   
 		/**
 		 * @see  insertamos los valores de la sanción para darla de alta

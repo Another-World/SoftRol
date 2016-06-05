@@ -14,7 +14,7 @@ public class BBDDMesa {
     /**
      * @see  método para añadir una mesa
      */
-    public static void añadir(Mesa mesa, Connection c){
+    public static void anadir(Mesa mesa, Connection c){
         String cadena="INSERT INTO mesas VALUES('" + mesa.getN_mesa() + "','" + mesa.getTipo()+"','"+ mesa.getEstado() +"')";   
         /**
          * @see  damos de alta una mesa añadiendo sus datos principales

@@ -12,7 +12,7 @@ public class BBDDEmpleado {
 	/**
 	 * @see método para añadir empleados
 	 */
-	public static void añadir(Empleado emp, Connection c){
+	public static void anadir(Empleado emp, Connection c){
 		String cadena="INSERT INTO empleados VALUES('" + emp.getNombre() + "','" + emp.getDni_emple()+"','" + emp.getTelefono()+"','"+ emp.getContraseña() +"')";   
 
 		try{

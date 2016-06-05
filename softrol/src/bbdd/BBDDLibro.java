@@ -14,7 +14,7 @@ public class BBDDLibro {
 	/**
 	 * @see  método para añadir libros en la biblioteca
 	 */
-	public static void añadir(Libro lib, Connection c){
+	public static void anadir(Libro lib, Connection c){
 		String cadena="INSERT INTO libros VALUES('" + lib.getTitulo() + "','" + lib.getAutor()+"','" + lib.getEditorial()+"','" + lib.isEstado_alquilado()+"','"+ lib.getId_libro() +"')";  
 
 		try{

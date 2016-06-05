@@ -16,7 +16,7 @@ public class BBDDReserva {
 	/**
 	 * @see  método para añadir reservas de mesas
 	 */
-	public static void añadir(Reserva res, Connection c){
+	public static void anadir(Reserva res, Connection c){
 		String cadena="INSERT INTO reservas VALUES('" + res.getFecha_inicio() + "','" + res.getFecha_final()+"','" + res.getN_mesa()+"','"+ res.getDni_socio() +"')";   
 		/**
 		 * @see  damos de alta una reserva en la cual guardamos el tiempo de uso el número de la misma y el dni del socio

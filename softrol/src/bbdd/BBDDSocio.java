@@ -16,7 +16,7 @@ public class BBDDSocio {
 	/**
 	 * @see  método para añadir socios
 	 */
-	public static void añadir(Socio soc, Connection c){
+	public static void anadir(Socio soc, Connection c){
 		String cadena="INSERT INTO socios VALUES('" + soc.getNombre() + "','" + soc.getDni_socio()+"','" + soc.getTelefono()+"','" + soc.getFecha_nacimiento()+"','" + soc.getFecha_alta()+"','" + soc.getTipo_cuota()+"','"+ soc.getCuota_pagada() +"')";  
 		/**
 		 * @see  insertamos cada uno de los datos correspondientes a los socios

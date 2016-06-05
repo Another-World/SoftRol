@@ -20,7 +20,7 @@ public class BBDDAlquiler {
 	 * @param c
 	 * @see añadimos un socio a la tabla introduciendo todos sus datos esenciales.
 	 */
-	public static void añadir(Alquiler alq, Connection c){
+	public static void anadir(Alquiler alq, Connection c){
 		String cadena="INSERT INTO alquileres_libro VALUES('" + alq.getFecha_inicio() + "','" + alq.getFecha_final()+"','" + alq.getId_libro()+"','"+ alq.getDni_socio() +"')"; 	
 		
 		try{

@@ -16,7 +16,8 @@ import com.thoughtworks.xstream.XStream;
 import clases.*;
 import bbdd.*;
 /**
- * @see Esta es la clase con los datos de los socios.
+ * Esta es la clase con los datos de los socios.
+ * @author david, alex, marcelo
  */
 
 public class Socio {
@@ -103,7 +104,7 @@ public class Socio {
 	}
 
 	/**
-	 * @see metodo para contruir tickect cuota.
+	 * metodo para contruir tickect cuota.
 	 *
 	 */
 	public static Socio ticketCuota(String dni){ 
