@@ -87,7 +87,7 @@ public class Socio {
 
 
 	}
-	
+
 	/**
 	 *  metodo para comprobar el dni
 	 * @param dni se pasa el dni para validarlo
@@ -205,28 +205,46 @@ public class Socio {
 			return fechanacimiento;
 		}
 	}
-	
-	
+
+
 
 	public static Vector<Socio> eliminarSocioMoroso() {
+		int cont=0;
 		BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");
 		Vector <Socio> moverAlXml =new Vector<Socio>();
 		mibase.abrir();
-		
+
 		for(int i=0; i< BBDDSocio.EliminarSocio2(mibase.getConexion()).size(); i++) {
 			Socio soc;
 			Socio socXML;
 			soc = new Socio( BBDDSocio.EliminarSocio2(mibase.getConexion()).get(i).getDni_socio());
-			
+
 
 			int cuotaComprobada = BBDDSocio.comprobarCuotaPagada(soc, mibase.getConexion());
-			
+
 			if (cuotaComprobada == 0) {
 
 				if (LocalDate.now().getDayOfMonth() > 4) { // CAMBIAR A 7
-					System.out.println("el socio: "+BBDDSocio.EliminarSocio2(mibase.getConexion()).get(i).getDni_socio() +" ha sido borrado por no pagar la cuota mensual.");
-					socXML= new Socio(BBDDSocio.EliminarSocio2(mibase.getConexion()).get(i).getNombre(), BBDDSocio.EliminarSocio2(mibase.getConexion()).get(i).getDni_socio(), BBDDSocio.EliminarSocio2(mibase.getConexion()).get(i).getTelefono());
-					moverAlXml.add(socXML);
+					cont++;
+				}
+			}
+		}
+		if(cont>0){
+			for(int i=0; i< BBDDSocio.EliminarSocio2(mibase.getConexion()).size(); i++) {
+				Socio soc;
+				Socio socXML;
+				soc = new Socio( BBDDSocio.EliminarSocio2(mibase.getConexion()).get(i).getDni_socio());
+
+
+				int cuotaComprobada = BBDDSocio.comprobarCuotaPagada(soc, mibase.getConexion());
+
+				if (cuotaComprobada == 0) {
+
+					if (LocalDate.now().getDayOfMonth() > 4) { // CAMBIAR A 7
+						System.out.println("el socio: "+BBDDSocio.EliminarSocio2(mibase.getConexion()).get(i).getDni_socio() +" ha sido borrado por no pagar la cuota mensual.");
+						socXML= new Socio(BBDDSocio.EliminarSocio2(mibase.getConexion()).get(i).getNombre(), BBDDSocio.EliminarSocio2(mibase.getConexion()).get(i).getDni_socio(), BBDDSocio.EliminarSocio2(mibase.getConexion()).get(i).getTelefono());
+						moverAlXml.add(socXML);
+					}
 				}
 			}
 		}
@@ -234,12 +252,12 @@ public class Socio {
 		mibase.cerrar();
 		return moverAlXml;
 	}
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	//Listar socios
 	@Override
 	public String toString() {
