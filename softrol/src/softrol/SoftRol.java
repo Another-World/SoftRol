@@ -27,12 +27,7 @@ import java.io.OutputStream;
 import java.nio.file.NoSuchFileException;
 import java.util.Scanner;
 import java.util.concurrent.SynchronousQueue;
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.Locale;
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
-import com.thoughtworks.xstream.persistence.XmlArrayList;
+
 import org.omg.Messaging.SyncScopeHelper;
 
 public class SoftRol {
@@ -61,14 +56,15 @@ public class SoftRol {
 		Path salidaLibro=Paths.get("recibos/libro");
 		Path salidaMesa=Paths.get("recibos/mesa");
 		//variables
-		int opc = 1, opc2, idLibro,mesasLibres,numeroMesa,nHoras, Ndias;
+		int opc = 1, opc2=1, idLibro=0,mesasLibres=0,numeroMesa=0,nHoras=0, Ndias=0;
 		String dniSocio, operacion, titulo,rango, repetir, usuario, dniValidado,telefonoValidado,tipo, telefono="", tematica, nombreTicket;
 		LocalDate fechaValidada, fecha;
-		boolean comprobar,validar,comprobarLibros=false;
-		// inicio de sesión
+		boolean comprobar=false,validar=false,comprobarLibros=false, except=false;
+
+		// inicio de sesiÃ³n
 		Socio.eliminarSocioMoroso();
 		do {
-			System.out.println("--- Iniciar sesión ---");
+			System.out.println("--- Iniciar sesiÃ³n ---");
 			System.out.print("Usuario: ");
 			usuario = sc.nextLine();
 			System.out.print("Password: ");
@@ -81,56 +77,80 @@ public class SoftRol {
 			mibase.cerrar();
 
 			do {
-				if (rango.equals("administrador")) { // Menú principal para los usuarios que sean administradores
-					Sancion.recorrerSancion();
+				if (rango.equals("administrador")) { // MenÃº principal para los usuarios que sean administradores
 					do {
-						System.out.println("       --- Menú ---");
-						System.out.println("1. Salir de la aplicación");
-						System.out.println("2. Gestión de biblioteca");
-						System.out.println("3. Gestión de mesas");
-						System.out.println("4. Gestión de socios");
-						System.out.println("5. Gestión de cuotas");
-						System.out.print("Introduce una opción: ");
-						opc = sc.nextInt();
-						System.out.println();
-						if (opc < 1 || opc > 5) {
-							System.out.println("Introduce una opción entre 1 y 5.");
-						}
-					} while (opc < 1 || opc > 5);
-				} else {
-					if (rango.equals("empleado")) { // Menú principal para los usuarios que sean empleados
-						Sancion.recorrerSancion();
-						do {
-							System.out.println("--- Menú ---");
-							System.out.println("1. Salir de la aplicación");
-							System.out.println("2. Gestión de biblioteca");
-							System.out.println("3. Gestión de mesas");
-							System.out.print("Introduce una opción: ");
+						except=false;
+						try{
+							System.out.println("       --- MenÃº ---");
+							System.out.println("1. Salir de la aplicaciÃ³n");
+							System.out.println("2. GestiÃ³n de biblioteca");
+							System.out.println("3. GestiÃ³n de mesas");
+							System.out.println("4. GestiÃ³n de socios");
+							System.out.println("5. GestiÃ³n de cuotas");
+							System.out.print("Introduce una opciÃ³n: ");
 							opc = sc.nextInt();
 							System.out.println();
-							if (opc < 1 || opc > 3) {
-								System.out.println("Introduce una opción entre 1 y 3.");
+							if (opc < 1 || opc > 5) {
+								System.out.println("Introduce una opciÃ³n entre 1 y 5.");
 							}
-						} while (opc < 1 || opc > 3);
+						}catch(InputMismatchException ie){
+							System.out.println("Debe introducir un valor numÃ©rico.");
+							except=true;
+							sc.nextLine();
+						}
+					} while (opc < 1 || opc > 5 || except==true);
+				} else {
+					if (rango.equals("empleado")) { // MenÃº principal para los usuarios que sean empleados
+						do {
+							except=false;
+							try{
+								System.out.println("       --- MenÃº ---");
+								System.out.println("1. Salir de la aplicaciÃ³n");
+								System.out.println("2. GestiÃ³n de biblioteca");
+								System.out.println("3. GestiÃ³n de mesas");
+								System.out.print("Introduce una opciÃ³n: ");
+								opc = sc.nextInt();
+								System.out.println();
+								if (opc < 1 || opc > 3) {
+									System.out.println("Introduce una opciÃ³n entre 1 y 3.");
+								}
+							}catch(InputMismatchException ie){
+								System.out.println("Debe introducir un valor numÃ©rico.");
+								except=true;
+								sc.nextLine();
+							}
+						} while (opc < 1 || opc > 3 || except==true);
 					} else {
-						System.out.println("Usuario o contraseña incorrectos.");
+						System.out.println("Usuario o contraseÃ±a incorrectos.");
 					}
 
 				}
-				//----------------------------------------- PARTES DEL MENÚ  -----------------------------------------
+				//----------------------------------------- PARTES DEL MENÃš  -----------------------------------------
 				switch (opc) {
 				case 2: // Gestion de la biblioteca
 					do {
-						System.out.println("--- Gestión de biblioteca ---");
-						System.out.println("1. Volver al menú");
-						System.out.println("2. Alquilar libro");
-						System.out.println("3. Devolver libro");
-						System.out.println("4. Listar libros");
-						System.out.print("Introduce una opción: ");
-						opc2 = sc.nextInt();
-						sc.nextLine();
+						except=false;
+						try{
+							
+							System.out.println("--- GestiÃ³n de biblioteca ---");
+							System.out.println("1. Volver al menÃº");
+							System.out.println("2. Alquilar libro");
+							System.out.println("3. Devolver libro");
+							System.out.println("4. Listar libros");
+							System.out.print("Introduce una opciÃ³n: ");
+							opc2 = sc.nextInt();
+							if(opc2<1 || opc2>4){
+								System.out.println("Introduce una opciÃ³n entre 1 y 4");
+							}
+						}catch(InputMismatchException ie){
+							System.out.println("Debe introducir un valor numÃ©rico.");
+							except=true;
+							sc.nextLine();
+						}
+						
 						System.out.println();
-					} while (opc2 < 1 || opc2 > 4);
+					} while (opc2 < 1 || opc2 > 4 || except==true);
+					sc.nextLine();
 					switch (opc2) {
 					case 2:
 						System.out.println("--- Alquilar libro ---");
@@ -146,7 +166,7 @@ public class SoftRol {
 
 							int numeroSancion=Sancion.numeroSanciones(dniSocio);
 							if(numeroSancion==0){
-								System.out.print("Anota el título del libro: ");
+								System.out.print("Anota el tÃ­tulo del libro: ");
 								titulo = sc.nextLine();
 								titulo=titulo.toUpperCase();
 								String libroValidado=Libro.comprobarLibro(titulo); // comprobar si existe el libro solicitado
@@ -159,28 +179,39 @@ public class SoftRol {
 									mibase.cerrar();
 
 									if(estadoLibro.equals("0")){
-										System.out.println("Desea llevar el libro a casa o usarlo en el local?");
-										System.out.println("1. Cancelar.");
-										System.out.println("2. Usar en local.");
-										System.out.println("3. Llevar a casa.");
-										System.out.print("Introduce opción: ");
-										opc2=sc.nextInt();
-
+										do{
+											except=false;
+											try{
+											System.out.println("Desea llevar el libro a casa o usarlo en el local?");
+											System.out.println("1. Cancelar.");
+											System.out.println("2. Usar en local.");
+											System.out.println("3. Llevar a casa.");
+											System.out.print("Introduce opciÃ³n: ");
+											opc2=sc.nextInt();
+											if(opc2<1 || opc2>3){
+												System.out.println("Introduce una opciÃ³n entre 1 y 3");
+											}
+											}catch(InputMismatchException ie){
+												System.out.println("Debe introducir un valor numÃ©rico.");
+												except=true;
+												sc.nextLine();
+											}
+										}while(opc2<1 || opc2>3 || except==true);
 										switch(opc2){
 										case 2:
 											System.out.println("Ha seleccionado usar en el local.");
 											LocalDate DiaReservado=LocalDate.now();
-											System.out.println("debe devolver el libro el día: "+ DiaReservado);
+											System.out.println("debe devolver el libro el dÃ­a: "+ DiaReservado);
 
 											mibase.abrir();
 											BBDDLibro.actualizarEstadoLibroTrue(lib, mibase.getConexion());// cambiar el boolean a true para reservarlo
 											mibase.cerrar();
 
-											idLibro =Libro.buscarIdLibro(titulo); //buscar el id del libro para añadirlo a la tabla de reservas
+											idLibro =Libro.buscarIdLibro(titulo); //buscar el id del libro para aÃ±adirlo a la tabla de reservas
 
 											alq=new Alquiler(DiaReservado,DiaReservado,idLibro,dniSocio);
 											mibase.abrir();
-											BBDDAlquiler.añadir(alq, mibase.getConexion()); // añadir la reserva a la BBDD
+											BBDDAlquiler.aÃ±adir(alq, mibase.getConexion()); // aÃ±adir la reserva a la BBDD
 											mibase.cerrar();
 											//creacion del ticket del libro
 											Path salidaticketLibro=Paths.get("recibos/libro/ticketLibro-"+dniSocio+"-"+enumerarTicket(2,dniSocio)+".txt"); //crear el nombre del ticket
@@ -214,25 +245,32 @@ public class SoftRol {
 										case 3:
 											System.out.println("Ha seleccionado llevar a casa.");
 											do {
-											System.out.print("Introduce el número de dias que desea reservar: ");
-											Ndias=sc.nextInt();
-											if (Ndias>14) {
-												System.out.println("El libro no puede ser reservado más de 14 días. ");
-											}
-											} while(Ndias>14);
+												except=false;
+												try{
+												System.out.print("Introduce el nÃºmero de dias que desea reservar: ");
+												Ndias=sc.nextInt();
+												if (Ndias>14) {
+													System.out.println("El libro no puede ser reservado mÃ¡s de 14 dÃ­as. ");
+												}
+												}catch(InputMismatchException ie){
+													System.out.println("Debe introducir un valor numÃ©rico.");
+													except=true;
+													sc.nextLine();
+												}
+											} while(Ndias>14 || except==true);
 											DiaReservado=LocalDate.now();
 											System.out.println("El dia actual es: "+ DiaReservado);
 											LocalDate DiaDevolucion=LocalDate.now().plusDays(Ndias);
-											System.out.println("debe devolver el libro el día: "+ DiaDevolucion);
+											System.out.println("debe devolver el libro el dÃ­a: "+ DiaDevolucion);
 											mibase.abrir();
 											BBDDLibro.actualizarEstadoLibroTrue(lib, mibase.getConexion());// cambiar el boolean a true para reservarlo
 											mibase.cerrar();
 
-											idLibro =Libro.buscarIdLibro(titulo); //buscar el id del libro para añadirlo a la tabla de reservas
+											idLibro =Libro.buscarIdLibro(titulo); //buscar el id del libro para aÃ±adirlo a la tabla de reservas
 
 											alq=new Alquiler(DiaReservado,DiaDevolucion,idLibro,dniSocio);
 											mibase.abrir();
-											BBDDAlquiler.añadir(alq, mibase.getConexion()); // añadir la reserva a la BBDD
+											BBDDAlquiler.aÃ±adir(alq, mibase.getConexion()); // aÃ±adir la reserva a la BBDD
 											mibase.cerrar();
 											//creacion del ticket del libro
 											salidaticketLibro=Paths.get("recibos/libro/ticketLibro-"+dniSocio+"-"+enumerarTicket(2,dniSocio)+".txt"); //crear el nombre del ticket
@@ -270,21 +308,21 @@ public class SoftRol {
 									else{
 
 
-										idLibro =Libro.buscarIdLibro(titulo); //buscar el id del libro para añadirlo a la tabla de reservas
+										idLibro =Libro.buscarIdLibro(titulo); //buscar el id del libro para aÃ±adirlo a la tabla de reservas
 
 										alq=new Alquiler(idLibro);
 										mibase.abrir();
 										java.sql.Date fechaMayor=BBDDAlquiler.buscarFechaFinalAlquiler(alq, mibase.getConexion()); // buscar fechaFinal del libro alquilado
 										mibase.cerrar();
 
-										System.out.println("El libro "+ titulo+ " ya está alquilado.");
-										System.out.println("La fecha de devolución es: " +fechaMayor);
+										System.out.println("El libro "+ titulo+ " ya estÃ¡ alquilado.");
+										System.out.println("La fecha de devoluciÃ³n es: " +fechaMayor);
 
 									}
 
 								}
 								else{
-									System.out.println("El libro "+titulo+" no está disponible en nuestro repertorio.");
+									System.out.println("El libro "+titulo+" no estÃ¡ disponible en nuestro repertorio.");
 								}
 							}
 							else{
@@ -308,7 +346,7 @@ public class SoftRol {
 							dniSocio = sc.nextLine();
 							comprobar=Socio.validarDni(dniSocio);
 						}while (comprobar == false);
-						dniValidado = Socio.comprobarDni(dniSocio); //validar si el socio está en la BBDD para poder devolver el libro
+						dniValidado = Socio.comprobarDni(dniSocio); //validar si el socio estÃ¡ en la BBDD para poder devolver el libro
 						if (dniSocio.equals(dniValidado)) {
 
 							System.out.print("Introduce el titulo del libro que deseas devolver: ");
@@ -334,28 +372,28 @@ public class SoftRol {
 							mibase.cerrar();
 
 							if(comprobarLibros==true){
-								
+
 								alq =new Alquiler(idLibro);
 								mibase.abrir();
 								boolean tiempoExcedido=Alquiler.pasarDeTiempo(alq);//ver si ha excedido el tiempo 
 								mibase.cerrar();
-								
+
 								if(tiempoExcedido==true){
-									System.out.println("El socio ha excedido el tiempo de préstamo. Se procede a poner una sanción de 7 días.");
+									System.out.println("El socio ha excedido el tiempo de prÃ©stamo. Se procede a poner una sanciÃ³n de 7 dÃ­as.");
 									//insert sancion
-									
+
 									LocalDate fecha_inicio=LocalDate.now();
 									LocalDate fecha_final=LocalDate.now().plusDays(7);
-									System.out.println("Introduce motivo de sanción: ");
+									System.out.println("Introduce motivo de sanciÃ³n: ");
 									String motivo=sc.nextLine();
-									
-									
-									
+
+
+
 									san=new Sancion(fecha_inicio,fecha_final,motivo,dniSocio,usuario); //consultar autoIncremental
 									mibase.abrir();
-									BBDDSancion.añadir(san,  mibase.getConexion()); 
+									BBDDSancion.aÃ±adir(san,  mibase.getConexion()); 
 									mibase.cerrar();
-									
+
 									lib=new Libro(titulo);
 									mibase.abrir();
 									BBDDLibro.actualizarEstadoLibroFalse(lib,  mibase.getConexion()); //cambiar estado de libro a 0 para devolverlo
@@ -366,11 +404,11 @@ public class SoftRol {
 									mibase.abrir();
 									BBDDAlquiler.borrar(alq,  mibase.getConexion()); //borrar registro de la reserva una vez devuelto el libro
 									mibase.cerrar();
-									
+
 								}else{
 									//devolver libro aqui sin sancion
-									
-									
+
+
 									lib=new Libro(titulo);
 									mibase.abrir();
 									BBDDLibro.actualizarEstadoLibroFalse(lib,  mibase.getConexion()); //cambiar estado de libro a 0 para devolverlo
@@ -382,7 +420,7 @@ public class SoftRol {
 									BBDDAlquiler.borrar(alq,  mibase.getConexion()); //borrar registro de la reserva una vez devuelto el libro
 									mibase.cerrar();
 									System.out.println("El libro "+ titulo+" ha sido devuelto correctamente.");
-									 
+
 								}
 
 							}else{
@@ -407,13 +445,24 @@ public class SoftRol {
 					sc.nextLine(); // limpiar Scanner para que no salte el dni
 
 					Reserva.recorrerReservas();
-					
-					System.out.println("--- Gestión de mesas ---");
-					System.out.println("1. Volver al menú. ");
-					System.out.println("2. Seleccionar el tipo de mesa.");
-					System.out.println("3. Listar mesas");
-					System.out.print("Introduce una opción: ");
-					opc2 = sc.nextInt();
+					do{
+						except=false;
+						try{
+						System.out.println("--- GestiÃ³n de mesas ---");
+						System.out.println("1. Volver al menÃº. ");
+						System.out.println("2. Seleccionar el tipo de mesa.");
+						System.out.println("3. Listar mesas");
+						System.out.print("Introduce una opciÃ³n: ");
+						opc2 = sc.nextInt();
+						if(opc2<1 || opc2>3){
+							System.out.println("Introduce una opciÃ³n entre 1 y 3");
+						}
+						}catch(InputMismatchException ie){
+							System.out.println("Debe introducir un valor numÃ©rico.");
+							except=true;
+							sc.nextLine();
+						}
+					}while(opc2<1 || opc2>3 || except==true);
 					sc.nextLine();
 					switch (opc2) {
 					case 2:
@@ -423,7 +472,7 @@ public class SoftRol {
 							dniSocio = sc.nextLine();
 							comprobar=Socio.validarDni(dniSocio);
 						}while (comprobar == false);
-						dniValidado = Socio.comprobarDni(dniSocio); //validar si el socio está en la BBDD para poder reservar una mesa
+						dniValidado = Socio.comprobarDni(dniSocio); //validar si el socio estÃ¡ en la BBDD para poder reservar una mesa
 
 						if (dniSocio.equals(dniValidado)) {
 							int numeroSancion=Sancion.numeroSanciones(dniSocio);
@@ -446,24 +495,38 @@ public class SoftRol {
 										Mesa.listadoMesasDisponibles(tematica);
 
 										do{
-											System.out.print("Introduce el número de mesa que deseas elegir: ");
+											except=false;
+											try{
+											System.out.print("Introduce el nÃºmero de mesa que deseas elegir: ");
 											numeroMesa=sc.nextInt();
 											validar=Mesa.compararMesasDisponibles(tematica, numeroMesa);
-										}while(validar!=true);
+											}catch(InputMismatchException ie){
+												System.out.println("Debe introducir un valor numÃ©rico.");
+												except=true;
+												sc.nextLine();
+											}
+										}while(validar!=true || except==true); 
 										mesa=new Mesa(numeroMesa);
 										mibase.abrir();
-										BBDDMesa.modificarEstadoMesaOcupado(mesa, mibase.getConexion()); // añadir la reserva a la BBDD
+										BBDDMesa.modificarEstadoMesaOcupado(mesa, mibase.getConexion()); // aÃ±adir la reserva a la BBDD
 										mibase.cerrar();
 										do{
-											System.out.println("Introduce el número de horas que desea reservar la mesa: ");
+											except=false;
+											try{
+											System.out.println("Introduce el nÃºmero de horas que desea reservar la mesa: ");
 											nHoras=sc.nextInt();
 											if(nHoras>4){
-												System.out.println("No se puede reservar más de 3 horas");
+												System.out.println("No se puede reservar mÃ¡s de 3 horas");
 											}
-										}while(nHoras>4);
+											}catch(InputMismatchException ie){
+												System.out.println("Debe introducir un valor numÃ©rico.");
+												except=true;
+												sc.nextLine();
+											}
+										}while(nHoras>4 || except==true); 
 										res=new Reserva(LocalTime.now(),LocalTime.now().plusHours(nHoras),numeroMesa,dniSocio);
 										mibase.abrir();
-										BBDDReserva.añadir(res, mibase.getConexion()); // añadir la reserva a la BBDD
+										BBDDReserva.aÃ±adir(res, mibase.getConexion()); // aÃ±adir la reserva a la BBDD
 										mibase.cerrar();
 
 										//creacion del ticket del libro
@@ -513,24 +576,38 @@ public class SoftRol {
 									else{
 										Mesa.listadoMesasDisponibles(tematica);
 										do{
-											System.out.print("Introduce el número de mesa que deseas elegir: ");
+											except=false;
+											try{
+											System.out.print("Introduce el nÃºmero de mesa que deseas elegir: ");
 											numeroMesa=sc.nextInt();
 											validar=Mesa.compararMesasDisponibles(tematica, numeroMesa);
-										}while(validar!=true);
+											}catch(InputMismatchException ie){
+												System.out.println("Debe introducir un valor numÃ©rico.");
+												except=true;
+												sc.nextLine();
+											}
+										}while(validar!=true || except==true);
 										mesa=new Mesa(numeroMesa);
 										mibase.abrir();
-										BBDDMesa.modificarEstadoMesaOcupado(mesa, mibase.getConexion()); // añadir la reserva a la BBDD
+										BBDDMesa.modificarEstadoMesaOcupado(mesa, mibase.getConexion()); // aÃ±adir la reserva a la BBDD
 										mibase.cerrar();
 										do{
-											System.out.println("Introduce el número de horas que desea reservar la mesa: ");
+											except=false;
+											try{
+											System.out.println("Introduce el nÃºmero de horas que desea reservar la mesa: ");
 											nHoras=sc.nextInt();
 											if(nHoras>4){
-												System.out.println("No se puede reservar más de 3 horas");
+												System.out.println("No se puede reservar mÃ¡s de 3 horas");
 											}
-										}while(nHoras>4);
+											}catch(InputMismatchException ie){
+												System.out.println("Debe introducir un valor numÃ©rico.");
+												except=true;
+												sc.nextLine();
+											}
+										}while(nHoras>4 || except==true);
 										res=new Reserva(LocalTime.now(),LocalTime.now().plusHours(nHoras),numeroMesa,dniSocio);
 										mibase.abrir();
-										BBDDReserva.añadir(res, mibase.getConexion()); // añadir la reserva a la BBDD
+										BBDDReserva.aÃ±adir(res, mibase.getConexion()); // aÃ±adir la reserva a la BBDD
 										mibase.cerrar();
 
 										//creacion del ticket del libro
@@ -592,21 +669,31 @@ public class SoftRol {
 				case 4:// Gestion de los socios
 
 					do {
-						System.out.println("--- Gestión de socios ---");
-						System.out.println("1. Volver al menú");
+						except=false;
+						try{
+						System.out.println("--- GestiÃ³n de socios ---");
+						System.out.println("1. Volver al menÃº");
 						System.out.println("2. Dar de alta");
 						System.out.println("3. Dar de baja");
 						System.out.println("4. Listar socios");
-						System.out.print("Introduce una opción: ");
+						System.out.print("Introduce una opciÃ³n: ");
 						opc2 = sc.nextInt();
 						sc.nextLine();
 						System.out.println();
-					} while (opc2 < 1 || opc2 > 4);
+						if(opc2<1 || opc2>4){
+							System.out.println("Introduce una opciÃ³n entre 1 y 4");
+						}
+						}catch(InputMismatchException ie){
+							System.out.println("Debe introducir un valor numÃ©rico.");
+							except=true;
+							sc.nextLine();
+						}
+					} while (opc2 < 1 || opc2 > 4|| except==true);
 
-					switch (opc2) { //Submenú de gestion de socios
+					switch (opc2) { //SubmenÃº de gestion de socios
 					case 2:
 						System.out.println("--- Dar de alta ---");
-						// comprobación para validar existencia del socio
+						// comprobaciÃ³n para validar existencia del socio
 						do{
 							System.out.print("Introduce el DNI del socio: ");
 							dniSocio = sc.nextLine();
@@ -628,29 +715,29 @@ public class SoftRol {
 
 									do{
 
-										System.out.print("Teléfono :");
+										System.out.print("TelÃ©fono :");
 										telefono = sc.nextLine();
 
 										telefonoValidado=Socio.validarTelefono(telefono);
 										//if(telefonoValidado==null){
-										//	System.out.println("El teléfono debe ser válido.");
+										//	System.out.println("El telÃ©fono debe ser vÃ¡lido.");
 										//}
 									}while(telefonoValidado==null);
 									do {
-										System.out.print("Fecha de nacimiento (año-mes-dia) :");
+										System.out.print("Fecha de nacimiento (aÃ±o-mes-dia) :");
 										String fechaNacimiento = sc.nextLine();
 										fecha = LocalDate.parse(fechaNacimiento);
 										fechaValidada = Socio.validarFechaNacimiento(fecha);
 										if (fechaValidada == null) {
-											System.out.println("El socio debe tener más de 14 años. ");
+											System.out.println("El socio debe tener mÃ¡s de 14 aÃ±os. ");
 											repetir="no";
 											break;
 										}
 										else{
-											//añadir socio a la BBDD
+											//aÃ±adir socio a la BBDD
 											soc = new Socio(nombre, telefono, dniSocio, fecha);
 											mibase.abrir();
-											BBDDSocio.añadir(soc, mibase.getConexion());
+											BBDDSocio.aÃ±adir(soc, mibase.getConexion());
 											mibase.cerrar();
 											System.out.println("El usuario "+ nombre +" ha sido dado de alta correctamente.");
 
@@ -672,7 +759,7 @@ public class SoftRol {
 											bufferIn=bufferIn.replaceAll("<nombre>",soci.getNombre());
 											bufferIn=bufferIn.replaceAll("<dni>",soci.getDni_socio());
 											bufferIn=bufferIn.replaceAll("<fpago>",fechaPago); 
-											bufferIn=bufferIn.replaceAll("<importe>",importeCuota+" €");
+											bufferIn=bufferIn.replaceAll("<importe>",importeCuota+" Â€");
 											output.write(bufferIn);
 											output.newLine();
 											System.out.println(bufferIn);
@@ -707,7 +794,7 @@ public class SoftRol {
 							mibase.abrir();
 							int nLibros = BBDDAlquiler.consultarIDLibro(soc, mibase.getConexion());
 							mibase.cerrar();
-							
+
 							if(nLibros==0){
 								soc = new Socio(dniSocio);
 								mibase.abrir();
@@ -718,7 +805,7 @@ public class SoftRol {
 							else{
 								System.out.println("El socio con DNI: "+dniSocio+" No ha podido ser eliminado ya que tiene "+nLibros+" libro(s) en su poder");
 							}
-							
+
 
 
 						} else {
@@ -737,13 +824,25 @@ public class SoftRol {
 					break; // fin de gestion de socios
 					//-------------------------------------------------------------------------------------------------------------------------------
 				case 5: // gestion de cuotas
-					System.out.println("--- Gestión de cuotas ---");
-					System.out.println("1. Volver al menú");
-					System.out.println("2. Pagar Cuota");
-					System.out.println("3. Listar Cuotas");
-					System.out.print("Introduce una opción: ");
-					opc2 = sc.nextInt();
-					sc.nextLine();
+					do{
+						except=false;
+						try{
+						System.out.println("--- GestiÃ³n de cuotas ---");
+						System.out.println("1. Volver al menÃº");
+						System.out.println("2. Pagar Cuota");
+						System.out.println("3. Listar Cuotas");
+						System.out.print("Introduce una opciÃ³n: ");
+						opc2 = sc.nextInt();
+						sc.nextLine();
+						if(opc2<1 || opc2>3){
+							System.out.println("Introduce una opciÃ³n entre 1 y 3");
+						}
+						}catch(InputMismatchException ie){
+							System.out.println("Debe introducir un valor numÃ©rico.");
+							except=true;
+							sc.nextLine();
+						}
+					} while (opc2 < 1 || opc2 > 3 || except==true);
 					System.out.println();
 					switch(opc2){
 					case 2://aqui se pagan las cuotas
@@ -759,7 +858,7 @@ public class SoftRol {
 
 
 						do{
-							System.out.println("¿Estás seguro de querer realizar la operación? (si / no)" );
+							System.out.println("Â¿EstÃ¡s seguro de querer realizar la operaciÃ³n? (si / no)" );
 							repetir=sc.nextLine();
 						}while(repetir.equals("si")!=true && repetir.equals("no")!=true);
 						if(repetir.equals("si")){
@@ -783,7 +882,7 @@ public class SoftRol {
 											bufferIn=bufferIn.replaceAll("<nombre>",soci.getNombre());
 											bufferIn=bufferIn.replaceAll("<dni>",soci.getDni_socio());
 											bufferIn=bufferIn.replaceAll("<fpago>",fechaPago); 
-											bufferIn=bufferIn.replaceAll("<importe>",importeCuota+" €");
+											bufferIn=bufferIn.replaceAll("<importe>",importeCuota+" Â€");
 											output.write(bufferIn);
 											output.newLine();
 											System.out.println(bufferIn);
@@ -802,14 +901,14 @@ public class SoftRol {
 
 									System.out.println("");
 								}else{
-									System.out.println("la cuota del socio " +dniSocio+" ya está pagada para el mes en curso. ");
+									System.out.println("la cuota del socio " +dniSocio+" ya estÃ¡ pagada para el mes en curso. ");
 								}
 
 							} else {
 								System.out.println("No existe el socio con dni: " + dniSocio);
 							}
 						}else{
-							System.out.println("La operación ha sido cancelada.");
+							System.out.println("La operaciÃ³n ha sido cancelada.");
 						}
 
 						break;//fin de pago de cuota
@@ -830,6 +929,7 @@ public class SoftRol {
 
 			} while (opc != 1);
 		} while (rango.equals("administrador") != true && rango.equals("empleado") != true);
+
 
 		System.out.println("Programa finalizado.");
 	}//cierre del Main
