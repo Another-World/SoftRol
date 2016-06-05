@@ -246,4 +246,20 @@ public class BBDDSocio {
 			System.out.println(e.getMessage());
 		}
 	}
+	/**
+	 *  método para cambiar todas las cuotas a 0
+	 *   @param c se pasa la conexion de la bbdd
+	 */
+	public static void cancelarPagos(Connection c){
+		String cadena="UPDATE socios SET cuota_pagada=0";  
+
+		try{
+			s=c.createStatement();
+			s.executeUpdate(cadena);
+			s.close();
+		}
+		catch ( SQLException e){
+			System.out.println(e.getMessage());
+		}
+	}
 }
