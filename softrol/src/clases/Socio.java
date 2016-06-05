@@ -244,11 +244,12 @@ public class Socio {
 						System.out.println("el socio: "+BBDDSocio.EliminarSocio2(mibase.getConexion()).get(i).getDni_socio() +" ha sido borrado por no pagar la cuota mensual.");
 						socXML= new Socio(BBDDSocio.EliminarSocio2(mibase.getConexion()).get(i).getNombre(), BBDDSocio.EliminarSocio2(mibase.getConexion()).get(i).getDni_socio(), BBDDSocio.EliminarSocio2(mibase.getConexion()).get(i).getTelefono());
 						moverAlXml.add(socXML);
+						BBDDSocio.borrar(socXML,mibase.getConexion());
 					}
 				}
 			}
 		}
-		//BBDDSocio.EliminarSocio(mibase.getConexion());
+		
 		mibase.cerrar();
 		return moverAlXml;
 	}

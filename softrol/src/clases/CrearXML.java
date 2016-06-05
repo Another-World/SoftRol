@@ -27,7 +27,7 @@ public class CrearXML {
 
 	
 	public void toXML(String nombre) throws IOException {
-		
+		xstream.alias("Socio", Socio.class);
 		BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");
 		mibase.abrir();
 		xstream.toXML(Socio.eliminarSocioMoroso(), Files.newBufferedWriter(Paths.get(nombre)));
@@ -37,12 +37,33 @@ public class CrearXML {
 
 	public static void crearRegistroMorosos(){
 		try {
-
+			int cont=0;
 			BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");
 			mibase.abrir();
 			
-			CrearXML sol = new CrearXML();
-			sol.toXML("socioEliminado.xml");
+			
+			for(int i=0; i< BBDDSocio.EliminarSocio2(mibase.getConexion()).size(); i++) {
+				Socio soc;
+				Socio socXML;
+				
+				soc = new Socio( BBDDSocio.EliminarSocio2(mibase.getConexion()).get(i).getDni_socio());
+
+
+				int cuotaComprobada = BBDDSocio.comprobarCuotaPagada(soc, mibase.getConexion());
+
+				if (cuotaComprobada == 0) {
+
+					if (LocalDate.now().getDayOfMonth() > 4) { // CAMBIAR A 7
+						cont++;
+					}
+				}
+			}
+			
+			if(cont>0){
+				CrearXML sol = new CrearXML();
+				sol.toXML("registroSociosEliminados/RegistroSocios-"+LocalDate.now().getYear()+"-"+LocalDate.now().getMonthValue()+".xml");
+			}
+			
 			mibase.cerrar();
 		
 		} catch (IOException e) {
