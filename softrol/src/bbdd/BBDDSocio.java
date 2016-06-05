@@ -145,27 +145,32 @@ public class BBDDSocio {
 
 
 	}
-	 public static Vector<Socio> EliminarSocio2(Connection c){
-	        String cadena="SELECT nombre,dni_socio,telefono,fecha_nacimiento,fecha_alta,tipo_cuota,cuota_pagada FROM socios"; //Select para eliminar los socios
-	        Vector <Socio> EliminarSocio=new Vector<Socio>();
-	        try{
-	            s=c.createStatement();
-	            reg=s.executeQuery(cadena);
-	            while ( reg.next()){
-	                Socio soc=new Socio(reg.getString("nombre"),reg.getString("dni_socio"),reg.getString("telefono"));
-	                EliminarSocio.add(soc);
-	            }
-	            s.close();
-	            return EliminarSocio;
-	        }
-	        catch ( SQLException e){
-	            //      System.out.println(e.getMessage());
-	            return null;
-	        }
-	 
-	 
-	    }
+	/**
+	 * @see  método para borrar socios morosos y utilizarlo para xml
+	 */
+	public static Vector<Socio> EliminarSocio2(Connection c){
+		String cadena="SELECT nombre,dni_socio,telefono,fecha_nacimiento,fecha_alta,tipo_cuota,cuota_pagada FROM socios"; //Select para eliminar los socios
+		Vector <Socio> EliminarSocio=new Vector<Socio>();
+		try{
+			s=c.createStatement();
+			reg=s.executeQuery(cadena);
+			while ( reg.next()){
+				Socio soc=new Socio(reg.getString("nombre"),reg.getString("dni_socio"),reg.getString("telefono"));
+				EliminarSocio.add(soc);
+			}
+			s.close();
+			return EliminarSocio;
+		}
+		catch ( SQLException e){
+			//      System.out.println(e.getMessage());
+			return null;
+		}
 
+
+	}
+	/**
+	 * @see método para comprobrar si la cuota está pagada de un determinado socio
+	 */
 	public static int comprobarCuotaPagada(Socio soc, Connection c){
 		String cadena="SELECT cuota_pagada FROM socios WHERE dni_socio='" + soc.getDni_socio() +"'";
 		/**

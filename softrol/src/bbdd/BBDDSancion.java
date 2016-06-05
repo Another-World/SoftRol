@@ -34,18 +34,18 @@ public class BBDDSancion {
 	/**
 	 * @see  método para borrar sanciones una vez cooncluidas
 	 */
-	 public static void borrar(int numero, Connection c){
-	        String cadena="DELETE FROM sanciones WHERE n_sancion=" + numero;    
-	         
-	        try{
-	        s=c.createStatement();
-	        s.executeUpdate(cadena);
-	        s.close();
-	        }
-	        catch ( SQLException e){
-	            System.out.println(e.getMessage());
-	        }
-	    }
+	public static void borrar(int numero, Connection c){
+		String cadena="DELETE FROM sanciones WHERE n_sancion=" + numero;    
+
+		try{
+			s=c.createStatement();
+			s.executeUpdate(cadena);
+			s.close();
+		}
+		catch ( SQLException e){
+			System.out.println(e.getMessage());
+		}
+	}
 	/**
 	 * @see  método para buscar sanciones de socios
 	 */
@@ -73,6 +73,9 @@ public class BBDDSancion {
 		}
 
 	}
+	/**
+	 * @see  método para borrar sanciones
+	 */
 	public static Vector<Sancion> buscarSancion2(Connection c){
 
 		String cadena="SELECT fecha_final, n_sancion FROM sanciones";
