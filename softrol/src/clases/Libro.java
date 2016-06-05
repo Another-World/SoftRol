@@ -5,7 +5,7 @@ import bbdd.BaseDatosC;
 
 
 /**
- * @see esta es la clase con los datos de los libros.
+ * esta es la clase con los datos de los libros.
  *
  */
 
@@ -28,8 +28,9 @@ public class Libro {
 
 
 /**
- * @see metodo para comprobar libro
- *
+ * metodo para comprobar libro
+ * @return libroValidado se devuelve el nombre del libro
+ * @param titulo se pasan el titulo del libro
  */
 	public static String comprobarLibro(String titulo){
 		Libro lib;
@@ -44,9 +45,9 @@ public class Libro {
 	
 	
 	/**
-	 * @param titulo
-	 * @return int
-	 * @see buscar el id del libro para añadirlo a la tabla de reservas
+	 * buscar el id del libro para añadirlo a la tabla de reservas
+	 * @param titulo se pasa el titulo del libro para buscar el id
+	 * @return idLibro devuelve el id del libro
 	 */
 	public static int buscarIdLibro( String titulo){
 		Libro lib;

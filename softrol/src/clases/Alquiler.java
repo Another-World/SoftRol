@@ -9,7 +9,7 @@ import bbdd.BaseDatosC;
 
 
 /**
- * @category clase alquiler.
+ *  clase alquiler.
  */
 public class Alquiler {
 
@@ -71,9 +71,9 @@ public class Alquiler {
 	
 	
 	/**
-	 * @param alq
-	 * @return boolean
-	 * @see metodo para comprobar si se ha pasado de tiempo.
+	 * metodo para comprobar si se ha pasado de tiempo.
+	 * @return true devuelve verdadero si encuentra las fechas
+	 * @param alq se pasa el objeto alquiler
 	 */
 	public static boolean pasarDeTiempo(Alquiler alq){
 		BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");

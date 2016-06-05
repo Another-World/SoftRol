@@ -1,7 +1,7 @@
 package clases;
 
 /**
- * @see Esta es la clase con los datos de los empleados.
+ *  Esta es la clase con los datos de los empleados.
  */
 public class Empleado {
 

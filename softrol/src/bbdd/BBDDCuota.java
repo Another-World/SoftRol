@@ -10,7 +10,7 @@ public class BBDDCuota {
 	private static Connection c;
 	private static ResultSet reg;
 	/**
-	 * @see metodo para buscar el precio de la cuota
+	 * metodo para buscar el precio de la cuota
 	 */
 	public static String buscarPrecioCuota(Cuota cu, Socio so, Connection c){
 		String cadena="SELECT precio FROM cuotas,socios WHERE cuotas.tipo=socios.tipo_cuota and dni_socio='"+so.getDni_socio() +"'";
@@ -32,11 +32,11 @@ public class BBDDCuota {
 		}
 	}
 	/**
-	 * @see metodo para listar cuotas
+	 *  metodo para listar cuotas
 	 */
 	public static Vector<Cuota> listarCuota(Connection c){
 		/**
-		 * @see select para listar cuota
+		 *  select para listar cuota
 		 */
 		String cadena="SELECT * FROM cuotas "; 
 		Vector <Cuota> listarCuota=new Vector<Cuota>();

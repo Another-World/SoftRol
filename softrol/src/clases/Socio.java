@@ -89,10 +89,10 @@ public class Socio {
 	}
 	
 	/**
-	 * @see metodo para comprobar el dni
-	 *
+	 *  metodo para comprobar el dni
+	 * @param dni se pasa el dni para validarlo
+	 * @return dniValidado devuelve el dni validado
 	 */
-
 	public static String comprobarDni(String dni){
 		Socio soc;
 		BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");
@@ -105,7 +105,8 @@ public class Socio {
 
 	/**
 	 * metodo para contruir tickect cuota.
-	 *
+	 * @param dni se pasa el dni para validarlo
+	 * @return soc devuelve el objeto socio
 	 */
 	public static Socio ticketCuota(String dni){ 
 		Socio soc;

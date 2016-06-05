@@ -14,12 +14,12 @@ public class BBDDReserva {
 	private static Connection c;
 	private static ResultSet reg;
 	/**
-	 * @see  método para añadir reservas de mesas
+	 *  método para añadir reservas de mesas
 	 */
 	public static void anadir(Reserva res, Connection c){
 		String cadena="INSERT INTO reservas VALUES('" + res.getFecha_inicio() + "','" + res.getFecha_final()+"','" + res.getN_mesa()+"','"+ res.getDni_socio() +"')";   
 		/**
-		 * @see  damos de alta una reserva en la cual guardamos el tiempo de uso el número de la misma y el dni del socio
+		 *  damos de alta una reserva en la cual guardamos el tiempo de uso el número de la misma y el dni del socio
 		 */
 		try{
 			s=c.createStatement();
@@ -31,7 +31,7 @@ public class BBDDReserva {
 		}
 	}
 	/**
-	 * @see  método para borrar la reserva de una mesa utilizando su número para solo borrar esa determinada mesa
+	 *  método para borrar la reserva de una mesa utilizando su número para solo borrar esa determinada mesa
 	 */
 	public static void borrar(int numero, Connection c){
 		String cadena="DELETE FROM reservas WHERE n_mesa=" +  numero;   
@@ -45,7 +45,7 @@ public class BBDDReserva {
 		}
 	}
 	/**
-	 * @see  método para buscar las reservas
+	 *   método para buscar las reservas
 	 */
 	@SuppressWarnings("deprecation")
 	public static Vector<Reserva> buscarReserva(Connection c){

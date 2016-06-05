@@ -7,7 +7,7 @@ import bbdd.BBDDReserva;
 import bbdd.BBDDSancion;
 import bbdd.BaseDatosC;
 /**
- * @see esta es la clase con los datos de las reservas.
+ * esta es la clase con los datos de las reservas.
  */
 
 public class Reserva {
@@ -25,7 +25,7 @@ public class Reserva {
 	}
 
 	/**
-	 * @see metodo para recorrer reservas
+	 *  metodo para recorrer reservas
 	 */
 	public static void recorrerReservas(){
 		int cont=0;

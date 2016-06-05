@@ -6,7 +6,7 @@ import bbdd.BaseDatosC;
 
 
 /**
- *@see clase con los datos de las cuotas.
+ * clase con los datos de las cuotas.
  */
 
 public class Cuota {
@@ -35,8 +35,9 @@ public class Cuota {
 	}
 	
 	/**
-	 * @see metodo para comprobar las cuotas
-	 *
+	 * metodo para comprobar las cuotas
+	 * @return importe se devuelve el importe
+	 * @param dni se pasa el dni del socio
 	 */
 	public static String comprobarCuota(String dni){
 		Cuota cu;

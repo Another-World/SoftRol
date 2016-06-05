@@ -14,12 +14,14 @@ public class BBDDSocio {
 	private static ResultSet reg;
 
 	/**
-	 * @see  método para añadir socios
+	 *   método para añadir socios
+	 *    @param c se pasa la conexion de la bbdd
+	 *     @param soc objeto socio
 	 */
 	public static void anadir(Socio soc, Connection c){
 		String cadena="INSERT INTO socios VALUES('" + soc.getNombre() + "','" + soc.getDni_socio()+"','" + soc.getTelefono()+"','" + soc.getFecha_nacimiento()+"','" + soc.getFecha_alta()+"','" + soc.getTipo_cuota()+"','"+ soc.getCuota_pagada() +"')";  
 		/**
-		 * @see  insertamos cada uno de los datos correspondientes a los socios
+		 *  insertamos cada uno de los datos correspondientes a los socios
 		 */
 		try{
 			s=c.createStatement();
@@ -31,12 +33,14 @@ public class BBDDSocio {
 		}
 	}
 	/**
-	 * @see  método para borrar socios
+	 * método para borrar socios
+	 *  @param c se pasa la conexion de la bbdd
+	 *   @param soc objeto socio
 	 */
 	public static void borrar(Socio soc, Connection c){
 		String cadena="DELETE FROM socios WHERE dni_socio='" + soc.getDni_socio()+ "'"; 
 		/**
-		 * @see borramos los socios mediante los campos del nombre, dni_socio y teléfono
+		 *  borramos los socios mediante los campos del nombre, dni_socio y teléfono
 		 */
 		try{
 			s=c.createStatement();
@@ -48,12 +52,14 @@ public class BBDDSocio {
 		}
 	}
 	/**
-	 * @see  método para validar el socio
+	 *   método para validar el socio
+	 *    @param c se pasa la conexion de la bbdd
+	 *     @param soc objeto socio
 	 */
 	public static String validarSocio(Socio soc, Connection c){
 		String cadena="SELECT dni_socio FROM socios WHERE dni_socio='" + soc.getDni_socio() +"'";
 		/**
-		 * @see  buscamos los datos del socio mediante su dni
+		 *   buscamos los datos del socio mediante su dni
 		 */
 		try{
 			s=c.createStatement();
@@ -73,12 +79,14 @@ public class BBDDSocio {
 		}
 	}
 	/**
-	 * @see  método para sacar los datos y realizar el ticket de pago de ese determinado socio
+	 *   método para sacar los datos y realizar el ticket de pago de ese determinado socio
+	 *    @param c se pasa la conexion de la bbdd
+	 *     @param soc objeto socio
 	 */
 	public static Socio datosTicketPago(Socio soc, Connection c){
 		String cadena="SELECT nombre, dni_socio FROM socios WHERE dni_socio='" + soc.getDni_socio() +"'";
 		/**
-		 * @see  buscamos los datos del socio mediante el dni del socio
+		 *  buscamos los datos del socio mediante el dni del socio
 		 */
 		Socio soci;
 		try{
@@ -100,7 +108,8 @@ public class BBDDSocio {
 		}
 	}
 	/**
-	 * @see  método para listar el socio
+	 *  método para listar el socio
+	 *   @param c se pasa la conexion de la bbdd
 	 */
 	public static Vector<Socio> listarSocio(Connection c){
 		String cadena="SELECT * FROM socios ";
@@ -123,7 +132,8 @@ public class BBDDSocio {
 
 	}
 	/**
-	 * @see  método para eliminar socios
+	 *  método para eliminar socios
+	 *   @param c se pasa la conexion de la bbdd
 	 */
 	public static Vector<Socio> EliminarSocio(Connection c){
 		String cadena="SELECT dni_socio FROM socios";
@@ -146,7 +156,9 @@ public class BBDDSocio {
 
 	}
 	/**
-	 * @see  método para borrar socios morosos y utilizarlo para xml
+	 *  método para borrar socios morosos y utilizarlo para xml
+	 *  @return devuelve un vector con los socios que se van a eliminar
+	 *  @param c se pasa la conexion de la bbdd
 	 */
 	public static Vector<Socio> EliminarSocio2(Connection c){
 		String cadena="SELECT nombre,dni_socio,telefono,fecha_nacimiento,fecha_alta,tipo_cuota,cuota_pagada FROM socios"; //Select para eliminar los socios
@@ -169,12 +181,14 @@ public class BBDDSocio {
 
 	}
 	/**
-	 * @see método para comprobrar si la cuota está pagada de un determinado socio
+	 *  método para comprobrar si la cuota está pagada de un determinado socio
+	 *  @param c se pasa la conexion de la bbdd
+	 *   @param soc objeto socio
 	 */
 	public static int comprobarCuotaPagada(Socio soc, Connection c){
 		String cadena="SELECT cuota_pagada FROM socios WHERE dni_socio='" + soc.getDni_socio() +"'";
 		/**
-		 * @see buscamos los datos del socio mediante su dni
+		 *  buscamos los datos del socio mediante su dni
 		 */
 		try{
 			s=c.createStatement();
@@ -194,7 +208,9 @@ public class BBDDSocio {
 		}
 	}
 	/**
-	 * @see  método para actualizar el estado de la cuota y ponerla a 'pagada'
+	 * método para actualizar el estado de la cuota y ponerla a 'pagada'
+	 *  @param c se pasa la conexion de la bbdd
+	 *   @param soc objeto socio
 	 */
 	public static void actualizarEstadoCuotaTrue(Socio soc, Connection c){
 		String cadena="UPDATE socios SET cuota_pagada=1 WHERE dni_socio='"+soc.getDni_socio()+"'";  
@@ -209,7 +225,9 @@ public class BBDDSocio {
 		}
 	}
 	/**
-	 * @see  método para actualizar el estado de la cuota y ponerla a 'no pagado'
+	 *  método para actualizar el estado de la cuota y ponerla a 'no pagado'
+	 *   @param c se pasa la conexion de la bbdd
+	 *    @param soc objeto socio
 	 */
 	public static void actualizarEstadoCuotaFalse(Socio soc, Connection c){
 		String cadena="UPDATE socios SET cuota_pagada=0 WHERE dni_socio='"+soc.getDni_socio()+"'";  

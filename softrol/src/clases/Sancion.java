@@ -6,8 +6,7 @@ import bbdd.BBDDReserva;
 import bbdd.BBDDSancion;
 import bbdd.BaseDatosC;
 /**
- * @see esta es la clase con los datos de las sanciones.
- *
+ *  esta es la clase con los datos de las sanciones.
  */
 
 public class Sancion {
@@ -71,8 +70,7 @@ public class Sancion {
 	}
 
 	/**
-	 * @see metodo para recorrer sancion.
-	 *
+	 *  metodo para recorrer sancion.
 	 */
 	public static void recorrerSancion(){
 		int cont=0;

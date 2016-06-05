@@ -8,8 +8,7 @@ import bbdd.BaseDatosC;
 
 
 /**
- * @see clase con los datos de las mesas
- *
+ * clase con los datos de las mesas
  */
 public class Mesa {
 
@@ -55,10 +54,9 @@ public class Mesa {
 	}
 
 	/**
-	 * @param tipo
-	 * @see metodo para listar las mesas.
+	 *  metodo para listar las mesas.
+	 *  @param tipo se pasa el tipo de mesa
 	 */
-
 	public static void listadoMesasDisponibles(String tipo){
 		Mesa mesa;
 		BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");
@@ -74,8 +72,7 @@ public class Mesa {
 		mibase.cerrar();
 
 		/**
-		 * @param tipo
-		 * @see metodo para comparar mesas disponibles
+		 * metodo para comparar mesas disponibles
 		 */
 
 	}

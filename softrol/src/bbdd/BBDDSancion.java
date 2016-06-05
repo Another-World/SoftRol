@@ -15,12 +15,12 @@ public class BBDDSancion {
 	private static Connection c;
 	private static ResultSet reg;
 	/**
-	 * @see  método para añadir sanciones a los socios que no devuelvan los libros a tiempo
+	 *  método para añadir sanciones a los socios que no devuelvan los libros a tiempo
 	 */
 	public static void anadir(Sancion san, Connection c){
 		String cadena="INSERT INTO sanciones(fecha_inicio, fecha_final, motivo, dni_socio, dni_emple) VALUES('" +  san.getFecha_inicio()+"','" + san.getFecha_final()+"','" + san.getMotivo()+"','" + san.getDni_socio()+"','"+ san.getDni_emple() +"')";   
 		/**
-		 * @see  insertamos los valores de la sanción para darla de alta
+		 *  insertamos los valores de la sanción para darla de alta
 		 */
 		try{
 			s=c.createStatement();
@@ -32,7 +32,7 @@ public class BBDDSancion {
 		}
 	}
 	/**
-	 * @see  método para borrar sanciones una vez cooncluidas
+	 *  método para borrar sanciones una vez cooncluidas
 	 */
 	public static void borrar(int numero, Connection c){
 		String cadena="DELETE FROM sanciones WHERE n_sancion=" + numero;    
@@ -47,12 +47,12 @@ public class BBDDSancion {
 		}
 	}
 	/**
-	 * @see  método para buscar sanciones de socios
+	 *  método para buscar sanciones de socios
 	 */
 	public static String buscarSancion(Sancion san, Connection c){
 		String cadena="SELECT count(*) FROM sanciones WHERE dni_socio='" + san.getDni_socio() +"'";
 		/**
-		 * @see  buscamos la información de la sanción mediante el dni del socio
+		 *   buscamos la información de la sanción mediante el dni del socio
 		 */
 		try{
 			s=c.createStatement();
@@ -74,7 +74,7 @@ public class BBDDSancion {
 
 	}
 	/**
-	 * @see  método para borrar sanciones
+	 *  método para borrar sanciones
 	 */
 	public static Vector<Sancion> buscarSancion2(Connection c){
 

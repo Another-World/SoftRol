@@ -213,7 +213,7 @@ public class SoftRol {
 
 											alq=new Alquiler(DiaReservado,DiaReservado,idLibro,dniSocio);
 											mibase.abrir();
-											BBDDAlquiler.añadir(alq, mibase.getConexion()); // añadir la reserva a la BBDD
+											BBDDAlquiler.anadir(alq, mibase.getConexion()); // añadir la reserva a la BBDD
 											mibase.cerrar();
 											//creacion del ticket del libro
 											Path salidaticketLibro=Paths.get("recibos/libro/ticketLibro-"+dniSocio+"-"+enumerarTicket(2,dniSocio)+".txt"); //crear el nombre del ticket
@@ -272,7 +272,7 @@ public class SoftRol {
 
 											alq=new Alquiler(DiaReservado,DiaDevolucion,idLibro,dniSocio);
 											mibase.abrir();
-											BBDDAlquiler.añadir(alq, mibase.getConexion()); // añadir la reserva a la BBDD
+											BBDDAlquiler.anadir(alq, mibase.getConexion()); // añadir la reserva a la BBDD
 											mibase.cerrar();
 											//creacion del ticket del libro
 											salidaticketLibro=Paths.get("recibos/libro/ticketLibro-"+dniSocio+"-"+enumerarTicket(2,dniSocio)+".txt"); //crear el nombre del ticket
@@ -393,7 +393,7 @@ public class SoftRol {
 
 									san=new Sancion(fecha_inicio,fecha_final,motivo,dniSocio,usuario); //consultar autoIncremental
 									mibase.abrir();
-									BBDDSancion.añadir(san,  mibase.getConexion()); 
+									BBDDSancion.anadir(san,  mibase.getConexion()); 
 									mibase.cerrar();
 
 									lib=new Libro(titulo);
@@ -528,7 +528,7 @@ public class SoftRol {
 										}while(nHoras>4 || except==true); 
 										res=new Reserva(LocalTime.now(),LocalTime.now().plusHours(nHoras),numeroMesa,dniSocio);
 										mibase.abrir();
-										BBDDReserva.añadir(res, mibase.getConexion()); // añadir la reserva a la BBDD
+										BBDDReserva.anadir(res, mibase.getConexion()); // añadir la reserva a la BBDD
 										mibase.cerrar();
 
 										//creacion del ticket del libro
@@ -609,7 +609,7 @@ public class SoftRol {
 										}while(nHoras>4 || except==true);
 										res=new Reserva(LocalTime.now(),LocalTime.now().plusHours(nHoras),numeroMesa,dniSocio);
 										mibase.abrir();
-										BBDDReserva.añadir(res, mibase.getConexion()); // añadir la reserva a la BBDD
+										BBDDReserva.anadir(res, mibase.getConexion()); // añadir la reserva a la BBDD
 										mibase.cerrar();
 
 										//creacion del ticket del libro
@@ -739,7 +739,7 @@ public class SoftRol {
 											//añadir socio a la BBDD
 											soc = new Socio(nombre, telefono, dniSocio, fecha);
 											mibase.abrir();
-											BBDDSocio.añadir(soc, mibase.getConexion());
+											BBDDSocio.anadir(soc, mibase.getConexion());
 											mibase.cerrar();
 											System.out.println("El usuario "+ nombre +" ha sido dado de alta correctamente.");
 
