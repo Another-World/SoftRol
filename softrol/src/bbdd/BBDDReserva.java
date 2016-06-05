@@ -13,14 +13,13 @@ public class BBDDReserva {
 	private static Statement s;
 	private static Connection c;
 	private static ResultSet reg;
-
+	/**
+	 * @see  método para añadir reservas de mesas
+	 */
 	public static void añadir(Reserva res, Connection c){
-		String cadena="INSERT INTO reservas VALUES('" + res.getFecha_inicio() + "','" + res.getFecha_final()+"','" + res.getN_mesa()+"','"+ res.getDni_socio() +"')"; 	
-		/*
-		 * damos de alta una reserva,
-		 * en la cual guardamos
-		 * su horario de uso
-		 * el numero de la misma y el dni del socio
+		String cadena="INSERT INTO reservas VALUES('" + res.getFecha_inicio() + "','" + res.getFecha_final()+"','" + res.getN_mesa()+"','"+ res.getDni_socio() +"')";   
+		/**
+		 * @see  damos de alta una reserva en la cual guardamos el tiempo de uso el número de la misma y el dni del socio
 		 */
 		try{
 			s=c.createStatement();
@@ -31,12 +30,11 @@ public class BBDDReserva {
 			System.out.println(e.getMessage());
 		}
 	}
-
+	/**
+	 * @see  método para borrar la reserva de una mesa utilizando su número para solo borrar esa determinada mesa
+	 */
 	public static void borrar(int numero, Connection c){
-		String cadena="DELETE FROM reservas WHERE n_mesa=" +  numero;	
-		/*
-		 * borramos una reserva mediante el numero de esta
-		 */
+		String cadena="DELETE FROM reservas WHERE n_mesa=" +  numero;   
 		try{
 			s=c.createStatement();
 			s.executeUpdate(cadena);
@@ -46,10 +44,12 @@ public class BBDDReserva {
 			System.out.println(e.getMessage());
 		}
 	}
-
+	/**
+	 * @see  método para buscar las reservas
+	 */
 	@SuppressWarnings("deprecation")
 	public static Vector<Reserva> buscarReserva(Connection c){
-		
+
 		String cadena="SELECT fecha_final, n_mesa FROM reservas";
 		Vector <Reserva> buscarReserva=new Vector<Reserva>();
 		try{
@@ -68,7 +68,7 @@ public class BBDDReserva {
 			return buscarReserva;
 		}
 		catch ( SQLException e){
-			//		System.out.println(e.getMessage());
+			//      System.out.println(e.getMessage());
 			return null;
 		}
 

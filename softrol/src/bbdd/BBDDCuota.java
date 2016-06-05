@@ -5,12 +5,13 @@ import java.util.Vector;
 
 import clases.*;
 
-
 public class BBDDCuota {
 	private static Statement s;
 	private static Connection c;
 	private static ResultSet reg;
-
+	/**
+	 * @see metodo para buscar el precio de la cuota
+	 */
 	public static String buscarPrecioCuota(Cuota cu, Socio so, Connection c){
 		String cadena="SELECT precio FROM cuotas,socios WHERE cuotas.tipo=socios.tipo_cuota and dni_socio='"+so.getDni_socio() +"'";
 		try{
@@ -25,14 +26,19 @@ public class BBDDCuota {
 			return "";
 		}
 		catch ( SQLException e){
-			//		System.out.println(e.getMessage());
+			//      System.out.println(e.getMessage());
 			return null;
-		} 
+
+		}
 	}
-	
-	//Metodo listar cuotas
+	/**
+	 * @see metodo para listar cuotas
+	 */
 	public static Vector<Cuota> listarCuota(Connection c){
-		String cadena="SELECT * FROM cuotas "; //Select para listar las cuotas
+		/**
+		 * @see select para listar cuota
+		 */
+		String cadena="SELECT * FROM cuotas "; 
 		Vector <Cuota> listarCuota=new Vector<Cuota>();
 		try{
 			s=c.createStatement();
@@ -45,10 +51,8 @@ public class BBDDCuota {
 			return listarCuota;
 		}
 		catch ( SQLException e){
-			//		System.out.println(e.getMessage());
+			//      System.out.println(e.getMessage());
 			return null;
 		}
-
-
 	}
 }
