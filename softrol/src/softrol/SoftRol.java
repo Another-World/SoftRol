@@ -574,7 +574,7 @@ public class SoftRol {
 									mesasLibres=BBDDMesa.buscarMesaLibres(mesa, mibase.getConexion()); // buscar mesasLibres de tipo rol
 									mibase.cerrar();
 									if(mesasLibres==0){
-										System.out.println("No quedan mesas disponibles de tipo rol.");
+										System.out.println("No quedan mesas disponibles de tipo estrategia.");
 									}
 
 									else{
@@ -894,6 +894,7 @@ public class SoftRol {
 								soc = new Socio(dniSocio);
 								mibase.abrir();
 								int cuotaPagada=BBDDSocio.comprobarCuotaPagada(soc, mibase.getConexion());
+								BBDDSocio.actualizarEstadoCuotaTrue(soc, mibase.getConexion()); //cambiamos la cuota a pagada
 								mibase.cerrar();
 								if (cuotaPagada==0){
 									//creacion de ticket del pago de la cuota
