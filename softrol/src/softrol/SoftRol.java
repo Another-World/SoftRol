@@ -118,6 +118,7 @@ public class SoftRol {
 								System.out.println("Debe introducir un valor numérico.");
 								except=true;
 								sc.nextLine();
+								
 							}
 						} while (opc < 1 || opc > 3 || except==true);
 					} else {
