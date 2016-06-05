@@ -3,8 +3,10 @@ package clases;
 import bbdd.BBDDLibro;
 import bbdd.BaseDatosC;
 
-/*
- * esta es la clase con los datos de los libros.
+
+/**
+ * @see esta es la clase con los datos de los libros.
+ *
  */
 public class Libro {
 
@@ -36,12 +38,17 @@ public class Libro {
 	}
 	
 	
+	/**
+	 * @param titulo
+	 * @return int
+	 * @see buscar el id del libro para añadirlo a la tabla de reservas
+	 */
 	public static int buscarIdLibro( String titulo){
 		Libro lib;
 		BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");
 		lib=new Libro(titulo);
 		mibase.abrir();
-		int idLibro =BBDDLibro.buscarIdLibro(lib, mibase.getConexion()); //buscar el id del libro para añadirlo a la tabla de reservas
+		int idLibro =BBDDLibro.buscarIdLibro(lib, mibase.getConexion()); 
 		mibase.cerrar();
 		return idLibro;
 	}

@@ -1,11 +1,14 @@
 package clases;
-//esta es la clase con los datos de las reservas.
+
 import java.time.*;
 import java.util.Date;
 
 import bbdd.BBDDReserva;
 import bbdd.BBDDSancion;
 import bbdd.BaseDatosC;
+/**
+ * @see esta es la clase con los datos de las reservas.
+ */
 public class Reserva {
 
 	private LocalTime fecha_inicio;
@@ -45,12 +48,6 @@ public class Reserva {
 		System.out.println();
 		mibase.cerrar();
 	}
-
-
-
-
-
-
 
 
 	public Reserva(int n_mesa) {

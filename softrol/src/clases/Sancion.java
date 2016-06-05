@@ -1,10 +1,14 @@
-package clases;
-//esta es la clase con los datos de las sanciones.
+package clases; 
+
 import java.time.*;
 
 import bbdd.BBDDReserva;
 import bbdd.BBDDSancion;
 import bbdd.BaseDatosC;
+/**
+ * @see esta es la clase con los datos de las sanciones.
+ *
+ */
 public class Sancion {
 
 	private int n_sancion;

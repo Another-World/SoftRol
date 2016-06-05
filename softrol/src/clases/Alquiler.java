@@ -7,6 +7,11 @@ import bbdd.*;
 import bbdd.*;
 import bbdd.BaseDatosC;
 
+
+/**
+ * @author pepito
+ * @category clase alquiler
+ */
 public class Alquiler {
 
 	private LocalDate fecha_inicio;

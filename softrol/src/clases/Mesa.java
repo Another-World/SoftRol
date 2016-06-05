@@ -6,7 +6,11 @@ import bbdd.BBDDMesa;
 import bbdd.BBDDSocio;
 import bbdd.BaseDatosC;
 
-//clase con los datos de las mesas
+
+/**
+ * @see clase con los datos de las mesas
+ *
+ */
 public class Mesa {
 
 	private int n_mesa;

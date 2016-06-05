@@ -1,5 +1,8 @@
 package clases;
-// Esta es la clase con los datos de los empleados.
+
+/**
+ * @see Esta es la clase con los datos de los empleados.
+ */
 public class Empleado {
 
 	private String nombre;

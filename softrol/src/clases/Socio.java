@@ -1,5 +1,5 @@
 package clases;
-//Esta es la clase con los datos de los socios.
+
 import java.time.*;
 import java.util.Vector;
 import java.util.*;
@@ -15,6 +15,9 @@ import com.thoughtworks.xstream.XStream;
 
 import clases.*;
 import bbdd.*;
+/**
+ * @see Esta es la clase con los datos de los socios.
+ */
 public class Socio {
 
 	private String nombre;

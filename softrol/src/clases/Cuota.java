@@ -4,7 +4,10 @@ import bbdd.BBDDCuota;
 import bbdd.BBDDLibro;
 import bbdd.BaseDatosC;
 
-//clase con los datos de las cuotas.
+
+/**
+ *@see clase con los datos de las cuotas.
+ */
 public class Cuota {
 
 	private String tipo;
