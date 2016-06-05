@@ -54,6 +54,11 @@ public class Mesa {
 		return "Mesa \n\t n_mesa=" + n_mesa + ",\n\t tipo=" + tipo + ",\n\t estado=" + estado + "\n\n";
 	}
 
+	/**
+	 * @param tipo
+	 * @see metodo para listar las mesas.
+	 */
+
 	public static void listadoMesasDisponibles(String tipo){
 		Mesa mesa;
 		BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");
@@ -68,7 +73,10 @@ public class Mesa {
 		System.out.println("");
 		mibase.cerrar();
 
-
+		/**
+		 * @param tipo
+		 * @see metodo para comparar mesas disponibles
+		 */
 
 	}
 	public static boolean compararMesasDisponibles(String tipo, int nMesa){

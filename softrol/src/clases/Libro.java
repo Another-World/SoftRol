@@ -8,6 +8,7 @@ import bbdd.BaseDatosC;
  * @see esta es la clase con los datos de los libros.
  *
  */
+
 public class Libro {
 
 	private String titulo;
@@ -25,7 +26,11 @@ public class Libro {
 		this.id_libro = id_libro;
 	}
 
-	
+
+/**
+ * @see metodo para comprobar libro
+ *
+ */
 	public static String comprobarLibro(String titulo){
 		Libro lib;
 		BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");

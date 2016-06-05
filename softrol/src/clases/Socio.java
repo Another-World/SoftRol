@@ -18,6 +18,7 @@ import bbdd.*;
 /**
  * @see Esta es la clase con los datos de los socios.
  */
+
 public class Socio {
 
 	private String nombre;
@@ -85,6 +86,11 @@ public class Socio {
 
 
 	}
+	
+	/**
+	 * @see metodo para comprobar el dni
+	 *
+	 */
 
 	public static String comprobarDni(String dni){
 		Socio soc;
@@ -96,6 +102,10 @@ public class Socio {
 		return dniValidado;
 	}
 
+	/**
+	 * @see metodo para contruir tickect cuota.
+	 *
+	 */
 	public static Socio ticketCuota(String dni){ 
 		Socio soc;
 		BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");

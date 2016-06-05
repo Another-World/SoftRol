@@ -9,6 +9,7 @@ import bbdd.BaseDatosC;
  * @see esta es la clase con los datos de las sanciones.
  *
  */
+
 public class Sancion {
 
 	private int n_sancion;
@@ -69,6 +70,10 @@ public class Sancion {
 		return  numero;
 	}
 
+	/**
+	 * @see metodo para recorrer sancion.
+	 *
+	 */
 	public static void recorrerSancion(){
 		int cont=0;
 		BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");

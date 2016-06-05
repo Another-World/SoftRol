@@ -9,6 +9,7 @@ import bbdd.BaseDatosC;
 /**
  * @see esta es la clase con los datos de las reservas.
  */
+
 public class Reserva {
 
 	private LocalTime fecha_inicio;
@@ -23,7 +24,9 @@ public class Reserva {
 		this.dni_socio = dni_socio;
 	}
 
-
+	/**
+	 * @see metodo para recorrer reservas
+	 */
 	public static void recorrerReservas(){
 		int cont=0;
 		BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");
