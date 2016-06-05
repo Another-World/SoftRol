@@ -15,6 +15,8 @@ public class BBDDReserva {
 	private static ResultSet reg;
 	/**
 	 *  método para añadir reservas de mesas
+	 *  @param res objeto reserva
+	 *  @param c pasa la conexion
 	 */
 	public static void anadir(Reserva res, Connection c){
 		String cadena="INSERT INTO reservas VALUES('" + res.getFecha_inicio() + "','" + res.getFecha_final()+"','" + res.getN_mesa()+"','"+ res.getDni_socio() +"')";   
@@ -32,6 +34,8 @@ public class BBDDReserva {
 	}
 	/**
 	 *  método para borrar la reserva de una mesa utilizando su número para solo borrar esa determinada mesa
+	 *  @param numero numero de mesa para buscar las reservas
+	 *  @param c se pasa la conexion
 	 */
 	public static void borrar(int numero, Connection c){
 		String cadena="DELETE FROM reservas WHERE n_mesa=" +  numero;   
@@ -46,6 +50,8 @@ public class BBDDReserva {
 	}
 	/**
 	 *   método para buscar las reservas
+	 *   @return buscarReserva devuelve el vector con la fecha final y el numero de la mesa de las reservas
+	 *   @param c se pasa la conexion
 	 */
 	@SuppressWarnings("deprecation")
 	public static Vector<Reserva> buscarReserva(Connection c){

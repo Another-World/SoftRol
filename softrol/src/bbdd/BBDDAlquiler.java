@@ -17,6 +17,8 @@ public class BBDDAlquiler {
 
 	/**
 	 * añadimos un socio a la tabla introduciendo todos sus datos esenciales.
+	 * @param c pasa la conexion
+	 * @param alq objeto alquiler
 	 */
 	public static void anadir(Alquiler alq, Connection c){
 		String cadena="INSERT INTO alquileres_libro VALUES('" + alq.getFecha_inicio() + "','" + alq.getFecha_final()+"','" + alq.getId_libro()+"','"+ alq.getDni_socio() +"')"; 	
@@ -31,7 +33,9 @@ public class BBDDAlquiler {
 		}
 	}
 	/**
-	 *  borramos el alquiler de un libro mediante el id y el dni del socio ya que son los datos que no se pueden repetir y por tanto aseguran el borrado exacto de un libro en concreto 
+	 *  borramos el alquiler de un libro mediante el id y el dni del socio ya que son los datos que no se pueden repetir y por tanto aseguran el borrado exacto de un libro en concreto
+	 * @param alq objeto alquiler
+	 *  @param c pasa la conexion 
 	 */
 	public static void borrar(Alquiler alq, Connection c){
 		String cadena="DELETE FROM alquileres_libro WHERE id_libro='" +  alq.getId_libro() + "' AND dni_socio='" + alq.getDni_socio()+ "'";	
@@ -48,6 +52,9 @@ public class BBDDAlquiler {
 
 	/**
 	 * esta consulta la utilizaremos para saber mediante el id_libro la fecha final del alquiler.
+	 * @param c pasa la conexion
+	 * @param alq objeto alquiler
+	 * @return t devuelve la fecha final del alquiler
 	 */
 	public static Date buscarFechaFinalAlquiler(Alquiler alq, Connection c){
 		String cadena="SELECT fecha_final FROM alquileres_libro WHERE id_libro=" + alq.getId_libro() ;
@@ -72,6 +79,9 @@ public class BBDDAlquiler {
 
 	/**
 	 *Metodo para consultar el id del libro.
+	 *@param c pasa la conexion
+	 *@param soc objeto socio
+	 *@return t devuelve el numero de id libros que tiene el socio
 	 */
 	public static int consultarIDLibro(Socio soc, Connection c){
 		String cadena="SELECT COUNT(id_libro) FROM alquileres_libro WHERE dni_socio='"+soc.getDni_socio()+"'";//consultar por qué falla
@@ -99,6 +109,11 @@ public class BBDDAlquiler {
 
 	/**
 	 * vector para almacenar el id_libro.
+	 * @param c pasa la conexion
+	 * @param id_libro se pasa el id del libro
+	 * @param numero se pasa el numero 
+	 * @param soc objeto soc
+	 * @return iDLibros devuelve un vector con los id de los libros
 	 */
 public static Vector<Libro> consultarIDLibro2(int id_libro,int numero,Socio soc, Connection c){
 	if(numero==0){

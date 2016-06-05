@@ -13,6 +13,8 @@ public class BBDDMesa {
     private static ResultSet reg;
     /**
      *   método para añadir una mesa
+     *   @param c se pasa la conexion
+     *   @param mesa objeto mesa
      */
     public static void anadir(Mesa mesa, Connection c){
         String cadena="INSERT INTO mesas VALUES('" + mesa.getN_mesa() + "','" + mesa.getTipo()+"','"+ mesa.getEstado() +"')";   
@@ -30,6 +32,8 @@ public class BBDDMesa {
     }
     /**
      *   método borrar una mesa
+     *   @param c se pasa la conexion
+     *   @param mesa objeto mesa
      */
     public static void borrar(Mesa mesa, Connection c){
         String cadena="DELETE FROM mesas WHERE n_mesa='" +  mesa.getN_mesa() + "'"; 
@@ -47,6 +51,9 @@ public class BBDDMesa {
     }
     /**
      *  método buscar una mesa
+     *  @param c se pasa la conexion
+     *  @param mesa objeto mesa
+     *  @return t devuelve el tipo de mesa
      */
     public static String buscarMesa(Mesa mesa, Connection c){
         String cadena="SELECT tipo, estado FROM mesas WHERE n_mesa='" + mesa.getN_mesa() +"'";
@@ -72,6 +79,8 @@ public class BBDDMesa {
     }
     /**
      *  método para listar las mesas
+     *  @param c se pasa la conexion
+     *  @return listarMesa devuelve un vector con todas las mesas
      */
     public static Vector<Mesa> listarMesa(Connection c){
         String cadena="SELECT * FROM mesas "; //Select para listar las mesas
@@ -95,6 +104,9 @@ public class BBDDMesa {
     }
     /**
      *  método para buscar las mesas que estén libres
+     *  @param c se pasa la conexion
+     *  @param mesa objeto mesa
+     *  @return t devuelve el numero de mesas libres
      */
     public static int buscarMesaLibres(Mesa mesa, Connection c){
         String cadena="SELECT count(estado) FROM mesas WHERE estado='libre' and tipo='" + mesa.getTipo() +"'";
@@ -123,6 +135,9 @@ public class BBDDMesa {
     }
     /**
      *  método para listar las mesas libres
+     *  @param c se pasa la conexion
+     *  @param mesa objeto mesa
+     *  @return mostrarLibres vector con los numeros de mesa de las mesas libres
      */
     public static Vector<Mesa> listarMesaLibres(Mesa mesa,Connection c){
         String cadena="SELECT n_mesa FROM mesas WHERE estado='libre' and tipo='"+mesa.getTipo() +"'"; //Select para listar las mesas
@@ -146,6 +161,8 @@ public class BBDDMesa {
     }
     /**
      *   método para modificar el estado de la libre a ocupada
+     *   @param c se pasa la conexion
+     *   @param mesa objeto mesa
      */
     public static void modificarEstadoMesaOcupado(Mesa mesa, Connection c){
         String cadena="UPDATE mesas SET estado='ocupado' WHERE n_mesa='"+mesa.getN_mesa()+"'";  
@@ -163,6 +180,8 @@ public class BBDDMesa {
     }
     /**
      *   método para modificar el estado de la mesa a libre
+     *   @param mesa objeto mesa
+     *   @param c se pasa la conexion
      */
     public static void modificarEstadoLibre(Mesa mesa, Connection c){
         String cadena="UPDATE mesas SET estado='libre' WHERE n_mesa='"+mesa.getN_mesa()+"'";    

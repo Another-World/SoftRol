@@ -55,6 +55,7 @@ public class BBDDSocio {
 	 *   método para validar el socio
 	 *    @param c se pasa la conexion de la bbdd
 	 *     @param soc objeto socio
+	 *     @return t devuelve el dni del socio
 	 */
 	public static String validarSocio(Socio soc, Connection c){
 		String cadena="SELECT dni_socio FROM socios WHERE dni_socio='" + soc.getDni_socio() +"'";
@@ -82,6 +83,7 @@ public class BBDDSocio {
 	 *   método para sacar los datos y realizar el ticket de pago de ese determinado socio
 	 *    @param c se pasa la conexion de la bbdd
 	 *     @param soc objeto socio
+	 *     @return soci devuelve el objeto socio con nombre y dni
 	 */
 	public static Socio datosTicketPago(Socio soc, Connection c){
 		String cadena="SELECT nombre, dni_socio FROM socios WHERE dni_socio='" + soc.getDni_socio() +"'";
@@ -110,6 +112,7 @@ public class BBDDSocio {
 	/**
 	 *  método para listar el socio
 	 *   @param c se pasa la conexion de la bbdd
+	 *   @return listarSocio devuelve vector con la lista de los socios con todos sus datos
 	 */
 	public static Vector<Socio> listarSocio(Connection c){
 		String cadena="SELECT * FROM socios ";
@@ -134,6 +137,7 @@ public class BBDDSocio {
 	/**
 	 *  método para eliminar socios
 	 *   @param c se pasa la conexion de la bbdd
+	 *   @return EliminarSocio vector con todos los dni de los socios
 	 */
 	public static Vector<Socio> EliminarSocio(Connection c){
 		String cadena="SELECT dni_socio FROM socios";
@@ -183,7 +187,8 @@ public class BBDDSocio {
 	/**
 	 *  método para comprobrar si la cuota está pagada de un determinado socio
 	 *  @param c se pasa la conexion de la bbdd
-	 *   @param soc objeto socio
+	 *  @param soc objeto socio
+	 *  @return t devuelve si la cuota está pagada o no
 	 */
 	public static int comprobarCuotaPagada(Socio soc, Connection c){
 		String cadena="SELECT cuota_pagada FROM socios WHERE dni_socio='" + soc.getDni_socio() +"'";

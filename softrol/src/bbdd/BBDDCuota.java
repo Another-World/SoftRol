@@ -11,6 +11,10 @@ public class BBDDCuota {
 	private static ResultSet reg;
 	/**
 	 * metodo para buscar el precio de la cuota
+	 * @param c se pasa la conexion
+	 * @param cu objeto cuota
+	 * @param so objeto socio
+	 * @return t devuelve el precio
 	 */
 	public static String buscarPrecioCuota(Cuota cu, Socio so, Connection c){
 		String cadena="SELECT precio FROM cuotas,socios WHERE cuotas.tipo=socios.tipo_cuota and dni_socio='"+so.getDni_socio() +"'";
@@ -33,6 +37,8 @@ public class BBDDCuota {
 	}
 	/**
 	 *  metodo para listar cuotas
+	 *  @param c se pasa la conexion
+	 *  @return listarCuota devuelve un vector con todas las cuotas
 	 */
 	public static Vector<Cuota> listarCuota(Connection c){
 		/**
