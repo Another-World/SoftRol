@@ -63,7 +63,7 @@ public class SoftRol {
 		boolean comprobar=false,validar=false,comprobarLibros=false, except=false;
 
 		// inicio de sesión
-		Socio.eliminarSocioMoroso();
+		
 		do {
 			System.out.println("--- Iniciar sesión ---");
 			System.out.print("Usuario: ");
@@ -76,9 +76,10 @@ public class SoftRol {
 			mibase.abrir();
 			rango = BBDDEmpleado.comprobarRango(emp, mibase.getConexion());
 			mibase.cerrar();
-
+			
 			do {
 				if (rango.equals("administrador")) { // Menú principal para los usuarios que sean administradores
+					CrearXML.crearRegistroMorosos();
 					do {
 						except=false;
 						try{
@@ -102,6 +103,7 @@ public class SoftRol {
 					} while (opc < 1 || opc > 5 || except==true);
 				} else {
 					if (rango.equals("empleado")) { // Menú principal para los usuarios que sean empleados
+						CrearXML.crearRegistroMorosos();
 						do {
 							except=false;
 							try{

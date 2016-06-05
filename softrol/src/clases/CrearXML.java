@@ -30,8 +30,9 @@ public class CrearXML {
 		
 		BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");
 		mibase.abrir();
-		xstream.toXML(BBDDSocio.EliminarSocio2(mibase.getConexion()), Files.newBufferedWriter(Paths.get(nombre)));
+		xstream.toXML(Socio.eliminarSocioMoroso(), Files.newBufferedWriter(Paths.get(nombre)));
 		mibase.cerrar();
+		
 	}
 
 	public static void crearRegistroMorosos(){
@@ -41,9 +42,9 @@ public class CrearXML {
 			mibase.abrir();
 			
 			CrearXML sol = new CrearXML();
-			sol.toXML("socio.xml");
+			sol.toXML("socioEliminado.xml");
 			mibase.cerrar();
-
+		
 		} catch (IOException e) {
 			System.out.println("Error: " + e.getMessage());
 		}

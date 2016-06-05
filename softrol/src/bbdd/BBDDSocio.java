@@ -165,7 +165,7 @@ public class BBDDSocio {
 	 *  @param c se pasa la conexion de la bbdd
 	 */
 	public static Vector<Socio> EliminarSocio2(Connection c){
-		String cadena="SELECT nombre,dni_socio,telefono,fecha_nacimiento,fecha_alta,tipo_cuota,cuota_pagada FROM socios"; //Select para eliminar los socios
+		String cadena="SELECT nombre,dni_socio,telefono FROM socios";
 		Vector <Socio> EliminarSocio=new Vector<Socio>();
 		try{
 			s=c.createStatement();

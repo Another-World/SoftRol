@@ -208,33 +208,38 @@ public class Socio {
 	
 	
 
-	public static void eliminarSocioMoroso() {
-		//public static final int numeraso=1;
-		//private XStream xstream;
+	public static Vector<Socio> eliminarSocioMoroso() {
 		BaseDatosC mibase = new BaseDatosC("mysql-properties.xml");
-		
+		Vector <Socio> moverAlXml =new Vector<Socio>();
 		mibase.abrir();
-		for(int i=0; i< BBDDSocio.EliminarSocio(mibase.getConexion()).size(); i++) {
-			
-		}
-		/*for(int i=0; i< BBDDSocio.EliminarSocio(mibase.getConexion()).size(); i++) {
+		
+		for(int i=0; i< BBDDSocio.EliminarSocio2(mibase.getConexion()).size(); i++) {
 			Socio soc;
-
-			soc = new Socio( BBDDSocio.EliminarSocio(mibase.getConexion()).get(i).getDni_socio());
+			Socio socXML;
+			soc = new Socio( BBDDSocio.EliminarSocio2(mibase.getConexion()).get(i).getDni_socio());
 			
 
 			int cuotaComprobada = BBDDSocio.comprobarCuotaPagada(soc, mibase.getConexion());
 			
 			if (cuotaComprobada == 0) {
 
-				if (LocalDate.now().getDayOfMonth() > 7) {
-					System.out.println("socio eliminado por moroso");
+				if (LocalDate.now().getDayOfMonth() > 4) { // CAMBIAR A 7
+					System.out.println("el socio: "+BBDDSocio.EliminarSocio2(mibase.getConexion()).get(i).getDni_socio() +" ha sido borrado por no pagar la cuota mensual.");
+					socXML= new Socio(BBDDSocio.EliminarSocio2(mibase.getConexion()).get(i).getNombre(), BBDDSocio.EliminarSocio2(mibase.getConexion()).get(i).getDni_socio(), BBDDSocio.EliminarSocio2(mibase.getConexion()).get(i).getTelefono());
+					moverAlXml.add(socXML);
 				}
 			}
-		}*/
-		BBDDSocio.EliminarSocio(mibase.getConexion());
+		}
+		//BBDDSocio.EliminarSocio(mibase.getConexion());
 		mibase.cerrar();
+		return moverAlXml;
 	}
+	
+	
+	
+	
+	
+	
 	//Listar socios
 	@Override
 	public String toString() {
