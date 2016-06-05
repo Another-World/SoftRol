@@ -580,17 +580,15 @@ public class SoftRol {
 										do{
 											except=false;
 											try{
-											System.out.println("Introduce el número de horas que desea reservar la mesa: ");
-											nHoras=sc.nextInt();
-											if(nHoras>4){
-												System.out.println("No se puede reservar más de 3 horas");
-											}
+											System.out.print("Introduce el número de mesa que deseas elegir: ");
+											numeroMesa=sc.nextInt();
+											validar=Mesa.compararMesasDisponibles(tematica, numeroMesa);
 											}catch(InputMismatchException ie){
 												System.out.println("Debe introducir un valor numérico.");
 												except=true;
 												sc.nextLine();
 											}
-										}while(nHoras>4 || except==true); 
+										}while(validar!=true || except==true);
 										mesa=new Mesa(numeroMesa);
 										mibase.abrir();
 										BBDDMesa.modificarEstadoMesaOcupado(mesa, mibase.getConexion()); // añadir la reserva a la BBDD
